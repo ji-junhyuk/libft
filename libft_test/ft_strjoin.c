@@ -1,30 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/25 11:23:03 by junji             #+#    #+#             */
-/*   Updated: 2022/05/27 01:19:56 by junji            ###   ########.fr       */
+/*   Created: 2022/05/25 10:58:04 by junji             #+#    #+#             */
+/*   Updated: 2022/07/09 14:18:21 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strtrim(char const *s1, char const *set)
+void	ft_strcat(char *dest, const char *src)
 {
-	size_t		size;
-	char		*copy;
+	while (*dest)
+		dest++;
+	while (*src)
+		*dest++ = *src++;
+	*dest = '\0';
+}
 
-	if (!s1 || !set)
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*copy;
+	size_t	size;
+
+	if (!s1 || !s2)
 		return (0);
-	while (*s1 && ft_strchr(set, *s1))
-		++s1;
-	size = ft_strlen(s1);
-	while (size > 0 && ft_strchr(set, s1[size - 1]))
-		--size;
-	copy = ft_substr(s1, 0, size);
+	size = ft_strlen(s1) + ft_strlen(s2);
+	copy = malloc(sizeof(char) * (size + 1));
+	if (!copy)
+		return (0);
+	copy[0] = '\0';
+	ft_strcat(copy, s1);
+	ft_strcat(copy, s2);
 	return (copy);
 }
 //
@@ -34,5 +44,8 @@ char	*ft_strtrim(char const *s1, char const *set)
 //#include <stdlib.h>
 //int main(void)
 //{
-//	printf("%s\n", ft_strtrim("hello", "ho"));
+//	char *str;
+//
+//	str = ft_strjoin("hello", ", junto");
+//	printf("%s\n", str);
 //}

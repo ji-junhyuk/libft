@@ -15,9 +15,9 @@ SRCS 		= ft_memset.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c \
 BONUS		= ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 			  ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c 
 
-OBJS 		= $(SRCS:.c=.o) 
+OBJS 		= $(SRCS:c=o) 
 
-OBJS_BONUS	= $(BONUS:.c=.o)
+OBJS_BONUS	= $(BONUS:c=o)
 
 ifdef BONUSFLAG
 	ALLOBJ 	= $(OBJS) $(OBJS_BONUS)
@@ -36,7 +36,7 @@ $(NAME): $(ALLOBJ)
 	ar rcs $@ $(ALLOBJ)
 
 bonus:
-	make BONUSFLAG=1 
+	make BONUSFLAG=1 all
 
 clean:
 	rm -rf $(OBJS) $(OBJS_BONUS)

@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 19:49:59 by junji             #+#    #+#             */
-/*   Updated: 2022/05/26 14:49:51 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/09 15:21:26 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 //	printf("%s\n", ft_strnstr("abc", "", 3));
 //	printf("%s\n", ft_strnstr("", "abc", 3));
 //	printf("%s\n", ft_strnstr("abc", "abc", 3));
+//
 //	printf("%s\n", ft_strnstr("aabcbds", "bc", 2));
 //	printf("%s\n", ft_strnstr("aabcbds", "zxc", 3));
 //	printf("%s\n", ft_strnstr("sdabgdabc", "abc", 2));
