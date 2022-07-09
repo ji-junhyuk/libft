@@ -6,14 +6,13 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 13:10:12 by junji             #+#    #+#             */
-/*   Updated: 2022/07/09 15:07:07 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/09 17:57:18 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include <stddef.h>
 # include <stdlib.h>
 # include <unistd.h>
 
