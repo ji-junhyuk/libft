@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 13:31:47 by junji             #+#    #+#             */
-/*   Updated: 2022/05/27 00:37:42 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/08 15:24:15 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 		p1[idx] = p2[idx];
 	return (dst);
 }
-//
+
 //#include <stdio.h>
 //#include <ctype.h>
 //#include <string.h>
@@ -42,9 +42,14 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 //	memcpy(arr, "abc", 3);
 //	printf("%s\n", arr);
 //
+////	char *arr4 = NULL;
+////	char *arr5 = NULL;
 ////	strcpy(arr, "");
-////	ft_memcpy(arr, "", 3);
-////	printf("%s\n", arr);
+////	ft_memcpy(arr4, arr5, 3);
+////	printf("%s\n", arr4);
+//
+//	char *arr10 = NULL;
+//	ft_memcpy(arr10, "hello", 5);
 //
 //	printf(">>>Test<<<\n");
 //	strcpy(arr, "hello");
@@ -54,7 +59,8 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 //	memcpy(arr, "abc", 3);
 //	printf("%s\n", arr);
 //
-////	strcpy(arr, "");
-////	memcpy(arr, "", 0);
-////	printf("%s\n", arr);	
+//	char *arr6 = NULL;
+//	char *arr7 = NULL;
+//	memcpy(arr6, arr7, 3);
+//	printf("%s\n", arr6);	
 //}

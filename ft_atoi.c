@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:52:02 by junji             #+#    #+#             */
-/*   Updated: 2022/07/06 18:02:40 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/09 11:27:53 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,10 @@ int	ft_atoi(const char *str)
 //#include <stdlib.h>
 //int	main(void)
 //{
+//	int a;
+//	a = (int)9223372036854775807;
+//	++a;
+//	printf("%d\n", a);
 //	printf(">>>Your<<<\n");
 //	printf("%d\n", ft_atoi(""));
 //	printf("%d\n", ft_atoi("   ---+--+1234ab567"));
@@ -78,6 +82,16 @@ int	ft_atoi(const char *str)
 //	printf("%d\n", ft_atoi("2222222222222222222222"));
 //	printf("%d\n", ft_atoi("-99999999999999999999999999"));
 //	printf("%d\n", ft_atoi("-2222222222222222222222"));
+//	printf("\n");
+//	printf("%d\n", ft_atoi(" \n \t \v  -9223372036854775805"));
+//	printf("%d\n", ft_atoi(" \n \t \v  -9223372036854775806"));
+//	printf("%d\n", ft_atoi(" \n \t \v  -9223372036854775807"));
+//	printf("%d\n", ft_atoi(" \n \t \v  -9223372036854775808"));
+//	printf("%d\n", ft_atoi(" \n \t \v  -9223372036854775809"));
+//	printf("%d\n", ft_atoi(" \n \t \v  -9223372036854775810"));
+//	printf("%d\n", ft_atoi(" \n \t \v  -9223372036854775811"));
+//	printf("%d\n", ft_atoi(" \n \t \v  -9223372036854775813"));
+//
 //	printf(">>>Test<<<\n");
 //	printf("%d\n", atoi(""));
 //	printf("%d\n", atoi("   ---+--+1234ab567"));
@@ -89,6 +103,15 @@ int	ft_atoi(const char *str)
 //	printf("%d\n", atoi(" \n \t \v  2147483647+"));
 //	printf("%d\n", atoi("99999999999999999999999999"));
 //	printf("%d\n", atoi("2222222222222222222222"));
-//	printf("%d\n", atoi("-9999999999999999999999999999999999999999999999999999"));
-//	printf("%d\n", atoi("-2147483649000000000000"));
+//	printf("%d\n", atoi("-999999999999999999999999999999999999"));
+//	printf("%d\n", atoi("-2222222222222222222222"));
+//	printf("\n");
+//	printf("%d\n", atoi(" \n \t \v  -9223372036854775805"));
+//	printf("%d\n", atoi(" \n \t \v  -9223372036854775806"));
+//	printf("%d\n", atoi(" \n \t \v  -9223372036854775807"));
+//	printf("%d\n", atoi(" \n \t \v  -9223372036854775808"));
+//	printf("%d\n", atoi(" \n \t \v  -9223372036854775809"));
+//	printf("%d\n", atoi(" \n \t \v  -9223372036854775810"));
+//	printf("%d\n", atoi(" \n \t \v  -9223372036854775811"));
+//	printf("%d\n", atoi(" \n \t \v  -9223372036854775813"));
 //}

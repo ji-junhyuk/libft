@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 13:35:17 by junji             #+#    #+#             */
-/*   Updated: 2022/07/04 18:17:10 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/08 15:38:12 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	**free_copy(char **str, int size)
 	return (0);
 }
 
-char	**ft_split(const char *str, char c)
+char	**ft_split(char const *str, char c)
 {
 	char	**copy;
 	int		words;

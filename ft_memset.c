@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 18:32:05 by junji             #+#    #+#             */
-/*   Updated: 2022/07/06 18:26:58 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/09 10:11:18 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,26 +29,34 @@ void	*ft_memset(void *b, int c, size_t len)
 //#include <string.h>
 //int main(void)
 //{
-//	unsigned char arr[50];
-//	unsigned char brr[50];
-//	printf(">>>Your<<<\n");
-//	memset(arr, 10, 50);
+//	int arr[50];
+//	int brr[50];
+//	printf(">>>Your<<\n");
+//	ft_memset(arr, 1, 50);
 //	for(int idx = 0; idx < 50; ++idx)
 //		printf("%d ", (arr[idx]));
-//	printf("\n");
+//	printf("\n\n");
+//
 //	printf(">>>Test<<<\n");
-//	ft_memset(brr, 10, 50);
+//	memset(brr, 1, 50);
 //	for(int idx = 0; idx < 50; ++idx)
 //		printf("%d ", (brr[idx]));
-//	printf("\n");
-//	int arr5[50];
-//	memset(arr5, -1, 200);
-//	for(int idx = 0; idx < 50; ++idx)
-//		printf("%d ", (arr5[idx]));
+//	printf("\n\n");
 //
-//	printf("\n");
-//	unsigned char test[50];
-//	ft_memset(test, 'a', 50);
-//	for (int idx = 0; idx < 50; ++idx)
-//		printf("%d ", test[idx]);
+//	int arr2[50];
+//	memset(arr2, -1, 200);
+//	for(int idx = 0; idx < 50; ++idx)
+//		printf("%d ", (arr2[idx]));
+//	printf("\n\n");
+//
+//	memset(arr2, -1, 200);
+//	for(int idx = 0; idx < 50; ++idx)
+//		printf("%d ", (arr2[idx]));
+//	printf("\n\n");
+//
+//	int brr2[50];
+//	memset(brr2, 5, 200);
+//	for(int idx = 0; idx < 50; ++idx)
+//		printf("%d ", (brr2[idx]));
+//	printf("\n\n");
 //}

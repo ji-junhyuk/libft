@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 18:00:57 by junji             #+#    #+#             */
-/*   Updated: 2022/07/06 11:45:29 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/09 11:36:59 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ char	*ft_strrchr(const char *s, int c)
 	last_occurence = 0;
 	while (*s)
 	{
-		if (*s == c)
+		if (*s == (char)c)
 			last_occurence = ((char *)s);
 		++s;
 	}
-	if (*s == c)
+	if (*s == (char)c)
 		return ((char *)s);
 	if (last_occurence)
 		return (last_occurence);

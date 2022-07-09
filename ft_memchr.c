@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 13:07:39 by junji             #+#    #+#             */
-/*   Updated: 2022/07/06 18:11:46 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/08 15:52:25 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	*ft_memchr(const void *s, int c, size_t n)
 	unsigned char	*p;
 
 	p = (unsigned char *)s;
-
 	idx = -1;
 	while (++idx < n)
 	{
