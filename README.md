@@ -1,6 +1,6 @@
 ### 1st try
 - 불필요한 헤더 선언 (stdddef.h)
-- list.h 중복 선언
+- list.h 중복 선언 (불필요한 파일이 있으면 채점조차 되지 않음, norm error)
 - static 사용 권장
 
 # Libft
