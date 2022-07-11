@@ -7,6 +7,7 @@
 
 ## 1 retry : 125%
 > 1. bonus파트에서 인자 에러 처리를 할꺼면 일관되게 하자.
+
 > t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 ```c
 lst에 대한 널 처리는 했지만, 함수포인터에 관해서 하지 않았다.
@@ -322,6 +323,10 @@ size_t  strlcpy(char * restrict dst, const char * restrict src, size_t dstsize)
 ```c
 int atoi(const char *str)
 ```
+- atoi() 함수는 libc에 의해 stdtol()를 내부로 돌려서 결과값을 리턴하는 방식을 가졌다.
+- atoi()의 리턴 타입은 int, strtol()의 리턴 타입은 long 이다.
+- strtol()함수에 오버플로우 값이 들어오면 LONG_MAX, 언더플로우 값이 들어오면 LONG_MIN을 리턴한다.
+- atoi()함수에 LONG 오버플로우 값이 들어오면 -1, 언더플로우 값이 들어오면 0을 리턴한다.
 
 <div align = "right">
 	<b><a href = "#Contents">↥ top</a></b>
@@ -333,7 +338,11 @@ int atoi(const char *str)
 ```c
 char    *strnstr(const char *haystack, const char *needle, size_t len)
 ```
-
+- 리턴 값
+	- needle이 비어있으면 haystack의 첫번째 주소 반환
+	- haystack에서 needle을 찾지 못하면 NULL반환
+	- haystack에서 needle을 찾으면 일치하는 haystack의 처음 포인터를 반환한다.
+	- haystack이 NULL이거나 len이 0이라면 NULL을 반환한다.
 <div align = "right">
 	<b><a href = "#Contents">↥ top</a></b>
 </div>
