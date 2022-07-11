@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 14:38:02 by junji             #+#    #+#             */
-/*   Updated: 2022/07/09 14:38:42 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/11 15:48:38 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 		*lst = new;
 		return ;
 	}
-	while ((*lst)->next)
-		*lst = (*lst)->next;
+	*lst = ft_lstlast(*lst);
 	(*lst)->next = new;
 	*lst = init_pos;
 }

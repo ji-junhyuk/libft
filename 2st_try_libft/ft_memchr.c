@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 13:57:15 by junji             #+#    #+#             */
-/*   Updated: 2022/07/09 13:57:20 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/11 15:47:48 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*ft_memchr(const void *s, int c, size_t n)
 	while (++idx < n)
 	{
 		if (p[idx] == (unsigned char)c)
-			return ((void *)&p[idx]);
+			return ((void *)(p + idx));
 	}
 	return (0);
 }

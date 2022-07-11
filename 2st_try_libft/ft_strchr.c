@@ -6,11 +6,9 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 13:53:20 by junji             #+#    #+#             */
-/*   Updated: 2022/07/09 13:53:23 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/11 16:07:39 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "libft.h"
 
 char	*ft_strchr(const char *s, int c)
 {

@@ -6,11 +6,9 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 14:08:53 by junji             #+#    #+#             */
-/*   Updated: 2022/07/09 16:52:42 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/11 16:04:33 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "libft.h"
 
 static int	is_space(char c)
 {

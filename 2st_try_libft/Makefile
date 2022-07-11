@@ -6,7 +6,7 @@
 #    By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/09 13:10:29 by junji             #+#    #+#              #
-#    Updated: 2022/07/09 13:10:35 by junji            ###   ########.fr        #
+#    Updated: 2022/07/11 16:00:30 by junji            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,8 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-re: fclean all
+re: 
+	make fclean
+	make all
 
 .PHONY: all bonus clean fclean re

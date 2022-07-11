@@ -1,8 +1,66 @@
-### 1st try
+## try : 0%
+> initial_errors: Files besides the allowed ones were found on repository
 - 불필요한 헤더 선언 (stdddef.h)
 - list.h 중복 선언 (불필요한 파일이 있으면 채점조차 되지 않음, norm error)
 - static 사용 권장
+- 과제 첫평가 받아보고, 실수 없으면 뒤에 평가 이어서 잡는게 옳다!
 
+## 1 retry : 125%
+> 1. bonus파트에서 인자 에러 처리를 할꺼면 일관되게 하자.
+> t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+```c
+lst에 대한 널 처리는 했지만, 함수포인터에 관해서 하지 않았다.
+lst는 lstclear함수도 있고, 비어 있는 리스트를 받을 확률이 높기 때문에 널처리를 했다고 말하는게 좋았을 듯 싶다.
+```
+> 2. 모든 파일에 #include "libft.h"를 선언했다. 효율적이지 않다.
+```c
+libft.h가 필요하지 않은 함수에 대해선 선언하지 않는다.
+libft과제에서 사용한 라이브러리는 <stdlib.h>와 <unistd.h>인데, 컴파일 시간까지 고려한다면 필요한 함수에서만 인클루드 해주는게 좋아보인다.
+```
+> 3. Makefile re 옵션
+```Makefile
+re: fclean all
+
+fclean과 all이 병렬적으로 실행되기 때문에 오류날 가능성이 있다. 안전하게 직렬로 바꿔주어야 한다. (-j 옵션을 사용할 경우)
+
+re:	
+	make fclean
+	make all
+	
+make re -j 6 (6하드코어 사용)
+```
+
+### > 개선사항 
+1. ft_memchr
+```c
+return ((void *)&p[idx]);
+// p[idx]라는 값에 접근하고 그 주소에 다시 접근하는 것보다 (p + idx)로 한번에 주소에 접근하는 게 효율적이다.
+```
+2. ft_strnstr
+```c
+while (*haystack && ++cnt <= len - ft_strlen(needle))
+// 반복문을 돌 때마다 ft_strlen함수를 호출하는 것은 비효율적이다.
+```
+3. ft_strjoin
+```c
+ft_strcat(copy, s1);
+ft_strcat(copy, s2);
+// 이어붙일 때 처음부터 찾는 건 비효율적이다. s1의 길이만큼 당겨주도록 하자.
+```
+4. ft_lstadd_back
+```
+마지막 노드를 찾을 때 이미 구현된 함수(ft_lstlast)를 사용하자.
+```
+5. ft_strtrim
+```
+<map>
+set이 담고 있는 문자를 1로 초기화한다. 모든 문자를 순회하는 것이 아닌(s1) map에 담긴 문자만 순회하면서 속도를 올릴 수 있다.
+```
+
+6. 나는 return문을 너무 많이 사용하고 있는 게 아닌가?
+```
+return문을 줄이면서 코드도 줄여진다면 줄이는게 맞다. 간결한 코드
+```
 # Libft
 > 이 프로젝트의 목적은 흔히 쓰이는 함수들을 재구성하여 이후의 모든 프로젝트에서 사용될 C 라이브러리를 제작하는 것입니다.
 

@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 14:07:56 by junji             #+#    #+#             */
-/*   Updated: 2022/07/09 14:07:59 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/11 15:37:54 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
 	size_t	cnt;
+	size_t	needle_len;
 
 	cnt = -1;
 	if (!(*needle))
@@ -23,12 +24,13 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 		return (0);
 	if (ft_strlen(needle) > len)
 		return (0);
-	while (*haystack && ++cnt <= len - ft_strlen(needle))
+	needle_len = ft_strlen(needle);
+	while (*haystack && ++cnt <= len - needle_len)
 	{
 		if (*haystack == *needle)
 		{
 			if (ft_strncmp((char *)haystack,
-					(char *)needle, ft_strlen(needle)) == 0)
+					(char *)needle, needle_len) == 0)
 				return ((char *)(haystack));
 		}
 		++haystack;

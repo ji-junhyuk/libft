@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 14:18:15 by junji             #+#    #+#             */
-/*   Updated: 2022/07/09 16:56:55 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/11 15:42:22 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,20 @@ static void	ft_strcat(char *dest, const char *src)
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*copy;
+	size_t	s1_size;
+	size_t	s2_size;
 	size_t	size;
 
 	if (!s1 || !s2)
 		return (0);
-	size = ft_strlen(s1) + ft_strlen(s2);
+	s1_size = ft_strlen(s1);
+	s2_size = ft_strlen(s2);
+	size = s1_size + s2_size;
 	copy = malloc(sizeof(char) * (size + 1));
 	if (!copy)
 		return (0);
 	copy[0] = '\0';
 	ft_strcat(copy, s1);
-	ft_strcat(copy, s2);
+	ft_strcat(copy + s1_size, s2);
 	return (copy);
 }
