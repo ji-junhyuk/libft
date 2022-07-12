@@ -158,7 +158,7 @@ printf("%d ", (arr[0]));
 	- [ft_strlcpy](#ft_strlcpy)
 	- [ft_strlcat](#ft_strlcat)
 	- [💫ft_strnstr](#ft_strnstr)
-	- [ft_atoi](#ft_atoi)
+	- [💫ft_atoi](#ft_atoi)
 	- [ft_memset](#ft_memset)
 	- [ft_bzero](#ft_bzero)
 	- [ft_memchr](#ft_memchr)
@@ -188,16 +188,7 @@ printf("%d ", (arr[0]));
 	- [ft_lstdelone](#ft_lstdelone)
 	- [ft_lstclear](#ft_lstclear)
 	- [ft_lstiter](#ft_lstiter)
-	- [ft_lstmap](#ft_lstmap)
-  - [Question](#question)
-	- [size_t형에 대하여](#size_t형에-대하여)
-	- [문자를 다루는 함수의 매개변수가 int형인 이유](#문자를-다루는-함수의-매개변수가-int형인-이유)
-	- [void* 형에 대하여](#void*-형에-대하여)
-	- [라이브러리 코드의 읽히는 부분이 const인 이유](#라이브러리-코드의-읽히는-부분이-const인-이유)
-	- [const char * vs char const *](#const-char-*-vs-char-const-*)
-	- [mapping에 대하여](#mapping에-대하여)
-	- [정적(Static) 변수에 대하여](#정적(Static)-변수에-대하여)
-
+	- [ft_lstmap](#ft_lstmap) 
 ## Part 1 - Libc functions
 
 ### ft_strlen
