@@ -3,9 +3,10 @@
 
 - [libft](#libft)
 	- [💫평가](#평가)
-	- [💫개선사항](#개선사항)
-	- [💫생각해보기](#생각해보기)
+	- [개선사항](#개선사항)
+	- [알아가기](#생각해보기)
 	- [프로토타입](#프로토타입)
+	- [참고자료](#참고자료)
 
 ## 평가
 ### try : 0%
@@ -40,6 +41,39 @@ re:
 	
 make re -j 6 (6하드코어 사용)
 ```
+
+## 개선사항 
+1. ft_memchr
+```c
+return ((void *)&p[idx]);
+// p[idx]라는 값에 접근하고 그 주소에 다시 접근하는 것보다 (p + idx)로 한번에 주소에 접근하는 게 효율적이다.
+```
+2. ft_strnstr
+```c
+while (*haystack && ++cnt <= len - ft_strlen(needle))
+// 반복문을 돌 때마다 ft_strlen함수를 호출하는 것은 비효율적이다.
+```
+3. ft_strjoin
+```c
+ft_strcat(copy, s1);
+ft_strcat(copy, s2);
+// 이어붙일 때 처음부터 찾는 건 비효율적이다. s1의 길이만큼 당겨주도록 하자.
+```
+4. ft_lstadd_back
+```
+마지막 노드를 찾을 때 이미 구현된 함수(ft_lstlast)를 사용하자.
+```
+5. ft_strtrim
+```
+<map>
+set이 담고 있는 문자를 1로 초기화한다. 모든 문자를 순회하는 것이 아닌(s1) map에 담긴 문자만 순회하면서 속도를 올릴 수 있다.
+```
+
+6. 나는 return문을 너무 많이 사용하고 있는 게 아닌가?
+```
+return문을 줄이면서 코드도 줄여진다면 줄이는게 맞다. 간결한 코드
+```
+
 
 ---
 
@@ -119,38 +153,6 @@ printf("%d ", (arr[0]));
 - strtol()함수에 오버플로우 값이 들어오면 LONG_MAX, 언더플로우 값이 들어오면 LONG_MIN을 리턴한다.
 - atoi()함수에 LONG 오버플로우 값이 들어오면 -1, 언더플로우 값이 들어오면 0을 리턴한다.
  
-## 개선사항 
-1. ft_memchr
-```c
-return ((void *)&p[idx]);
-// p[idx]라는 값에 접근하고 그 주소에 다시 접근하는 것보다 (p + idx)로 한번에 주소에 접근하는 게 효율적이다.
-```
-2. ft_strnstr
-```c
-while (*haystack && ++cnt <= len - ft_strlen(needle))
-// 반복문을 돌 때마다 ft_strlen함수를 호출하는 것은 비효율적이다.
-```
-3. ft_strjoin
-```c
-ft_strcat(copy, s1);
-ft_strcat(copy, s2);
-// 이어붙일 때 처음부터 찾는 건 비효율적이다. s1의 길이만큼 당겨주도록 하자.
-```
-4. ft_lstadd_back
-```
-마지막 노드를 찾을 때 이미 구현된 함수(ft_lstlast)를 사용하자.
-```
-5. ft_strtrim
-```
-<map>
-set이 담고 있는 문자를 1로 초기화한다. 모든 문자를 순회하는 것이 아닌(s1) map에 담긴 문자만 순회하면서 속도를 올릴 수 있다.
-```
-
-6. 나는 return문을 너무 많이 사용하고 있는 게 아닌가?
-```
-return문을 줄이면서 코드도 줄여진다면 줄이는게 맞다. 간결한 코드
-```
-
 ---
 
 ### 프로토타입
@@ -683,3 +685,6 @@ t_list    *ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 	<b><a href = "#Contents">↥ top</a></b>
 </div>
 
+## 참고자료
+- 이재 깃헙(https://github.com/ejaee/42_Project/tree/main/Circle_0)
+- 구글 담부턴 꼭 적기
