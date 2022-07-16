@@ -1,0 +1,9 @@
+#!/bin/bash
+echo -e "\033[32;1m"norm check"\033[m"
+read $a
+norminette ./*.c ./*.h
+echo -e "\033[32;1m"gnl test"\033[m"
+read $a
+git clone https://github.com/Tripouille/gnlTester.git
+cd gnlTester
+make
