@@ -6,7 +6,7 @@
 /*   By: junji <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/15 15:15:52 by junji             #+#    #+#             */
-/*   Updated: 2022/07/16 17:18:32 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/17 12:50:37 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*get_next_line(int fd)
 	static char		*buffer;
 	char			*line;
 
-	if (fd < 0 && BUFFER_SIZE <= 0)
+	if (fd < 0)
 		return (0);
 	buffer = read_line(fd, buffer);
 	if (!buffer)
