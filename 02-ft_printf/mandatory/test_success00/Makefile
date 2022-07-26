@@ -2,7 +2,7 @@ CC			= cc
 
 CFLAGS		= -Wall -Wextra -Werror
 
-HEADER 		= 
+HEADER 		= ft_printf.h
 
 SRCS 		= ft_printf.c
 
@@ -13,7 +13,7 @@ NAME		= libftprintf.a
 all: $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ 
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(HEADER)
 
 $(NAME): $(OBJS)
 	ar rcs $@ $(OBJS)
