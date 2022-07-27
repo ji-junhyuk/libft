@@ -7,14 +7,13 @@
 #define FLAG_HASH	0b00000100
 #define FLAG_SPACE	0b00001000
 #define FLAG_PLUS	0b00010000
-
+#define PRECISION	0b00100000
 
 typedef struct t_option
 {
 	int	flag;
 	int	width;
 	int precision;
-
 }	s_option;	
 
 typedef struct t_tool
@@ -24,15 +23,70 @@ typedef struct t_tool
 	void		*functions[256];
 }	s_tool;
 
+
+void	ft_putnbr_fd(int n, int fd)
+{
+	long long	num;
+	char		c;
+
+	num = n;
+	if (num < 0)
+	{
+		write(fd, "-", 1);
+		num *= -1;
+	}
+	if (num < 10)
+	{
+		c = num + '0';
+		write(fd, &c, 1);
+	}	
+	else
+	{
+		ft_putnbr_fd(num / 10, fd);
+		ft_putnbr_fd(num % 10, fd);
+	}
+}
+
+int	find_len(long long num)
+{
+	int	len;
+
+	len = 0;
+	if (num < 0)
+	{
+		++len;
+		num *= -1;
+	}
+	while (1)
+	{
+		++len;
+		num /= 10;
+		if (num == 0)
+			return (len);
+	}
+}
+
 int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
 {
+	int		value;
+	int		len;
+
+	value = va_arg(*ap, int);
+	len = find_len(value);
+	if (option->flag & PRECISION)
+		option->flag &= ~FLAG_ZERO;
 	if (option->flag & FLAG_LEFT)
 	{
 
 	}
 	else
 	{
-
+		if (option->flag & FLAG_SPACE)
+		{
+			write(1, " ", 1);
+			++(tool->printed);
+		}
+		ft_putnbr_fd(value, 1, );
 	}
 	return (tool->printed);
 }
@@ -58,7 +112,7 @@ void	initializer(s_option *option, s_tool *tool)
 //	functions['x'] = print_hex_small;
 //	functions['X'] = print_hex_big;
 //	functions['%'] = print_percent;
-	// 적법하지 않은 인자에 대해선 컴파일 에러가 난다. 
+	// 적합하지 않은 인자에 대해선 컴파일 에러가 난다. 
 	// ex) printf("%v", 123) // Invalid conversion specifier 'v'
 }
 
@@ -122,6 +176,7 @@ void	check_precision(char **format, s_option *option)
 	res= 0;
 	if ((*(*format)) == '.')
 	{
+		option->flag |= PRECISION;
 		++*(*format);
 		while (*(*format) && is_num(*(*format)))
 		{
