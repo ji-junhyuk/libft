@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/28 15:45:51 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/28 18:16:38 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,84 +130,41 @@ int	printf_dec_args(s_option *option, s_tool *tool, int value)
 	return (0);
 }
 
-int	printf_dec_width(s_option *option, s_tool *tool, int value, int len)
+
+int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
 {
-	if (value < 0)
+	int		value;
+	int		len;
+	char	c;
+
+	(void) *tool;
+	value = va_arg(*ap, int);
+	len = find_len(value);
+	if (option->precision > 0)
 	{
-		write(1, "-", 1);
-		++tool->printed;
-		++len;
+		option->flag &= ~FLAG_ZERO; 
+		option->precision -= len;
 	}
-	if (option->flag & FLAG_PLUS)
-	{
-		write(1, "+", 1);
-		++len;
-		++tool->printed;
-	}
-	else if (option->flag & FLAG_SPACE)
-	{
-		if (value > 0)
-			write(1, " ", 1);
-		++len;
-		++tool->printed;
-	}
+	printf("precision:%d\n", option->precision);
+	option->width -= option->precision;
+	printf("width:%d\n", option->width);
+	c = ' ';
 	if (option->flag & FLAG_LEFT)
 	{
 
 	}
 	else
 	{
-
-	}
-	while (option->width > len)
-	return (0);
-}
-int	printf_dec_prec(s_option *option, s_tool *tool, int value, int len)
-{
-	if (value < 0)
-	{
-		write(1, "-", 1);
-		++tool->printed;
-	}
-	if (option->flag & FLAG_PLUS)
-		write(1, "+", 1);
-	else if (option->flag & FLAG_SPACE)
-	{
-		if (value > 0)
-			write(1, " ", 1);
-	}
-	++tool->printed;
-	while (option->precision > len) // 8 3
-	{
-		write(1, "0", 1);
-		++len;
-	}
-	ft_putnbr_fd(value, 1, tool);
-	return (0);
-}
-
-int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
-{
-	int		value;
-	int		len;
-
-	value = va_arg(*ap, int);
-	len = find_len(value);
-	check_len_flag(option, tool, len);
-	if (tool->longgest == LONGGEST_ARGS)
-	{
-		if (printf_dec_args(option, tool, value) == -1)
-			return (-1);
-	}
-	else if (tool->longgest == LONGGEST_PRECISION)
-	{
-		if (printf_dec_prec(option, tool, value, len) == -1)
-			return (-1);
-	}
-	else
-	{
-		if (printf_dec_width(option, tool, value, len) == -1)
-			return (-1);
+//		if (option->flag & (FLAG_SPACE + FLAG_ZERO + FLAG_PLUS))
+//		{
+//			if (option->flag & FLAG_SPACE && option->flag & FLAG_PLUS)
+//			{
+//				write(1, "+"j
+//		}
+		if (option->flag & FLAG_ZERO)
+			c = '0';
+		while ((option->width)-- > 0)
+			write(1, &c, 1);
 	}
 	return (0);
 }
@@ -377,43 +334,8 @@ int ft_printf(char *format, ...)
 
 int main(void)
 {
-//	printf("%d\n", ft_printf("%2147483646"));
-//	ft_printf("%2147483647d");
-
-//	printf("===========================\n");
-//	ft_printf("===========================\n");
-
-	ft_printf("ft[% -05.13d]\n", -123);
-	printf("pf[% 05.13d]\n", -123);
-
-	ft_printf("ft[%03.11d]\n", -123);
-	printf("pf[%03.11d]\n", -123);
-
-	ft_printf("ft[%03.3d]\n", -123);
-	printf("pf[%03.3d]\n", -123);
-//	printf("%+2.2d\n", 123);
-//	ft_printf("%+2.2d\n", 123);
-//	printf("%0 2.2d\n", -123);
-//	ft_printf("%0 2.2d\n", -123);
-//	printf("%0 2.2d\n", 123);
-//	ft_printf("%0 2.2d\n", 123);
-//
-//	printf("%02.2d\n", 123);
-//	ft_printf("%02.2d\n", 123);
-//	printf("%2.2d\n", 123);
-//	ft_printf("%2.2d\n", 123);
-//	printf("[% 010.07d]\n", 123); //[ 0000123] 
-//	ft_printf("[% 010.07d]\n", 123); //[  000123] 
-//	printf("[% 05.04d]\n", 123); //[ 0123]
-//	ft_printf("[% 05.04d]\n", 123); //[ 0123]
-
-//	printf("[% 06.3d]\n", 123); //   [ 00123] : 정밀도가 있으면 flag 0을 무시한다.
-//	ft_printf("[% 06.3d]\n", 123); //   [ 00123] : 정밀도가 있으면 flag 0을 무시한다.
-//	printf("[% 06d]\n", 123); //   [ 00123]
-//	ft_printf("[% 06d]\n", 123); //   [ 00123]
-//	printf("[% 05d]\n", 123); //   [ 0123]
-//	ft_printf("[% 05d]\n", 123); //   [ 0123]
-
-//	ft_printf("[% 5d]\n", 123);
-//	printf("[% 5d]\n", 123);
+	printf("pf[%0 5d]]\n", 789); //[-0000000789]
+	ft_printf("ft[%0 5d]\n", 789); //[-0000000789]
+	printf("pf[%0+5d]]\n", 789); //[-0000000789]
+	ft_printf("ft[% +5d]\n", 789); //[-0000000789]
 }
