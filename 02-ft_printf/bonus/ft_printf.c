@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/29 14:57:56 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/29 15:57:32 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,52 +135,113 @@ int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
 	int		len;
 	char	c;
 
-	(void) *tool;
+	(void)(*tool);
 	value = va_arg(*ap, int);
 	len = find_len(value);
-	if (!(option->flag & PRECISION))
-		option->width -= len;
-	option->width -= option->precision;
+
 	option->precision -= len;
-	printf("precision:%d\n", option->precision);
+	if (option->precision <= 0)
+		option->precision = 0;
+	//printf("pf[%+7.4d]\n", 789); //[  +0789]
+	option->width -= (option->precision + len); // 5
 	printf("width:%d\n", option->width);
+	printf("precision:%d\n", option->precision);
 	c = ' ';
 	if (option->flag & FLAG_ZERO)
 		c = '0';
-	if (option->flag & PRECISION)
-	{
-		option->flag &= ~FLAG_ZERO;
+	if (option->flag & PRECISION) // ZERO를 쓰진 않으니까? ZERO를 다시 꺼줄필요가 있나?
 		c = ' ';
-	}
-	if (value < 0)
-	{
-		write(1, "-", 1);
-		--option->width;
-	}
 	if (option->flag & FLAG_LEFT)
 	{
-
 	}
 	else
 	{
-		// 정밀도가 value길이보다 작으면 코드가 돌지 않음.
-		while (--(option->width) > 0)
-			write(1, &c, 1);
-		if (option->flag & FLAG_PLUS && value >= 0)
+		if (option->flag & PRECISION)
 		{
-			write(1, "+", 1);
+			while (--(option->width) > 0)
+				write(1, &c, 1);
+			if (value < 0)
+			{
+				write(1, "-", 1);
+				--option->width;
+			}
+			else if (option->flag & FLAG_PLUS && value >= 0)
+			{
+				write(1, "+", 1);
+				--option->width;
+			}
+			else if (option->flag & FLAG_SPACE)
+				write(1, " ", 1); 
+			else
+				write(1, &c, 1);
 			--option->width;
 		}
-		else if (option->flag & FLAG_SPACE)
-			write(1, " ", 1); 
 		else
-			write(1, &c, 1);
-		--option->width;
+		{
+			if (option->flag & FLAG_PLUS && value >= 0)
+				write(1, "+", 1);
+			else if (option->flag & FLAG_SPACE)
+				write(1, " ", 1); 
+			else
+				write(1, &c, 1);
+			--option->width;
+			while (--(option->width) >= 0)
+				write(1, &c, 1);
+		}
 	}
 	while (--(option->precision) >= 0)
 		write(1, "0", 1);
 	ft_putnbr_fd(value, 1, tool);
 	return (0);
+
+
+//	int		value;
+//	int		len;
+//	char	c;
+//
+//	(void) *tool;
+//	value = va_arg(*ap, int);
+//	len = find_len(value);
+//	if (!(option->flag & PRECISION))
+//		option->width -= len;
+//	option->width -= option->precision;
+//	option->precision -= len;
+//	printf("precision:%d\n", option->precision);
+//	printf("width:%d\n", option->width);
+//	c = ' ';
+//	if (option->flag & FLAG_ZERO)
+//		c = '0';
+//	if (option->flag & PRECISION)
+//	{
+//		option->flag &= ~FLAG_ZERO;
+//		c = ' ';
+//	}
+//	if (value < 0)
+//	{
+//		write(1, "-", 1);
+//		--option->width;
+//	}
+//	if (option->flag & FLAG_LEFT)
+//	{
+//
+//	}
+//	else
+//	{
+//		// 정밀도가 value길이보다 작으면 코드가 돌지 않음.
+//		while (--(option->width) > 0)
+//			write(1, &c, 1);
+//		if (option->flag & FLAG_PLUS && value >= 0)
+//		{
+//			write(1, "+", 1);
+//			--option->width;
+//		}
+//		else if (option->flag & FLAG_SPACE)
+//			write(1, " ", 1); 
+//		else
+//			write(1, &c, 1);
+//		--option->width;
+//	}
+//	return (0);
 }
 
 void	initializer(s_option *option, s_tool *tool)
@@ -348,6 +409,9 @@ int ft_printf(char *format, ...)
 
 int main(void)
 {
+
+	ft_printf("[%+10d]]\n", 789); //[-0000000789]
+	printf("[%+10d]]\n", 789); //[-0000000789]
 //	printf("0, ' ' :flag, width: 6, precision: 5 , value: 789\n");
 //	printf("pf[%0 6.8d]\n", -789); //[-0000000789]
 //	ft_printf("pf[%0 6.8d]\n", -789); //[-0000000789]
@@ -364,8 +428,12 @@ int main(void)
 //	printf("pf[% 07d]\n", 789); //[-0000000789]
 //	ft_printf("ft[% 07d]\n", 789); //[-0000000789]
 //=========================================
-	printf("pf[%+7.2d]\n", 789); //[  +0789]
-	ft_printf("ft[%+7.2d]\n", 789); //[  +0789]
+//	printf("pf[%+7.2d]\n", 789); //[  +0789] 
+//	ft_printf("ft[%+7.2d]\n", 789); //[  +0789]
+//	printf("pf[%+7.4d]\n", 789); //[  +0789]
+//	ft_printf("ft[%+7.4d]\n", 789); //[  +0789]
+//	printf("pf[%+07d]\n", 789); //[-0000000789]
+//	ft_printf("ft[%+07d]\n", 789); //[-0000000789]
 //	printf("pf[%+07d]\n", 789); //[-0000000789]
 //	ft_printf("ft[%+07d]\n", 789); //[-0000000789]
 }
