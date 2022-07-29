@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/28 18:16:38 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/29 14:21:27 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ int	find_len(long long num)
 	int	len;
 
 	len = 0;
-	if (num < 0)
-		num *= -1;
 	while (1)
 	{
 		++len;
@@ -140,32 +138,49 @@ int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
 	(void) *tool;
 	value = va_arg(*ap, int);
 	len = find_len(value);
-	if (option->precision > 0)
-	{
-		option->flag &= ~FLAG_ZERO; 
-		option->precision -= len;
-	}
-	printf("precision:%d\n", option->precision);
+	if (!(option->flag & PRECISION))
+		option->width -= len;
 	option->width -= option->precision;
+	option->precision -= len;
+	printf("precision:%d\n", option->precision);
 	printf("width:%d\n", option->width);
 	c = ' ';
+	if (option->flag & FLAG_ZERO)
+		c = '0';
+	if (option->flag & PRECISION)
+	{
+		option->flag &= ~FLAG_ZERO;
+		c = ' ';
+	}
+	if (value < 0)
+	{
+		write(1, "-", 1);
+		--option->width;
+	}
 	if (option->flag & FLAG_LEFT)
 	{
 
 	}
 	else
 	{
-//		if (option->flag & (FLAG_SPACE + FLAG_ZERO + FLAG_PLUS))
-//		{
-//			if (option->flag & FLAG_SPACE && option->flag & FLAG_PLUS)
-//			{
-//				write(1, "+"j
-//		}
-		if (option->flag & FLAG_ZERO)
-			c = '0';
-		while ((option->width)-- > 0)
+		while (--(option->width) > 0)
 			write(1, &c, 1);
+		if (option->flag & FLAG_PLUS)
+		{
+			if (value >= 0)
+				write(1, "+", 1);
+//			else 
+//				write(1, "-", 1);
+		}
+		else if (option->flag & FLAG_SPACE)
+			write(1, " ", 1); 
+		else
+			write(1, &c, 1);
+		--option->width;
 	}
+	while (--(option->precision) >= 0)
+		write(1, "0", 1);
+	ft_putnbr_fd(value, 1, tool);
 	return (0);
 }
 
@@ -334,8 +349,24 @@ int ft_printf(char *format, ...)
 
 int main(void)
 {
-	printf("pf[%0 5d]]\n", 789); //[-0000000789]
-	ft_printf("ft[%0 5d]\n", 789); //[-0000000789]
-	printf("pf[%0+5d]]\n", 789); //[-0000000789]
-	ft_printf("ft[% +5d]\n", 789); //[-0000000789]
+//	printf("0, ' ' :flag, width: 6, precision: 5 , value: 789\n");
+//	printf("pf[%0 6.8d]\n", -789); //[-0000000789]
+//	ft_printf("pf[%0 6.8d]\n", -789); //[-0000000789]
+//	printf("pf[%0 6.5d]\n", -789); //[-0000000789]
+//	ft_printf("ft[%0 6.5d]\n", -789); //[-0000000789]
+//	printf("pf[%0 6.5d]\n", 789); //[-0000000789]
+//	ft_printf("ft[%0 6.5d]\n", 789); //[-0000000789]
+//	printf("pf[%0 6d]\n", 456); //[-0000000789]
+//	ft_printf("ft[%0 6d]\n", 456); //[-0000000789]
+//
+//	printf("pf[%0+7d]\n", 123); //[-0000000789]
+//	ft_printf("ft[%0+7d]\n", 123); //[-0000000789]
+//
+//	printf("pf[% 07d]\n", 789); //[-0000000789]
+//	ft_printf("ft[% 07d]\n", 789); //[-0000000789]
+//=========================================
+//	printf("pf[%+7.4d]\n", 789); //[-0000000789]
+//	ft_printf("ft[%+7.4d]\n", 789); //[-0000000789]
+	printf("pf[%+07d]\n", -789); //[-0000000789]
+	ft_printf("ft[%+07d]\n", -789); //[-0000000789]
 }
