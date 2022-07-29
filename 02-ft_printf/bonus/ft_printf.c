@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/29 14:21:27 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/29 14:57:56 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,14 +163,13 @@ int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
 	}
 	else
 	{
+		// 정밀도가 value길이보다 작으면 코드가 돌지 않음.
 		while (--(option->width) > 0)
 			write(1, &c, 1);
-		if (option->flag & FLAG_PLUS)
+		if (option->flag & FLAG_PLUS && value >= 0)
 		{
-			if (value >= 0)
-				write(1, "+", 1);
-//			else 
-//				write(1, "-", 1);
+			write(1, "+", 1);
+			--option->width;
 		}
 		else if (option->flag & FLAG_SPACE)
 			write(1, " ", 1); 
@@ -365,8 +364,8 @@ int main(void)
 //	printf("pf[% 07d]\n", 789); //[-0000000789]
 //	ft_printf("ft[% 07d]\n", 789); //[-0000000789]
 //=========================================
-//	printf("pf[%+7.4d]\n", 789); //[-0000000789]
-//	ft_printf("ft[%+7.4d]\n", 789); //[-0000000789]
-	printf("pf[%+07d]\n", -789); //[-0000000789]
-	ft_printf("ft[%+07d]\n", -789); //[-0000000789]
+	printf("pf[%+7.2d]\n", 789); //[  +0789]
+	ft_printf("ft[%+7.2d]\n", 789); //[  +0789]
+//	printf("pf[%+07d]\n", 789); //[-0000000789]
+//	ft_printf("ft[%+07d]\n", 789); //[-0000000789]
 }
