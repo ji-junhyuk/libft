@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/29 17:04:40 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/30 15:50:22 by jijunhyuk        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
 {
 	int		value;
 	int		len;
-	char 	flag;
 	char	c;
 
 	(void)(*tool);
@@ -143,8 +142,6 @@ int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
 		option->precision = len;
 	option->precision -= len;
 	option->width -= (option->precision + len); // 5
-	printf("width:%d\n", option->width);
-	printf("precision:%d\n", option->precision);
 	c = ' ';
 	if (option->flag & FLAG_ZERO)
 		c = '0';
@@ -152,44 +149,114 @@ int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
 		c = ' ';
 	if (option->flag & FLAG_LEFT)
 	{
+		if (option->flag & FLAG_ZERO)
+		{
+		}
+		else
+		{
+			if (option->precision == 0 && value == 0 && option->flag & PRECISION && option->width == 0)
+				return (++tool->printed);
+			if (value < 0)
+				write(1, "-", 1);
+			else if (option->flag & FLAG_PLUS && value >= 0)
+				write(1, "+", 1);
+			else if (option->flag & FLAG_SPACE)
+				write(1, " ", 1); 
+			if (option->flag & FLAG_PLUS || option->flag & FLAG_SPACE || value < 0)
+				--option->width;
+			while (--(option->precision) >= 0)
+				write(1, "0", 1);
+			ft_putnbr_fd(value, 1, tool);
+			while (--(option->width) >= 0)
+				write(1, &c, 1);
+//			while (option->width > 1)
+//			{
+//				write(1, &c, 1);
+//				--option->width;
+//			}
+//			if (value < 0)
+//				write(1, "-", 1);
+//			else if (option->flag & FLAG_PLUS && value >= 0)
+//				write(1, "+", 1);
+//			else if (option->flag & FLAG_SPACE)
+//				write(1, " ", 1); 
+//			else if (--option->width >= 0)
+//				write(1, &c, 1); 
+//
+//			if (option->flag & FLAG_PLUS || option->flag & FLAG_SPACE || value < 0)
+//				--option->width;
+//			while (--(option->precision) >= 0)
+//				write(1, "0", 1);
+//			ft_putnbr_fd(value, 1, tool);
+		}
 	}
 	else
 	{
 		// +10d
 		// 0 d
-		if (option->flag & FLAG_ZERO && option->flag & FLAG_PLUS + 	)
+		if (option->flag & FLAG_ZERO)
 		{
-			printf("여기맞죠?\n");
-			if (value < 0)
-				write(1, "-", 1);
-			else if (option->flag & FLAG_PLUS && value >= 0)
-				write(1, "+", 1);
-			else if (option->flag & FLAG_SPACE)
-				write(1, " ", 1); 
+			if (option->flag & PRECISION)
+			{
+				while (option->width > 1)
+				{
+					write(1, &c, 1);
+					--option->width;
+				}
+				if (value < 0)
+					write(1, "-", 1);
+				else if (option->flag & FLAG_PLUS && value >= 0)
+					write(1, "+", 1);
+				else if (option->flag & FLAG_SPACE)
+					write(1, " ", 1); 
+				else if (--option->width >= 0)
+					write(1, &c, 1); 
+				if (option->flag & FLAG_PLUS || option->flag & FLAG_SPACE || value < 0)
+					--option->width;
+				while (--(option->precision) >= 0)
+					write(1, "0", 1);
+				ft_putnbr_fd(value, 1, tool);
+			}
 			else
-				write(1, &c, 1);
-			--option->width;
-			while (--(option->width) >= 0)
-				write(1, &c, 1);
+			{
+				if (value < 0)
+					write(1, "-", 1);
+				else if (option->flag & FLAG_PLUS && value >= 0)
+					write(1, "+", 1);
+				else if (option->flag & FLAG_SPACE)
+					write(1, " ", 1); 
+				if (option->flag & FLAG_PLUS || option->flag & FLAG_SPACE || value < 0)
+					--option->width; while (--(option->width) >= 0) write(1, &c, 1);
+				while (--(option->precision) >= 0)
+					write(1, "0", 1);
+				ft_putnbr_fd(value, 1, tool);
+			}
 		}
 		else
 		{
-			while (--(option->width) > 0)
+			if (option->precision == 0 && value == 0 && option->flag & PRECISION && option->width == 0)
+				return (++tool->printed);
+			while (option->width > 1)
+			{
 				write(1, &c, 1);
+				--option->width;
+			}
 			if (value < 0)
 				write(1, "-", 1);
 			else if (option->flag & FLAG_PLUS && value >= 0)
 				write(1, "+", 1);
 			else if (option->flag & FLAG_SPACE)
 				write(1, " ", 1); 
-			else
-				write(1, &c, 1);
-			--option->width;
+			else if (--option->width >= 0)
+				write(1, &c, 1); 
+
+			if (option->flag & FLAG_PLUS || option->flag & FLAG_SPACE || value < 0)
+				--option->width;
+			while (--(option->precision) >= 0)
+				write(1, "0", 1);
+			ft_putnbr_fd(value, 1, tool);
 		}
 	}
-	while (--(option->precision) >= 0)
-		write(1, "0", 1);
-	ft_putnbr_fd(value, 1, tool);
 	return (0);
 
 
@@ -405,15 +472,22 @@ int ft_printf(char *format, ...)
 	return (tool.printed);
 }
 
-int main(void)
-{
+//int main(void)
+//{
+//	printf("pf[%0+7d]\n", 123); //[-0000000789]
+//	ft_printf("ft[%0+7d]\n", 123); //[-0000000789]
+//	printf("pf[%+07d]\n", 123); //[-0000000789]
+//	ft_printf("ft[%+07d]\n", 123); //[-0000000789]
+
 //	printf("pf[%0+7d]\n", 123); //[-0000000789]
 //	ft_printf("ft[%0+7d]\n", 123); //[-0000000789]
 //	printf("pf[%0 6d]\n", 456); //[-0000000789]
 //	ft_printf("ft[%0 6d]\n", 456); //[-0000000789]
-	printf("pf[% 07d]\n", 789); //[-0000000789]
-	ft_printf("ft[% 07d]\n", 789); //[-0000000789]
+//	printf("pf[% 07d]\n", 789); //[-0000000789]
+//	ft_printf("ft[% 07d]\n", 789); //[-0000000789]
 //	printf("pf[%+07d]\n", 789); //[-0000000789]
+//	ft_printf("pf[%+07d]\n", 789); //[-0000000789]
+								
 //	ft_printf("ft[%+07d]\n", 789); //[-0000000789]
 //	printf("pf[%+07d]\n", 789); //[-0000000789]
 //	ft_printf("ft[%+07d]\n", 789); //[-0000000789]
@@ -435,4 +509,37 @@ int main(void)
 //	ft_printf("ft[%+7.2d]\n", 789); //[  +0789]
 //	printf("pf[%+7.4d]\n", 789); //[  +0789]
 //	ft_printf("ft[%+7.4d]\n", 789); //[  +0789]
-}
+//	printf("pf[%-6.4d]\n", -789); //[  +0789]
+//	ft_printf("pf[%-6.4d]\n", -789); //[  +0789]
+//	printf("pf[%+-6.4d]\n", -789); //[  +0789]
+//	printf("pf[%+-6.4d]\n", -789); //[  +0789]
+//	printf("pf[%-10.4d]\n", 789); //[  +0789]
+//	ft_printf("ft[%-10.4d]\n", 789); //[  +0789]
+//}
+//int main(void)
+//{
+//	ft_printf("%d\n", 17);
+//	printf("%d\n", 17);
+//	ft_printf("ft[%7d]\n", 123);
+//	printf("pf[%7d]\n", 123);
+//	ft_printf("%5d\n", 52625);
+//	ft_printf("ft[%-7d]\n", 123);
+//	printf("%03d\n", 123);
+////	ft_printf("%03d\n", 123);
+//	ft_printf("[%010.5d]\n", -123);
+//	printf("[%010.5d]\n", -123);
+//	ft_printf("%0.d\n", 0);
+//	printf("%d", 0);
+//	ft_printf("%d", 0);
+//	ft_printf("%d", 0);
+//	printf("%.3d\n", 000);
+//
+//	printf("%.3d\n", 0);
+//	ft_printf("%.3d\n", 0);
+//	printf("%8.5d\n", 0);
+//	ft_printf("%8.5d\n", 0);
+//	printf("%5.0d\n", 0);
+//	printf("%-5.0d\n", 0);
+//	ft_printf("%5.0d\n", 0);
+//	ft_printf("%-5.0d\n", 0);
+//}
