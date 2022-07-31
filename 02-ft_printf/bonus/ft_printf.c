@@ -6,11 +6,19 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/31 22:29:23 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/08/01 08:01:34 by jijunhyuk        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+int write_tool(t_tool *tool, char c)
+{
+	if (write(1, &c, 1) == -1)
+		return (-1);
+	++tool->printed;
+	return (0);
+}
 
 int	find_len(long num)
 {
@@ -40,12 +48,10 @@ int	find_len_hex(long num)
 	}
 }
 
-int	ft_putnbr_fd(int value, int fd, t_tool *tool)
+int	ft_putnbr_fd(long num, int fd, t_tool *tool)
 {
-	long	num;
 	char	c;
 
-	num = value;
 	if (num < 10)
 	{
 		c = num + '0';
@@ -81,7 +87,7 @@ void	check_sign_un(t_option *option, t_tool *tool, unsigned int *value)
 	}
 }
 
-void	check_sign(t_option *option, t_tool *tool, int *value)
+void	check_sign(t_option *option, t_tool *tool, long *value)
 {
 	if (*value < 0)
 	{
@@ -118,26 +124,25 @@ int	print_width(t_tool *tool, t_option *option)
 	return (0);
 }
 
-int	print_decimal_2(t_option *option, t_tool *tool, int value)
+int	print_decimal_2(t_option *option, t_tool *tool, long value)
 {
 	if (!(option->flag & FLAG_LEFT))
 		if (print_width(tool, option) == -1)
 			return (-1);
 	while (tool->len < (option->precision)--)
-		if (write(1, "0", 1) == -1)
+		if (write_tool(tool, '0') == -1)
 			return (-1);
 	if (!tool->precision_value_zero)
 		if (ft_putnbr_fd(value, 1, tool) == -1)
 			return (-1);
-	while ((option->width)-- > 0)
-		if (write(1, &tool->c, 1) == -1)
-			return (-1);
+	if (print_width(tool, option) == -1)
+		return (-1);
 	return (0);
 }
 
 int	print_decimal(t_option *option, t_tool *tool, va_list *ap)
 {
-	int		value;
+	long	value;
 
 	value = va_arg(*ap, int);
 	tool->len = find_len(value);
@@ -157,7 +162,7 @@ int	print_decimal(t_option *option, t_tool *tool, va_list *ap)
 		if (print_width(tool, option) == -1)
 			return (-1);
 	if (tool->sign)
-		if (write(1, &tool->sign, 1) == -1)
+		if (write_tool(tool, tool->sign) == -1)
 			return (-1);
 	if (print_decimal_2(option, tool, value) == -1)
 		return (-1);
@@ -171,18 +176,27 @@ int	print_char(t_option *option, t_tool *tool, va_list *ap)
 	(void)	*tool;
 	value = va_arg(*ap, int);
 	if (!(option->flag & FLAG_LEFT))
+	{
 		while (--option->width > 0)
+		{
 			if (write(1, " ", 1) == -1)
 				return (-1);
+			++tool->printed;
+		}
+	}
 	if (write(1, &value, 1) == -1)
 		return (-1);
+	++tool->printed;
 	while (--option->width > 0)
+	{
 		if (write(1, " ", 1) == -1)
 			return (-1);
+		++tool->printed;
+	}
 	return (0);
 }
 
-int	ft_strlen(char *str)
+int	ft_strlen(unsigned char *str)
 {
 	int	len;
 
@@ -197,32 +211,42 @@ int	ft_strlen(char *str)
 	return (len);
 }
 
+
+int	print_str2(t_option *option, t_tool *tool, unsigned char *str)
+{
+	while (option->precision-- > 0)
+	{
+		if (write_tool(tool, *str) == -1)
+			return (-1);
+		++str;
+	}
+	if (print_width(tool, option) == -1)
+		return (-1);
+	return (0);
+}
+
 int	print_str(t_option *option, t_tool *tool, va_list *ap)
 {
-	char	*str;
+	unsigned char	*str;
 
-	str = va_arg(*ap, char *);
+	str = va_arg(*ap, unsigned char *);
 	if (!str)
-		str = "(null)";
+		str = (unsigned char *)"(null)";
 	tool->len = ft_strlen(str);
 	if (option->precision != -1 && option->precision > tool->len)
 		option->precision = tool->len;
-	if (option->precision == -1)
+	if (option->precision == -1) 
 		option->width -= tool->len;
 	else
 		option->width -= option->precision;
+
 	if (!(option->flag & PRECISION))
 		option->precision = tool->len;
 	if (!(option->flag & FLAG_LEFT))
-		while (option->width-- > 0)
-			if (write(1, " ", 1) == -1)
-				return (-1);
-	while (option->precision-- > 0)
-		if (write(1, str++, 1) == -1)
+		if (print_width(tool, option) == -1)
 			return (-1);
-	while (option->width-- > 0)
-		if (write(1, " ", 1) == -1)
-			return (-1);
+	if (print_str2(option, tool, str) == -1)
+		return (-1);
 	return (0);
 }
 
@@ -251,13 +275,13 @@ int	print_un_decimal_2(t_option *option, t_tool *tool, unsigned int value)
 		if (print_width(tool, option) == -1)
 			return (-1);
 	while (tool->len < (option->precision)--)
-		if (write(1, "0", 1) == -1)
+		if (write_tool(tool, '0') == -1)
 			return (-1);
 	if (!tool->precision_value_zero)
-		if (ft_putnbr_fd_2(value, 1, tool) == 1)
+		if (ft_putnbr_fd_2(value, 1, tool) == -1)
 			return (-1);
 	while ((option->width)-- > 0)
-		if (write(1, &tool->c, 1) == -1)
+		if (write_tool(tool, tool->c) == -1)
 			return (-1);
 	return (0);
 }
@@ -284,7 +308,8 @@ int	print_un_decimal(t_option *option, t_tool *tool, va_list *ap)
 		if (print_width(tool, option) == -1)
 			return (-1);
 	if (tool->sign)
-		write(1, &tool->sign, 1);
+		if (write_tool(tool, tool->sign) == -1)
+			return (-1);
 	if (print_un_decimal_2(option, tool, value) == -1)
 		return (-1);
 	return (0);
@@ -348,16 +373,15 @@ int	print_address(t_option *option, t_tool *tool, va_list *ap)
 		tool->len = sizeof(size_t) * 2 + 2 - find_zero_num(value, &idx);
 	option->width -= tool->len;
 	if (!(option->flag & FLAG_LEFT))
-		while ((option->width)-- > 0)
-			if (write(1, " ", 1) == -1)
-				return (-1);
+		if (print_width(tool, option) == -1)
+			return (-1);
 	if (write(1, "0x", 2) == -1)
 		return (-1);
+	tool->printed += 2;
 	if (print_address_hex(p, value, idx, tool) == -1)
 		return (-1);
-	while ((option->width)-- > 0)
-		if (write(1, " ", 1) == -1)
-			return (-1);
+	if (print_width(tool, option) == -1)
+		return (-1);
 	return (0);
 }
 
@@ -381,18 +405,20 @@ int	ft_puthex_fd_2(unsigned int value, int fd, t_tool *tool)
 
 int print_hex_big_2(t_option *option, t_tool *tool, int value)
 {
+	if (tool->sign)
+		if (write_tool(tool, tool->sign) == -1)
+			return (-1);
 	if (!(option->flag & FLAG_LEFT))
 		if (print_width(tool, option) == -1)
 			return (-1);
 	while (tool->len < (option->precision)--)
-		if (write(1, "0", 1) == -1)
+		if (write_tool(tool, '0') == -1)
 			return (-1);
 	if (!tool->precision_value_zero)
 		if (ft_puthex_fd_2(value, 1, tool) == -1)
 			return (-1);
-	while ((option->width)-- > 0)
-		if (write(1, &tool->c, 1) == -1)
-			return (-1);
+	if (print_width(tool, option) == -1)
+		return (-1);
 	return (0);
 }
 
@@ -416,15 +442,13 @@ int	print_hex_big(t_option *option, t_tool *tool, va_list *ap)
 	check_sign_un(option, tool, &value);
 	if (option->flag & FLAG_HASH && value != 0)
 	{
-		if (write(1, "0x", 2) == -1)
+		if (write(1, "0X", 2) == -1)
 			return (-1);
 		option->width -= 2;
+		tool->printed += 2;
 	}
 	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
 		if (print_width(tool, option) == -1)
-			return (-1);
-	if (tool->sign)
-		if (write(1, &tool->sign, 1) == -1)
 			return (-1);
 	if (print_hex_big_2(option, tool, value) == -1)
 		return (-1);
@@ -451,17 +475,20 @@ int	ft_puthex_fd(unsigned int value, int fd, t_tool *tool)
 
 int print_hex_small_2(t_option *option, t_tool *tool, int value)
 {
+	if (tool->sign)
+		if (write_tool(tool, tool->sign) == -1)
+			return (-1);
 	if (!(option->flag & FLAG_LEFT))
 		if (print_width(tool, option) == -1)
 			return (-1);
 	while (tool->len < (option->precision)--)
-		if (write(1, "0", 1) == -1)
+		if (write_tool(tool, '0') == -1)
 			return (-1);
 	if (!tool->precision_value_zero)
 		if (ft_puthex_fd(value, 1, tool) == -1)
 			return (-1);
 	while ((option->width)-- > 0)
-		if (write(1, &tool->c, 1) == -1)
+		if (write_tool(tool, tool->c) == -1)
 			return (-1);
 	return (0);
 }
@@ -489,12 +516,10 @@ int	print_hex_small(t_option *option, t_tool *tool, va_list *ap)
 		if (write(1, "0x", 2) == -1)
 			return (-1);
 		option->width -= 2;
+		tool->printed += 2;
 	}
 	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
 		if (print_width(tool, option) == -1)
-			return (-1);
-	if (tool->sign)
-		if (write(1, &tool->sign, 1) == -1)
 			return (-1);
 	if (print_hex_small_2(option, tool, value) == -1)
 		return (-1);
@@ -518,7 +543,7 @@ void	initializer(t_option *option, t_tool *tool)
 	option->width = -1;
 	option->precision = -1;
 	tool->precision_value_zero = 0;
-	tool->printed = 0;
+//	tool->printed = 0;
 	tool->len = 0;
 	tool->c = ' ';
 	tool->sign = 0;
@@ -634,6 +659,7 @@ int	ft_printf(const char *format, ...)
 	va_list		ap;
 
 	va_start(ap, format);
+	tool.printed = 0;	
 	while (*format)
 	{
 		if (*format == '%')
@@ -652,3 +678,9 @@ int	ft_printf(const char *format, ...)
 	}
 	return (tool.printed);
 }
+//
+//int main(void)
+//{
+//	printf("%#X|\n", 42000);
+//	ft_printf("%#X|\n", 42000);
+//}

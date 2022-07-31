@@ -6,7 +6,7 @@
 /*   By: jijunhyuk <marvin@42.fr>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 22:15:50 by jijunhyuk         #+#    #+#             */
-/*   Updated: 2022/07/31 22:25:08 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/08/01 07:24:18 by jijunhyuk        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,13 @@ int	print_un_decimal(t_option *option, t_tool *tool, va_list *ap);
 int	print_un_decimal_2(t_option *option, t_tool *tool, unsigned int value);
 int	ft_putnbr_fd_2(unsigned int num, int fd, t_tool *tool);
 int	print_str(t_option *option, t_tool *tool, va_list *ap);
-int	ft_strlen(char *str);
+int	ft_strlen(unsigned char *str);
 int	print_char(t_option *option, t_tool *tool, va_list *ap);
 int	print_decimal(t_option *option, t_tool *tool, va_list *ap);
-int	print_decimal_2(t_option *option, t_tool *tool, int value);
+int	print_decimal_2(t_option *option, t_tool *tool, long value);
 int	print_width(t_tool *tool, t_option *option);
 void	check_prec_value(t_tool *tool, t_option *option);
-void	check_sign(t_option *option, t_tool *tool, int *value);
-void	check_sign_un(t_option *option, t_tool *tool, unsigned int *value);
-int	print_str(t_option *option, t_tool *tool, va_list *ap);
-int	ft_strlen(char *str);
-int	print_char(t_option *option, t_tool *tool, va_list *ap);
-int	print_decimal(t_option *option, t_tool *tool, va_list *ap);
-int	print_decimal_2(t_option *option, t_tool *tool, int value);
-int	print_width(t_tool *tool, t_option *option);
-void	check_prec_value(t_tool *tool, t_option *option);
-void	check_sign(t_option *option, t_tool *tool, int *value);
+void	check_sign(t_option *option, t_tool *tool, long *value);
 void	check_sign_un(t_option *option, t_tool *tool, unsigned int *value);
 int	ft_printf(const char *format, ...);
 #endif
