@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/31 16:11:33 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/31 18:16:59 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,12 +302,76 @@ int	print_un_decimal(t_option *option, t_tool *tool, va_list *ap)
 	return (0);
 }
 
+int	print_address_hex(void *p, unsigned char *value, int idx, t_tool *tool)
+{
+	const char		*hex = "0123456789abcdef";
+
+	if (!p)
+	{
+		if (write(1, "0", 1) == -1)
+			return (-1);
+		++tool->printed;
+	}
+	else
+	{
+		if (value[idx] < 16)
+		{
+			if (write(1, &hex[*(value + idx--) % 16], 1) == -1)
+				return (-1);
+			++tool->printed;
+		}
+		while (idx >= 0)
+		{
+			if (write(1, &hex[*(value + idx) / 16], 1) == -1)
+				return (-1);
+			if (write(1, &hex[*(value + idx--) % 16], 1) == -1)
+				return (-1);
+			tool->printed += 2;
+		}
+	}
+	return (0);
+}
+
+int	find_zero_num(unsigned char *value, int *idx)
+{
+	int	zero_num;
+
+	zero_num = 0;
+	*idx = sizeof(size_t) - 1;
+	while (value[*idx] == 0)
+	{
+		--(*idx);
+		zero_num += 2;
+	}
+	if (value[*idx] < 16)
+		++zero_num;
+	return (zero_num);
+}
+
 int	print_address(t_option *option, t_tool *tool, va_list *ap)
 {
-//	long long			value;
-//	unsigned char 		*p_value;
-//
-//	value = 
+	unsigned char	*value;
+	void			*p;
+	int				idx;
+
+	p = va_arg(*ap, unsigned char *);
+	value = (unsigned char *)&p;
+	if (!p)
+		tool->len = 3;
+	else
+		tool->len = sizeof(size_t) * 2 + 2 - find_zero_num(value, &idx);
+	option->width -= tool->len;
+	if (!(option->flag & FLAG_LEFT))
+		while ((option->width)-- > 0)
+			if (write(1, " ", 1) == -1)
+				return (-1);
+	if (write(1, "0x", 2) == -1)
+		return (-1);
+	if (print_address_hex(p, value, idx, tool) == -1)
+		return (-1);
+	while ((option->width)-- > 0)
+		if (write(1, " ", 1) == -1)
+			return (-1);
 	return (0);
 }
 
@@ -452,36 +516,20 @@ int	ft_printf(char *format, ...)
 	}
 	return (tool.printed);
 }
+
 //int main(void)
 //{
-//	printf("%u", 4294967295u);
-//	ft_printf("%u", 4294967295u);
-//}
-//
-//int main(void)
-//{
-//	printf("%.3s|\n", (unsigned char *)NULL);
-//	ft_printf("%.3s|\n", (unsigned char *)NULL);
-//	printf("%s|\n", (unsigned char *)NULL);
-//	ft_printf("%s|\n", (unsigned char *)NULL);
-//	printf("%7s|\n", (char *)NULL);
-//	ft_printf("%7s|\n", (char *)NULL);
-//	printf("%7.2s|\n", (char *)NULL);
-//	ft_printf("%7.2s|\n", (char *)NULL);
-//	printf("%3s|\n", (char *)NULL);
-//	ft_printf("%3s|\n", (char *)NULL);
-//	printf("%.3s|\n", "junto");
-//	ft_printf("%.3s|\n", "junto");
-//	printf("%4.3s|\n", "junto");
-//	ft_printf("%4.3s|\n", "junto");
-//	printf("%5.2s|\n", "junto");
-//	ft_printf("%5.2s|\n", "junto");
-//	printf("%5.7s|\n", "junto");
-//	ft_printf("%5.7s|\n", "junto");
-//	printf("%-5.2s|\n", "junto");
-//	ft_printf("%-5.2s|\n", "junto");
-//	printf("%-5s|\n", "junto");
-//	ft_printf("%-5s|\n", "junto");
-//	printf("%-5.6s|\n", "junto");
-//	ft_printf("%-5.6s|\n", "junto");
+//	int num = 0;
+//	printf("%5p|\n", NULL);
+//	ft_printf("%5p|\n", NULL);
+//	printf("%2p|\n", NULL);
+//	ft_printf("%2p|\n", NULL);
+//	ft_printf("%15p|\n", &num);
+//	printf("%15p|\n", &num);
+//	printf("%1p|\n", &num);
+//	ft_printf("%1p|\n", &num);
+//	printf("%17p|\n", &num);
+//	ft_printf("%17p|\n", &num);
+//	printf("%-17p|\n", &num);
+//	ft_printf("%-17p|\n", &num);
 //}
