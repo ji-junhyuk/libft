@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/31 18:16:59 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/31 22:09:02 by jijunhyuk        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ typedef struct s_tool
 	int			len;
 	int			printed;
 	void		*functions[256];
+	char		*hex;
 }	t_tool;
 
-int	find_len(long long num)
+int	find_len(long num)
 {
 	int	len;
 
@@ -47,6 +48,20 @@ int	find_len(long long num)
 	{
 		++len;
 		num /= 10;
+		if (num == 0)
+			return (len);
+	}
+}
+
+int	find_len_hex(long num)
+{
+	int	len;
+
+	len = 0;
+	while (1)
+	{
+		++len;
+		num /= 16;
 		if (num == 0)
 			return (len);
 	}
@@ -72,6 +87,7 @@ int	ft_putnbr_fd(int value, int fd, t_tool *tool)
 	}
 	return (0);
 }
+
 
 void	check_sign_un(t_option *option, t_tool *tool, unsigned int *value)
 {
@@ -304,8 +320,6 @@ int	print_un_decimal(t_option *option, t_tool *tool, va_list *ap)
 
 int	print_address_hex(void *p, unsigned char *value, int idx, t_tool *tool)
 {
-	const char		*hex = "0123456789abcdef";
-
 	if (!p)
 	{
 		if (write(1, "0", 1) == -1)
@@ -316,15 +330,15 @@ int	print_address_hex(void *p, unsigned char *value, int idx, t_tool *tool)
 	{
 		if (value[idx] < 16)
 		{
-			if (write(1, &hex[*(value + idx--) % 16], 1) == -1)
+			if (write(1, &tool->hex[*(value + idx--) % 16], 1) == -1)
 				return (-1);
 			++tool->printed;
 		}
 		while (idx >= 0)
 		{
-			if (write(1, &hex[*(value + idx) / 16], 1) == -1)
+			if (write(1, &tool->hex[*(value + idx) / 16], 1) == -1)
 				return (-1);
-			if (write(1, &hex[*(value + idx--) % 16], 1) == -1)
+			if (write(1, &tool->hex[*(value + idx--) % 16], 1) == -1)
 				return (-1);
 			tool->printed += 2;
 		}
@@ -375,6 +389,155 @@ int	print_address(t_option *option, t_tool *tool, va_list *ap)
 	return (0);
 }
 
+int	ft_puthex_fd_2(unsigned int value, int fd, t_tool *tool)
+{
+	const char *hex = "0123456789ABCDEF";
+
+	if (value < 16)
+	{
+		if (write(1, &hex[value], 1) == -1)
+			return (-1);
+		++tool->printed;
+	}	
+	else
+	{
+		ft_puthex_fd_2(value / 16, fd, tool);
+		ft_puthex_fd_2(value % 16, fd, tool);
+	}
+	return (0);
+}
+
+int print_hex_big_2(t_option *option, t_tool *tool, int value)
+{
+	if (!(option->flag & FLAG_LEFT))
+		if (print_width(tool, option) == -1)
+			return (-1);
+	while (tool->len < (option->precision)--)
+		if (write(1, "0", 1) == -1)
+			return (-1);
+	if (!tool->precision_value_zero)
+		if (ft_puthex_fd_2(value, 1, tool) == -1)
+			return (-1);
+	while ((option->width)-- > 0)
+		if (write(1, &tool->c, 1) == -1)
+			return (-1);
+	return (0);
+}
+
+int	print_hex_big(t_option *option, t_tool *tool, va_list *ap)
+{
+	unsigned int	value;
+
+	value = va_arg(*ap, unsigned int);
+	tool->len = find_len_hex(value);
+	if (option->precision == 0 && value == 0)
+		check_prec_value(tool, option);
+	if (option->precision < tool->len)
+		option->precision = tool->len;
+	option->width -= option->precision;
+	if (option->flag & FLAG_LEFT)
+		option->flag &= ~FLAG_ZERO;
+	if (option->flag & PRECISION)
+		option->flag &= ~FLAG_ZERO;
+	if (option->flag & FLAG_ZERO)
+		tool->c = '0';
+	check_sign_un(option, tool, &value);
+	if (option->flag & FLAG_HASH && value != 0)
+	{
+		if (write(1, "0x", 2) == -1)
+			return (-1);
+		option->width -= 2;
+	}
+	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
+		if (print_width(tool, option) == -1)
+			return (-1);
+	if (tool->sign)
+		if (write(1, &tool->sign, 1) == -1)
+			return (-1);
+	if (print_hex_big_2(option, tool, value) == -1)
+		return (-1);
+	return (0);
+}
+
+int	ft_puthex_fd(unsigned int value, int fd, t_tool *tool)
+{
+	const char *hex = "0123456789abcdef";
+
+	if (value < 16)
+	{
+		if (write(1, &hex[value], 1) == -1)
+			return (-1);
+		++tool->printed;
+	}	
+	else
+	{
+		ft_puthex_fd(value / 16, fd, tool);
+		ft_puthex_fd(value % 16, fd, tool);
+	}
+	return (0);
+}
+
+int print_hex_small_2(t_option *option, t_tool *tool, int value)
+{
+	if (!(option->flag & FLAG_LEFT))
+		if (print_width(tool, option) == -1)
+			return (-1);
+	while (tool->len < (option->precision)--)
+		if (write(1, "0", 1) == -1)
+			return (-1);
+	if (!tool->precision_value_zero)
+		if (ft_puthex_fd(value, 1, tool) == -1)
+			return (-1);
+	while ((option->width)-- > 0)
+		if (write(1, &tool->c, 1) == -1)
+			return (-1);
+	return (0);
+}
+
+int	print_hex_small(t_option *option, t_tool *tool, va_list *ap)
+{
+	unsigned int	value;
+
+	value = va_arg(*ap, unsigned int);
+	tool->len = find_len_hex(value);
+	if (option->precision == 0 && value == 0)
+		check_prec_value(tool, option);
+	if (option->precision < tool->len)
+		option->precision = tool->len;
+	option->width -= option->precision;
+	if (option->flag & FLAG_LEFT)
+		option->flag &= ~FLAG_ZERO;
+	if (option->flag & PRECISION)
+		option->flag &= ~FLAG_ZERO;
+	if (option->flag & FLAG_ZERO)
+		tool->c = '0';
+	check_sign_un(option, tool, &value);
+	if (option->flag & FLAG_HASH && value != 0)
+	{
+		if (write(1, "0x", 2) == -1)
+			return (-1);
+		option->width -= 2;
+	}
+	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
+		if (print_width(tool, option) == -1)
+			return (-1);
+	if (tool->sign)
+		if (write(1, &tool->sign, 1) == -1)
+			return (-1);
+	if (print_hex_small_2(option, tool, value) == -1)
+		return (-1);
+	return (0);
+}
+
+int	print_percent(t_option *option, t_tool *tool)
+{
+	(void) *option;
+	if (write(1, "%", 1) == -1)
+		return (-1);
+	++tool->printed;
+	return (0);
+}
+
 void	initializer(t_option *option, t_tool *tool)
 {
 	int	idx;
@@ -387,6 +550,7 @@ void	initializer(t_option *option, t_tool *tool)
 	tool->len = 0;
 	tool->c = ' ';
 	tool->sign = 0;
+	tool->hex = "0123456789abcdef";
 	idx = -1;
 	while (++idx < 256)
 		tool->functions[idx] = 0;
@@ -396,9 +560,9 @@ void	initializer(t_option *option, t_tool *tool)
 	tool->functions['d'] = print_decimal;
 	tool->functions['i'] = print_decimal;
 	tool->functions['u'] = print_un_decimal;
-//	functions['x'] = print_11hex_small;
-//	functions['X'] = print_hex_big;
-//	functions['%'] = print_percent;
+	tool->functions['x'] = print_hex_small;
+	tool->functions['X'] = print_hex_big;
+	tool->functions['%'] = print_percent;
 }
 
 void	check_flag(char **format, t_option *option)
@@ -519,17 +683,18 @@ int	ft_printf(char *format, ...)
 
 //int main(void)
 //{
-//	int num = 0;
-//	printf("%5p|\n", NULL);
-//	ft_printf("%5p|\n", NULL);
-//	printf("%2p|\n", NULL);
-//	ft_printf("%2p|\n", NULL);
-//	ft_printf("%15p|\n", &num);
-//	printf("%15p|\n", &num);
-//	printf("%1p|\n", &num);
-//	ft_printf("%1p|\n", &num);
-//	printf("%17p|\n", &num);
-//	ft_printf("%17p|\n", &num);
-//	printf("%-17p|\n", &num);
-//	ft_printf("%-17p|\n", &num);
+//	printf("%%");
+//	ft_printf("%%");
+////	printf("%x\n", 4294967295u);
+////	ft_printf("%x\n", 4294967295u);
+////	ft_printf("%u\n", 4294967295u);
+////	printf("%u\n", 4294967295u);
+////	printf("%7.0x|\n", 2147483); //20c49b
+////	ft_printf("%7.0x|\n", 2147483);
+////	printf("%7.6x|\n", 123);
+////	ft_printf("%7.6x|\n", 123);
+////	printf("%0#7x|\n", 123);
+////	ft_printf("%0#7x|\n", 123);
+////	printf("%-#7x|\n", 123);
+////	ft_printf("%-#7x|\n", 123);
 //}
