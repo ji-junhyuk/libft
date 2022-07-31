@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/31 14:38:55 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/31 15:34:43 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,16 +173,50 @@ int	print_char(t_option *option, t_tool *tool, va_list *ap)
 	return (0);
 }
 
-int	print_str(t_option *option, t_tool *tool, va_list *ap)
+int	ft_strlen(char *str)
 {
-	unsigned char	*str;
-	
-	str = va_arg(*ap, unsigned char *);
-	printf("%s\n", str);
+	int	len;
 
-	return (0);
+	len = 0;
+	if (!str)
+		return (6);
+	while (*str)
+	{
+		++len;
+		++str;
+	}
+	return (len);
 }
 
+int	print_str(t_option *option, t_tool *tool, va_list *ap)
+{
+	char	*str;
+	
+	str = va_arg(*ap, char *);
+	if (!str)
+		str = "(null)";
+	tool->len = ft_strlen(str);
+	if (option->precision != -1 && option->precision > tool->len)
+		option->precision = tool->len;
+	if (option->precision == -1)
+		option->width -= tool->len;
+	else
+		option->width -= option->precision;
+//	printf("wid%d\n", option->width);
+	if (!(option->flag & PRECISION))
+		option->precision = tool->len;
+	if (!(option->flag & FLAG_LEFT))
+		while (option->width-- > 0)
+			if (write(1, " ", 1) == -1)
+				return (-1);
+	while (option->precision-- > 0)
+		if (write(1, str++, 1) == -1)
+			return (-1);
+	while (option->width-- > 0)
+		if (write(1, " ", 1) == -1)
+			return (-1);
+	return (0);
+}
 
 void	initializer(t_option *option, t_tool *tool)
 {
@@ -328,14 +362,28 @@ int	ft_printf(char *format, ...)
 //
 //int main(void)
 //{
-////	printf("%5c|\n", 0);
-////	ft_printf("%5c|\n", 0);
-////	printf("%c|\n", 0);
-////	ft_printf("%c|\n", 0);
-////	printf("%1c|\n", 'c');
-////	ft_printf("%1c|\n", 'c');
-////	printf("%-3c|\n", 'c');
-////	ft_printf("%-3c|\n", 'c');
-////	printf("%3c|\n", 'c');
-////	ft_printf("%3c|\n", 'c');
+//	printf("%.3s|\n", (unsigned char *)NULL);
+//	ft_printf("%.3s|\n", (unsigned char *)NULL);
+//	printf("%s|\n", (unsigned char *)NULL);
+//	ft_printf("%s|\n", (unsigned char *)NULL);
+//	printf("%7s|\n", (char *)NULL);
+//	ft_printf("%7s|\n", (char *)NULL);
+//	printf("%7.2s|\n", (char *)NULL);
+//	ft_printf("%7.2s|\n", (char *)NULL);
+//	printf("%3s|\n", (char *)NULL);
+//	ft_printf("%3s|\n", (char *)NULL);
+//	printf("%.3s|\n", "junto");
+//	ft_printf("%.3s|\n", "junto");
+//	printf("%4.3s|\n", "junto");
+//	ft_printf("%4.3s|\n", "junto");
+//	printf("%5.2s|\n", "junto");
+//	ft_printf("%5.2s|\n", "junto");
+//	printf("%5.7s|\n", "junto");
+//	ft_printf("%5.7s|\n", "junto");
+//	printf("%-5.2s|\n", "junto");
+//	ft_printf("%-5.2s|\n", "junto");
+//	printf("%-5s|\n", "junto");
+//	ft_printf("%-5s|\n", "junto");
+//	printf("%-5.6s|\n", "junto");
+//	ft_printf("%-5.6s|\n", "junto");
 //}
