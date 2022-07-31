@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/31 12:49:42 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/07/31 14:16:30 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,22 @@
 #define FLAG_PLUS			0b00010000
 #define PRECISION			0b00100000
 
-typedef struct t_option
+typedef struct s_option
 {
 	int	flag;
 	int	width;
-	int precision;
-}	s_option;	
+	int	precision;
+}	t_option;	
 
-typedef struct t_tool
+typedef struct s_tool
 {
 	int			c;
+	int			precision_value_zero;
 	int			sign;
 	int			len;
 	int			printed;
 	void		*functions[256];
-}	s_tool;
+}	t_tool;
 
 int	find_len(long long num)
 {
@@ -51,7 +52,7 @@ int	find_len(long long num)
 	}
 }
 
-int	ft_putnbr_fd(int value, int fd, s_tool *tool)
+int	ft_putnbr_fd(int value, int fd, t_tool *tool)
 {
 	long long	num;
 	char		c;
@@ -72,7 +73,7 @@ int	ft_putnbr_fd(int value, int fd, s_tool *tool)
 	return (0);
 }
 
-void	check_sign(s_option *option, s_tool *tool, int *value)
+void	check_sign(t_option *option, t_tool *tool, int *value)
 {
 	if (*value < 0)
 	{
@@ -92,53 +93,32 @@ void	check_sign(s_option *option, s_tool *tool, int *value)
 	}
 }
 
-int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
+void	check_prec_value(t_tool *tool, t_option *option)
 {
-	int		value;
+	tool->precision_value_zero = 1;
+	++option->width;
+}
 
-	value = va_arg(*ap, int);
-	tool->len = find_len(value);
+int	print_width(t_tool *tool, t_option *option)
+{
+	while ((option->width)-- > 0)
+	{
+		if (write(1, &tool->c, 1) == -1)
+			return (-1);
+		++tool->printed;
+	}
+	return (0);
+}
 
-	int wow = 0;
-	if (option->precision == 0 && value == 0)
-	{
-		wow = 1;
-		++option->width;
-	}
-	if (option->precision < tool->len)
-		option->precision = tool->len;
-	option->width -= option->precision;
-	if (option->flag & FLAG_LEFT)
-		option->flag &= ~FLAG_ZERO;
-	else if (option->flag & PRECISION) 
-		option->flag &= ~FLAG_ZERO;
-	if (option->flag & FLAG_ZERO)
-		tool->c = '0';
-	check_sign(option, tool, &value);
-	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
-	{
-		while (option->width-- > 0)
-		{
-			if (write(1, &tool->c, 1) == -1)
-				return (-1);
-			++tool->printed;
-		}
-	}
-	if (tool->sign)
-		write(1, &tool->sign, 1);
+int	print_decimal_2(t_option *option, t_tool *tool, int value)
+{
 	if (!(option->flag & FLAG_LEFT))
-	{
-		while (option->width-- > 0)
-		{
-			if (write(1, &tool->c, 1) == -1)
-				return (-1);
-			++tool->printed;
-		}
-	}
+		if (print_width(tool, option) == -1)
+			return (-1);
 	while (tool->len < (option->precision)--)
 		if (write(1, "0", 1) == -1)
 			return (-1);
-	if (!wow)
+	if (!tool->precision_value_zero)
 		if (ft_putnbr_fd(value, 1, tool) == -1)
 			return (-1);
 	while ((option->width)-- > 0)
@@ -147,13 +127,48 @@ int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
 	return (0);
 }
 
-void	initializer(s_option *option, s_tool *tool)
+int	print_decimal(t_option *option, t_tool *tool, va_list *ap)
+{
+	int		value;
+
+	value = va_arg(*ap, int);
+	tool->len = find_len(value);
+	if (option->precision == 0 && value == 0)
+		check_prec_value(tool, option);
+	if (option->precision < tool->len)
+		option->precision = tool->len;
+	option->width -= option->precision;
+	if (option->flag & FLAG_LEFT)
+		option->flag &= ~FLAG_ZERO;
+	if (option->flag & PRECISION)
+		option->flag &= ~FLAG_ZERO;
+	if (option->flag & FLAG_ZERO)
+		tool->c = '0';
+	check_sign(option, tool, &value);
+	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
+		if (print_width(tool, option) == -1)
+			return (-1);
+	if (tool->sign)
+		write(1, &tool->sign, 1);
+	if (print_decimal_2(option, tool, value) == -1)
+		return (-1);
+	return (0);
+}
+
+int	print_char(t_option *option, t_tool *tool, va_list *ap)
+{
+
+	return (0);
+}
+
+void	initializer(t_option *option, t_tool *tool)
 {
 	int	idx;
 
 	option->flag = 0;
 	option->width = -1;
 	option->precision = -1;
+	tool->precision_value_zero = 0;
 	tool->printed = 0;
 	tool->len = 0;
 	tool->c = ' ';
@@ -161,7 +176,7 @@ void	initializer(s_option *option, s_tool *tool)
 	idx = -1;
 	while (++idx < 256)
 		tool->functions[idx] = 0;
-//	functions['c'] = print_char;
+	tool->functions['c'] = print_char;
 //	functions['s'] = print_str;
 //	functions['p'] = print_address;
 	tool->functions['d'] = print_decimal;
@@ -170,11 +185,9 @@ void	initializer(s_option *option, s_tool *tool)
 //	functions['x'] = print_11hex_small;
 //	functions['X'] = print_hex_big;
 //	functions['%'] = print_percent;
-	// 적합하지 않은 인자에 대해선 컴파일 에러가 난다. 
-	// ex) printf("%v", 123) // Invalid conversion specifier 'v'
 }
 
-void	check_flag(char **format, s_option *option)
+void	check_flag(char **format, t_option *option)
 {
 	while (*(*format))
 	{
@@ -201,14 +214,14 @@ int	is_alpha(char c)
 	return (0);
 }
 
-int is_num(char c)
+int	is_num(char c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);
 	return (0);
 }
 
-int	check_width(char **format, s_option *option)
+int	check_width(char **format, t_option *option)
 {
 	int	res;
 
@@ -217,7 +230,7 @@ int	check_width(char **format, s_option *option)
 	{
 		res *= 10;
 		res += (*(*format)) - '0';
-		if (res >= 214748364 && (*format + 1 && *(*format + 1)  >= '7'))
+		if (res >= 214748364 && (*format + 1 && *(*format + 1) >= '7'))
 			return (-1);
 		++(*format);
 	}
@@ -225,11 +238,11 @@ int	check_width(char **format, s_option *option)
 	return (0);
 }
 
-int	check_precision(char **format, s_option *option)
+int	check_precision(char **format, t_option *option)
 {
 	int	res;
 
-	res= 0;
+	res = 0;
 	if ((*(*format)) == '.')
 	{
 		if (option->precision < 0)
@@ -249,9 +262,9 @@ int	check_precision(char **format, s_option *option)
 	return (0);
 }
 
-int	parse_print(char **format, s_option *option, s_tool *tool, va_list *ap)
+int	parse_print(char **format, t_option *option, t_tool *tool, va_list *ap)
 {
-	void (*func)(s_option *, s_tool *, va_list *);
+	void	(*func)(t_option *, t_tool *, va_list *);
 
 	check_flag(format, option);
 	if (check_width(format, option) == -1)
@@ -264,13 +277,12 @@ int	parse_print(char **format, s_option *option, s_tool *tool, va_list *ap)
 	return (0);
 }
 
-
-int ft_printf(char *format, ...)
+int	ft_printf(char *format, ...)
 {
-	s_option	option;
-	s_tool		tool;
+	t_option	option;
+	t_tool		tool;
+	va_list		ap;
 
-	va_list ap;
 	va_start(ap, format);
 	while (*format)
 	{
@@ -311,7 +323,6 @@ int ft_printf(char *format, ...)
 //	ft_printf("ft[% 07d]\n", 789); //[-0000000789]
 //	printf("pf[%+07d]\n", 789); //[-0000000789]
 //	ft_printf("pf[%+07d]\n", 789); //[-0000000789]
-								
 //	ft_printf("ft[%+07d]\n", 789); //[-0000000789]
 //	printf("pf[%+07d]\n", 789); //[-0000000789]
 //	ft_printf("ft[%+07d]\n", 789); //[-0000000789]
