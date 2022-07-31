@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 16:40:00 by junji             #+#    #+#             */
-/*   Updated: 2022/07/30 19:54:58 by jijunhyuk        ###   ########.fr       */
+/*   Updatedr 2022/07/31 11:25:50 by jijunhyuk        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ int	main(void)
 	int flag;
 	flag = 0;
 	flag |= FLAG_HASH;
+	flag |= FLAG_LEFT;
+	flag |= FLAG_SPACE;
+	if (!(flag & (FLAG_HASH + FLAG_LEFT)))
+		write(1, "hello", 5);
+	// 0b00000101
 //	flag &= ~FLAG_HASH;
 	printf("flag%d\n", flag);
 

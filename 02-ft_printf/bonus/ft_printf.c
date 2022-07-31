@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/31 01:10:36 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/07/31 12:49:42 by jijunhyuk        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct t_option
 typedef struct t_tool
 {
 	int			c;
+	int			sign;
 	int			len;
 	int			printed;
 	void		*functions[256];
@@ -50,16 +51,12 @@ int	find_len(long long num)
 	}
 }
 
-int	ft_putnbr_fd(int n, int fd, s_tool *tool, int precision)
+int	ft_putnbr_fd(int value, int fd, s_tool *tool)
 {
 	long long	num;
 	char		c;
 
-	num = n;
-	if (num == 0 && precision == 0)
-		return (0);
-	if (num < 0)
-		num *= -1;
+	num = value;
 	if (num < 10)
 	{
 		c = num + '0';
@@ -69,69 +66,30 @@ int	ft_putnbr_fd(int n, int fd, s_tool *tool, int precision)
 	}	
 	else
 	{
-		ft_putnbr_fd(num / 10, fd, tool, precision);
-		ft_putnbr_fd(num % 10, fd, tool, precision);
+		ft_putnbr_fd(num / 10, fd, tool);
+		ft_putnbr_fd(num % 10, fd, tool);
 	}
 	return (0);
 }
 
-//int	printf_dec_args(s_option *option, s_tool *tool, int value)
-//{
-//	if (value < 0)
-//	{
-//		write(1, "-", 1);
-//		++tool->printed;
-//	}
-//	else
-//	{
-//		if (option->flag & FLAG_PLUS)
-//			write(1, "+", 1);
-//		else if (option->flag & FLAG_SPACE)
-//			write(1, " ", 1);
-//		++tool->printed;
-//	}
-//	ft_putnbr_fd(value, 1, tool);
-//	return (0);
-//}
-
-int	write_flag(s_option *option, s_tool *tool, int value)
+void	check_sign(s_option *option, s_tool *tool, int *value)
 {
-		if (value < 0)
-		{
-			if (write(1, "-", 1) == -1)
-				return (-1);
-			--option->width;
-			++tool->printed;
-		}
-		else if (option->flag & FLAG_PLUS && value >= 0)
-		{
-			if (write(1, "+", 1) == -1)
-				return (-1);
-			--option->width;
-			++tool->printed;
-		}
-		else if (option->flag & FLAG_SPACE)
-		{
-			if (write(1, " ", 1) == -1)
-				return (-1);
-			--option->width;
-			++tool->printed;
-		}
-		else if (option->flag & FLAG_ZERO && option->width > 0 && value != 0)
-		{
-			if (write(1, "0", 1) == -1)
-				return (-1);
-			--option->width;
-			++tool->printed;
-		}
-		else if (!(option->flag & FLAG_LEFT) && option->width > 0)
-		{
-			if (write(1, " ", 1) == -1)
-				return (-1);
-			--option->width;
-			++tool->printed;
-		}
-	return (0);
+	if (*value < 0)
+	{
+		tool->sign = '-';
+		*value *= -1;
+		--option->width;
+	}
+	else if (option->flag & FLAG_PLUS)
+	{
+		tool->sign = '+';
+		--option->width;
+	}
+	else if (option->flag & FLAG_SPACE)
+	{
+		tool->sign = ' ';
+		--option->width;
+	}
 }
 
 int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
@@ -141,64 +99,52 @@ int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
 	value = va_arg(*ap, int);
 	tool->len = find_len(value);
 
-	if (option->precision < tool->len)
-		option->precision = 0;
-	else
-		option->precision -= tool->len;
+	int wow = 0;
 	if (option->precision == 0 && value == 0)
-		tool->len = 0;
-	option->width -= (option->precision + tool->len);
-	if (option->flag & PRECISION) 
+	{
+		wow = 1;
+		++option->width;
+	}
+	if (option->precision < tool->len)
+		option->precision = tool->len;
+	option->width -= option->precision;
+	if (option->flag & FLAG_LEFT)
+		option->flag &= ~FLAG_ZERO;
+	else if (option->flag & PRECISION) 
 		option->flag &= ~FLAG_ZERO;
 	if (option->flag & FLAG_ZERO)
 		tool->c = '0';
-	if (value == 0 && option->precision == 0 && option->flag & PRECISION && option->width == 0)
-		return (++tool->printed);
-//	printf("option->precision: %d\n", option->precision);
-//	printf("option->width: %d\n", option->width);
-	if (option->flag & FLAG_ZERO || option->flag & FLAG_LEFT)
+	check_sign(option, tool, &value);
+	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
 	{
-		if (write_flag(option, tool, value) == -1)
-			return (-1);
-		++option->width;
-	}
-	if (option->flag & FLAG_LEFT)
-	{
-		while (option->precision-- > 0)
+		while (option->width-- > 0)
 		{
-			if (write(1, "0", 1) == -1)
+			if (write(1, &tool->c, 1) == -1)
 				return (-1);
 			++tool->printed;
 		}
 	}
-	if (option->flag & FLAG_LEFT)
-		if (ft_putnbr_fd(value, 1, tool, option->precision) == -1)
-			return (-1);
-	while (option->width > 1)
-	{
-		if (write(1, &tool->c, 1) == -1)
-			return (-1);
-		++tool->printed;
-		--option->width;
-	}
-	if (option->flag & FLAG_LEFT)
-			return (-1);
-	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
-		if (write_flag(option, tool, value) == -1)
-			return (-1);
+	if (tool->sign)
+		write(1, &tool->sign, 1);
 	if (!(option->flag & FLAG_LEFT))
 	{
-		while (option->precision > 0)
+		while (option->width-- > 0)
 		{
-			if (write(1, "0", 1) == -1)
+			if (write(1, &tool->c, 1) == -1)
 				return (-1);
 			++tool->printed;
-			option->precision--;
 		}
-		if (ft_putnbr_fd(value, 1, tool, option->precision) == -1)
-			return (-1);
 	}
-	return (tool->printed);
+	while (tool->len < (option->precision)--)
+		if (write(1, "0", 1) == -1)
+			return (-1);
+	if (!wow)
+		if (ft_putnbr_fd(value, 1, tool) == -1)
+			return (-1);
+	while ((option->width)-- > 0)
+		if (write(1, &tool->c, 1) == -1)
+			return (-1);
+	return (0);
 }
 
 void	initializer(s_option *option, s_tool *tool)
@@ -211,6 +157,7 @@ void	initializer(s_option *option, s_tool *tool)
 	tool->printed = 0;
 	tool->len = 0;
 	tool->c = ' ';
+	tool->sign = 0;
 	idx = -1;
 	while (++idx < 256)
 		tool->functions[idx] = 0;
@@ -402,7 +349,7 @@ int ft_printf(char *format, ...)
 //	printf("%05d|\n", 123);
 //	ft_printf("%05d|\n", 123);
 //
-//	ft_printf("%-5d|\n", 123);
+//	f_printf("%-5d|\n", 123);
 //	ft_printf("%-+5d|\n", 123);
 //	ft_printf("%- 5d|\n", 123);
 //	ft_printf("%05d|\n", 123);
@@ -445,3 +392,18 @@ int ft_printf(char *format, ...)
 //	printf("%5.0d\n", 0);
 //	ft_printf("%5.0d\n", 0);
 //	printf("%-5.0d\n", 0);
+//int main(void)
+//{
+//	printf("%d\n", 0);
+//	ft_printf("%d\n", 0);
+//	printf("%5.0d|\n", 0);
+//	ft_printf("%5.0d|\n", 0);
+// ========================
+//	printf("%-7d|\n", 33);
+//	ft_printf("%-7d|\n", 33);
+//	printf("%.0d|\n", 0);
+//	ft_printf("%.0d|\n", 0);
+//	printf("%.d|\n", 0);
+//	ft_printf("%.d|\n", 0);
+
+//}
