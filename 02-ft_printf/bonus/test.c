@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 16:40:00 by junji             #+#    #+#             */
-/*   Updated: 2022/07/30 12:25:18 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/07/30 19:54:58 by jijunhyuk        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@
 int	main(void)
 {
 	// 정밀도가 없을 때
+	int flag;
+	flag = 0;
+	flag |= FLAG_HASH;
+//	flag &= ~FLAG_HASH;
+	printf("flag%d\n", flag);
+
 	printf("[%+10d]]\n", 789); //[-0000000789]
 	printf("[%+10d]]\n", 789); //[-0000000789]
 

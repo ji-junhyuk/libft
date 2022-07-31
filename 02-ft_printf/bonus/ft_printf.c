@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/30 15:50:22 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/07/31 01:10:36 by jijunhyuk        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@
 #define FLAG_SPACE			0b00001000
 #define FLAG_PLUS			0b00010000
 #define PRECISION			0b00100000
-#define LONGGEST_ARGS		1
-#define LONGGEST_WIDTH		2
-#define LONGGEST_PRECISION	3
 
 typedef struct t_option
 {
@@ -33,18 +30,11 @@ typedef struct t_option
 
 typedef struct t_tool
 {
-	int			longgest;
+	int			c;
+	int			len;
 	int			printed;
 	void		*functions[256];
 }	s_tool;
-
-//typedef enum t_enum
-//{
-//	LONGGEST_ARGS 		= 1,
-//	LONGGEST_WIDTH 		= 2,
-//	LONGGEST_PRECISION	= 3
-//}	e_flag;
-
 
 int	find_len(long long num)
 {
@@ -60,253 +50,155 @@ int	find_len(long long num)
 	}
 }
 
-void	check_len_flag(s_option *option, s_tool *tool, int len)
-{
-	int		max;
-
-	max = 0;
-	if (max < len)
-		max = len;
-	if (max < option->width)
-		max = option->width;
-	if (max < option->precision)
-		max = option->precision;	
-	if (max == len)
-	{
-		tool->longgest = LONGGEST_ARGS;
-		return ;
-	}
-	if (max == option->precision)
-	{
-		tool->longgest = LONGGEST_PRECISION;
-		return ;
-	}
-	if (max == option->width)
-	{
-		tool->longgest = LONGGEST_WIDTH;
-		return ;
-	}
-}
-
-void	ft_putnbr_fd(int n, int fd, s_tool *tool)
+int	ft_putnbr_fd(int n, int fd, s_tool *tool, int precision)
 {
 	long long	num;
 	char		c;
 
 	num = n;
+	if (num == 0 && precision == 0)
+		return (0);
 	if (num < 0)
 		num *= -1;
 	if (num < 10)
 	{
 		c = num + '0';
-		write(fd, &c, 1);
+		if (write(fd, &c, 1) == -1)
+			return (-1);
 		++tool->printed;
 	}	
 	else
 	{
-		ft_putnbr_fd(num / 10, fd, tool);
-		ft_putnbr_fd(num % 10, fd, tool);
+		ft_putnbr_fd(num / 10, fd, tool, precision);
+		ft_putnbr_fd(num % 10, fd, tool, precision);
 	}
+	return (0);
 }
 
-int	printf_dec_args(s_option *option, s_tool *tool, int value)
+//int	printf_dec_args(s_option *option, s_tool *tool, int value)
+//{
+//	if (value < 0)
+//	{
+//		write(1, "-", 1);
+//		++tool->printed;
+//	}
+//	else
+//	{
+//		if (option->flag & FLAG_PLUS)
+//			write(1, "+", 1);
+//		else if (option->flag & FLAG_SPACE)
+//			write(1, " ", 1);
+//		++tool->printed;
+//	}
+//	ft_putnbr_fd(value, 1, tool);
+//	return (0);
+//}
+
+int	write_flag(s_option *option, s_tool *tool, int value)
 {
-	if (value < 0)
-	{
-		write(1, "-", 1);
-		++tool->printed;
-	}
-	else
-	{
-		if (option->flag & FLAG_PLUS)
-			write(1, "+", 1);
+		if (value < 0)
+		{
+			if (write(1, "-", 1) == -1)
+				return (-1);
+			--option->width;
+			++tool->printed;
+		}
+		else if (option->flag & FLAG_PLUS && value >= 0)
+		{
+			if (write(1, "+", 1) == -1)
+				return (-1);
+			--option->width;
+			++tool->printed;
+		}
 		else if (option->flag & FLAG_SPACE)
-			write(1, " ", 1);
-		++tool->printed;
-	}
-	ft_putnbr_fd(value, 1, tool);
+		{
+			if (write(1, " ", 1) == -1)
+				return (-1);
+			--option->width;
+			++tool->printed;
+		}
+		else if (option->flag & FLAG_ZERO && option->width > 0 && value != 0)
+		{
+			if (write(1, "0", 1) == -1)
+				return (-1);
+			--option->width;
+			++tool->printed;
+		}
+		else if (!(option->flag & FLAG_LEFT) && option->width > 0)
+		{
+			if (write(1, " ", 1) == -1)
+				return (-1);
+			--option->width;
+			++tool->printed;
+		}
 	return (0);
 }
 
 int	print_decimal(s_option *option, s_tool *tool, va_list *ap)
 {
 	int		value;
-	int		len;
-	char	c;
 
-	(void)(*tool);
 	value = va_arg(*ap, int);
-	len = find_len(value);
+	tool->len = find_len(value);
 
-	if (option->precision < len)
-		option->precision = len;
-	option->precision -= len;
-	option->width -= (option->precision + len); // 5
-	c = ' ';
+	if (option->precision < tool->len)
+		option->precision = 0;
+	else
+		option->precision -= tool->len;
+	if (option->precision == 0 && value == 0)
+		tool->len = 0;
+	option->width -= (option->precision + tool->len);
+	if (option->flag & PRECISION) 
+		option->flag &= ~FLAG_ZERO;
 	if (option->flag & FLAG_ZERO)
-		c = '0';
-	if (option->flag & PRECISION) // ZERO를 쓰진 않으니까? ZERO를 다시 꺼줄필요가 있나?
-		c = ' ';
+		tool->c = '0';
+	if (value == 0 && option->precision == 0 && option->flag & PRECISION && option->width == 0)
+		return (++tool->printed);
+//	printf("option->precision: %d\n", option->precision);
+//	printf("option->width: %d\n", option->width);
+	if (option->flag & FLAG_ZERO || option->flag & FLAG_LEFT)
+	{
+		if (write_flag(option, tool, value) == -1)
+			return (-1);
+		++option->width;
+	}
 	if (option->flag & FLAG_LEFT)
 	{
-		if (option->flag & FLAG_ZERO)
+		while (option->precision-- > 0)
 		{
-		}
-		else
-		{
-			if (option->precision == 0 && value == 0 && option->flag & PRECISION && option->width == 0)
-				return (++tool->printed);
-			if (value < 0)
-				write(1, "-", 1);
-			else if (option->flag & FLAG_PLUS && value >= 0)
-				write(1, "+", 1);
-			else if (option->flag & FLAG_SPACE)
-				write(1, " ", 1); 
-			if (option->flag & FLAG_PLUS || option->flag & FLAG_SPACE || value < 0)
-				--option->width;
-			while (--(option->precision) >= 0)
-				write(1, "0", 1);
-			ft_putnbr_fd(value, 1, tool);
-			while (--(option->width) >= 0)
-				write(1, &c, 1);
-//			while (option->width > 1)
-//			{
-//				write(1, &c, 1);
-//				--option->width;
-//			}
-//			if (value < 0)
-//				write(1, "-", 1);
-//			else if (option->flag & FLAG_PLUS && value >= 0)
-//				write(1, "+", 1);
-//			else if (option->flag & FLAG_SPACE)
-//				write(1, " ", 1); 
-//			else if (--option->width >= 0)
-//				write(1, &c, 1); 
-//
-//			if (option->flag & FLAG_PLUS || option->flag & FLAG_SPACE || value < 0)
-//				--option->width;
-//			while (--(option->precision) >= 0)
-//				write(1, "0", 1);
-//			ft_putnbr_fd(value, 1, tool);
+			if (write(1, "0", 1) == -1)
+				return (-1);
+			++tool->printed;
 		}
 	}
-	else
+	if (option->flag & FLAG_LEFT)
+		if (ft_putnbr_fd(value, 1, tool, option->precision) == -1)
+			return (-1);
+	while (option->width > 1)
 	{
-		// +10d
-		// 0 d
-		if (option->flag & FLAG_ZERO)
-		{
-			if (option->flag & PRECISION)
-			{
-				while (option->width > 1)
-				{
-					write(1, &c, 1);
-					--option->width;
-				}
-				if (value < 0)
-					write(1, "-", 1);
-				else if (option->flag & FLAG_PLUS && value >= 0)
-					write(1, "+", 1);
-				else if (option->flag & FLAG_SPACE)
-					write(1, " ", 1); 
-				else if (--option->width >= 0)
-					write(1, &c, 1); 
-				if (option->flag & FLAG_PLUS || option->flag & FLAG_SPACE || value < 0)
-					--option->width;
-				while (--(option->precision) >= 0)
-					write(1, "0", 1);
-				ft_putnbr_fd(value, 1, tool);
-			}
-			else
-			{
-				if (value < 0)
-					write(1, "-", 1);
-				else if (option->flag & FLAG_PLUS && value >= 0)
-					write(1, "+", 1);
-				else if (option->flag & FLAG_SPACE)
-					write(1, " ", 1); 
-				if (option->flag & FLAG_PLUS || option->flag & FLAG_SPACE || value < 0)
-					--option->width; while (--(option->width) >= 0) write(1, &c, 1);
-				while (--(option->precision) >= 0)
-					write(1, "0", 1);
-				ft_putnbr_fd(value, 1, tool);
-			}
-		}
-		else
-		{
-			if (option->precision == 0 && value == 0 && option->flag & PRECISION && option->width == 0)
-				return (++tool->printed);
-			while (option->width > 1)
-			{
-				write(1, &c, 1);
-				--option->width;
-			}
-			if (value < 0)
-				write(1, "-", 1);
-			else if (option->flag & FLAG_PLUS && value >= 0)
-				write(1, "+", 1);
-			else if (option->flag & FLAG_SPACE)
-				write(1, " ", 1); 
-			else if (--option->width >= 0)
-				write(1, &c, 1); 
-
-			if (option->flag & FLAG_PLUS || option->flag & FLAG_SPACE || value < 0)
-				--option->width;
-			while (--(option->precision) >= 0)
-				write(1, "0", 1);
-			ft_putnbr_fd(value, 1, tool);
-		}
+		if (write(1, &tool->c, 1) == -1)
+			return (-1);
+		++tool->printed;
+		--option->width;
 	}
-	return (0);
-
-
-//	int		value;
-//	int		len;
-//	char	c;
-//
-//	(void) *tool;
-//	value = va_arg(*ap, int);
-//	len = find_len(value);
-//	if (!(option->flag & PRECISION))
-//		option->width -= len;
-//	option->width -= option->precision;
-//	option->precision -= len;
-//	printf("precision:%d\n", option->precision);
-//	printf("width:%d\n", option->width);
-//	c = ' ';
-//	if (option->flag & FLAG_ZERO)
-//		c = '0';
-//	if (option->flag & PRECISION)
-//	{
-//		option->flag &= ~FLAG_ZERO;
-//		c = ' ';
-//	}
-//	if (value < 0)
-//	{
-//		write(1, "-", 1);
-//		--option->width;
-//	}
-//	if (option->flag & FLAG_LEFT)
-//	{
-//
-//	}
-//	else
-//	{
-//		// 정밀도가 value길이보다 작으면 코드가 돌지 않음.
-//		while (--(option->width) > 0)
-//			write(1, &c, 1);
-//		if (option->flag & FLAG_PLUS && value >= 0)
-//		{
-//			write(1, "+", 1);
-//			--option->width;
-//		}
-//		else if (option->flag & FLAG_SPACE)
-//			write(1, " ", 1); 
-//		else
-//			write(1, &c, 1);
-//		--option->width;
-//	}
-//	return (0);
+	if (option->flag & FLAG_LEFT)
+			return (-1);
+	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
+		if (write_flag(option, tool, value) == -1)
+			return (-1);
+	if (!(option->flag & FLAG_LEFT))
+	{
+		while (option->precision > 0)
+		{
+			if (write(1, "0", 1) == -1)
+				return (-1);
+			++tool->printed;
+			option->precision--;
+		}
+		if (ft_putnbr_fd(value, 1, tool, option->precision) == -1)
+			return (-1);
+	}
+	return (tool->printed);
 }
 
 void	initializer(s_option *option, s_tool *tool)
@@ -314,9 +206,11 @@ void	initializer(s_option *option, s_tool *tool)
 	int	idx;
 
 	option->flag = 0;
-	option->width = 0;
-	option->precision = 0;
+	option->width = -1;
+	option->precision = -1;
 	tool->printed = 0;
+	tool->len = 0;
+	tool->c = ' ';
 	idx = -1;
 	while (++idx < 256)
 		tool->functions[idx] = 0;
@@ -367,7 +261,7 @@ int is_num(char c)
 	return (0);
 }
 
-void	check_width(char **format, s_option *option)
+int	check_width(char **format, s_option *option)
 {
 	int	res;
 
@@ -377,22 +271,22 @@ void	check_width(char **format, s_option *option)
 		res *= 10;
 		res += (*(*format)) - '0';
 		if (res >= 214748364 && (*format + 1 && *(*format + 1)  >= '7'))
-		{
-			option->width = -1;
-			return ;
-		}
+			return (-1);
 		++(*format);
 	}
 	option->width = res;
+	return (0);
 }
 
-void	check_precision(char **format, s_option *option)
+int	check_precision(char **format, s_option *option)
 {
 	int	res;
 
 	res= 0;
 	if ((*(*format)) == '.')
 	{
+		if (option->precision < 0)
+			option->precision = 0;
 		option->flag |= PRECISION;
 		++(*format);
 		while (*(*format) && is_num(*(*format)))
@@ -400,43 +294,24 @@ void	check_precision(char **format, s_option *option)
 			res *= 10;
 			res += (*(*format)) - '0';
 			if (res >= 214748364 && (*format + 1 && *(*format + 1) >= '7'))
-			{
-				option->width = -1;
-				return ;
-			}
+				return (-1);
 			++(*format);
 		}
 		option->precision = res;
 	}
+	return (0);
 }
-
-//int	print(char *format, s_option *option, void *functions[], va_list *ap)
-//{
-//	printf("print, format: %c\n", *format);
-//	return (0);
-//}
-
-//void	check_print_len(s_option *option, s_tool *tool)
-//{
-//	if (tool->len < option->width)
-//		tool->len = option->width;
-//	if (tool->len < option->precision)
-//		tool->len = option->width;
-//}
 
 int	parse_print(char **format, s_option *option, s_tool *tool, va_list *ap)
 {
 	void (*func)(s_option *, s_tool *, va_list *);
 
 	check_flag(format, option);
-	check_width(format, option);
-	check_precision(format, option);
-	if (option->width == -1 || option->precision == -1)
+	if (check_width(format, option) == -1)
 		return (-1);
-//	check_print_len(option, tool);
+	if (check_precision(format, option) == -1)
+		return (-1);
 	func = tool->functions[(int)*(*format)];
-	// cf. %d : 가변인자 크기가 INTMAX보다 같거나 비슷하면 Format specifies type 'int' but the argument has type 'long'
-    // 반드시 널에 도달한다. %u, %d등 type이 없으면 Incomplete format specifier 컴파일 에러가 발생한다.
 	func(option, tool, ap);
 	++(*(format));
 	return (0);
@@ -458,20 +333,22 @@ int ft_printf(char *format, ...)
 			initializer(&option, &tool);
 			if (parse_print(&format, &option, &tool, &ap) == -1)
 				return (-1);
-
-			// 이중포인터로 넘길까, -> 좀 낯섬
-			// 아니면 그냥 포인터로 넘길까? -> 함수포인터 만날 떄까지 길이를 세줘야한다. 그냥 이중포인터로.
-			// 다음 함수에서 체크하면서 넘겨주자.
 		}
 		else
 		{
-			write(1, format++, 1);
+			if (write(1, format++, 1) == -1)
+				return (-1);
 			++tool.printed;
 		}
 	}
 	return (tool.printed);
 }
 
+//int main(void)
+//{
+//	printf("%5.0d|\n", 0);
+//	ft_printf("%5.0d|\n", 0);
+//}
 //int main(void)
 //{
 //	printf("pf[%0+7d]\n", 123); //[-0000000789]
@@ -518,28 +395,53 @@ int ft_printf(char *format, ...)
 //}
 //int main(void)
 //{
+//	printf("%03d|\n", 123);
+//	ft_printf("%03d|\n", 123);
+//	printf("%7d|\n", -14);
+//	ft_printf("%7d|\n", -14);
+//	printf("%05d|\n", 123);
+//	ft_printf("%05d|\n", 123);
+//
+//	ft_printf("%-5d|\n", 123);
+//	ft_printf("%-+5d|\n", 123);
+//	ft_printf("%- 5d|\n", 123);
+//	ft_printf("%05d|\n", 123);
+//	ft_printf("%0+5d|\n", 123);
+//	ft_printf("%0 5d|\n", 123);
+//
+//	printf("%05d|\n", 123);
+//	printf("%0+5d|\n", 123);
+//	printf("%0 5d|\n", 123);
+//
+//	printf("%-5d|\n", 123);
+//	printf("%-+5d|\n", 123);
+//	printf("%- 5d|\n", 123);
+//
+//	printf("%-7d|\n", -14);
+//	ft_printf("%-7d|\n", -14);
+//	printf("%-5d|\n", 12345);
+//	ft_printf("%-5d|\n", 12345);
+//}
+//	printf("%-7d|\n", 123);
+//	ft_printf("%-7d|\n", 123);
 //	ft_printf("%d\n", 17);
 //	printf("%d\n", 17);
 //	ft_printf("ft[%7d]\n", 123);
 //	printf("pf[%7d]\n", 123);
-//	ft_printf("%5d\n", 52625);
-//	ft_printf("ft[%-7d]\n", 123);
 //	printf("%03d\n", 123);
-////	ft_printf("%03d\n", 123);
+//	ft_printf("%03d\n", 123);
 //	ft_printf("[%010.5d]\n", -123);
 //	printf("[%010.5d]\n", -123);
+//
 //	ft_printf("%0.d\n", 0);
 //	printf("%d", 0);
 //	ft_printf("%d", 0);
-//	ft_printf("%d", 0);
-//	printf("%.3d\n", 000);
-//
+//	printf("%d", 0);
+//	ft_printf("%.3d\n", 000);
 //	printf("%.3d\n", 0);
 //	ft_printf("%.3d\n", 0);
 //	printf("%8.5d\n", 0);
 //	ft_printf("%8.5d\n", 0);
 //	printf("%5.0d\n", 0);
-//	printf("%-5.0d\n", 0);
 //	ft_printf("%5.0d\n", 0);
-//	ft_printf("%-5.0d\n", 0);
-//}
+//	printf("%-5.0d\n", 0);
