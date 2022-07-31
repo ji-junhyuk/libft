@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/31 14:16:30 by junji            ###   ########.fr       */
+/*   Updated: 2022/07/31 14:38:55 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,9 +157,32 @@ int	print_decimal(t_option *option, t_tool *tool, va_list *ap)
 
 int	print_char(t_option *option, t_tool *tool, va_list *ap)
 {
+	int		value;
+
+	(void)	*tool;
+	value = va_arg(*ap, int);
+	if (!(option->flag & FLAG_LEFT))
+		while (--option->width > 0)
+			if (write(1, " ", 1) == -1)
+				return (-1);
+	if (write(1, &value, 1) == -1)
+		return (-1);
+	while (--option->width > 0)
+		if (write(1, " ", 1) == -1)
+			return (-1);
+	return (0);
+}
+
+int	print_str(t_option *option, t_tool *tool, va_list *ap)
+{
+	unsigned char	*str;
+	
+	str = va_arg(*ap, unsigned char *);
+	printf("%s\n", str);
 
 	return (0);
 }
+
 
 void	initializer(t_option *option, t_tool *tool)
 {
@@ -177,7 +200,7 @@ void	initializer(t_option *option, t_tool *tool)
 	while (++idx < 256)
 		tool->functions[idx] = 0;
 	tool->functions['c'] = print_char;
-//	functions['s'] = print_str;
+	tool->functions['s'] = print_str;
 //	functions['p'] = print_address;
 	tool->functions['d'] = print_decimal;
 //	functions['i'] = print_decimal;
@@ -302,119 +325,17 @@ int	ft_printf(char *format, ...)
 	}
 	return (tool.printed);
 }
-
+//
 //int main(void)
 //{
-//	printf("%5.0d|\n", 0);
-//	ft_printf("%5.0d|\n", 0);
-//}
-//int main(void)
-//{
-//	printf("pf[%0+7d]\n", 123); //[-0000000789]
-//	ft_printf("ft[%0+7d]\n", 123); //[-0000000789]
-//	printf("pf[%+07d]\n", 123); //[-0000000789]
-//	ft_printf("ft[%+07d]\n", 123); //[-0000000789]
-
-//	printf("pf[%0+7d]\n", 123); //[-0000000789]
-//	ft_printf("ft[%0+7d]\n", 123); //[-0000000789]
-//	printf("pf[%0 6d]\n", 456); //[-0000000789]
-//	ft_printf("ft[%0 6d]\n", 456); //[-0000000789]
-//	printf("pf[% 07d]\n", 789); //[-0000000789]
-//	ft_printf("ft[% 07d]\n", 789); //[-0000000789]
-//	printf("pf[%+07d]\n", 789); //[-0000000789]
-//	ft_printf("pf[%+07d]\n", 789); //[-0000000789]
-//	ft_printf("ft[%+07d]\n", 789); //[-0000000789]
-//	printf("pf[%+07d]\n", 789); //[-0000000789]
-//	ft_printf("ft[%+07d]\n", 789); //[-0000000789]
-//	ft_printf("[%+10d]]\n", 789); //[-0000000789]
-//	printf("[%+10d]]\n", 789); //[-0000000789]
-// ========================================== 
-//	ft_printf("[%+10d]]\n", -789); //[-0000000789]
-//	printf("[%+10d]]\n", -789); //[-0000000789]
-//	printf("pf[%0 6.8d]\n", -789); //[-0000000789]
-//	ft_printf("pf[%0 6.8d]\n", -789); //[-0000000789]
-//	printf("pf[%0 6.5d]\n", -789); //[-0000000789]
-//	ft_printf("ft[%0 6.5d]\n", -789); //[-0000000789]
-//	printf("pf[%0 6.5d]\n", 789); //[-0000000789]
-//	ft_printf("ft[%0 6.5d]\n", 789); //[-0000000789]
-//
-//
-//=========================================
-//	printf("pf[%+7.2d]\n", 789); //[  +0789] 
-//	ft_printf("ft[%+7.2d]\n", 789); //[  +0789]
-//	printf("pf[%+7.4d]\n", 789); //[  +0789]
-//	ft_printf("ft[%+7.4d]\n", 789); //[  +0789]
-//	printf("pf[%-6.4d]\n", -789); //[  +0789]
-//	ft_printf("pf[%-6.4d]\n", -789); //[  +0789]
-//	printf("pf[%+-6.4d]\n", -789); //[  +0789]
-//	printf("pf[%+-6.4d]\n", -789); //[  +0789]
-//	printf("pf[%-10.4d]\n", 789); //[  +0789]
-//	ft_printf("ft[%-10.4d]\n", 789); //[  +0789]
-//}
-//int main(void)
-//{
-//	printf("%03d|\n", 123);
-//	ft_printf("%03d|\n", 123);
-//	printf("%7d|\n", -14);
-//	ft_printf("%7d|\n", -14);
-//	printf("%05d|\n", 123);
-//	ft_printf("%05d|\n", 123);
-//
-//	f_printf("%-5d|\n", 123);
-//	ft_printf("%-+5d|\n", 123);
-//	ft_printf("%- 5d|\n", 123);
-//	ft_printf("%05d|\n", 123);
-//	ft_printf("%0+5d|\n", 123);
-//	ft_printf("%0 5d|\n", 123);
-//
-//	printf("%05d|\n", 123);
-//	printf("%0+5d|\n", 123);
-//	printf("%0 5d|\n", 123);
-//
-//	printf("%-5d|\n", 123);
-//	printf("%-+5d|\n", 123);
-//	printf("%- 5d|\n", 123);
-//
-//	printf("%-7d|\n", -14);
-//	ft_printf("%-7d|\n", -14);
-//	printf("%-5d|\n", 12345);
-//	ft_printf("%-5d|\n", 12345);
-//}
-//	printf("%-7d|\n", 123);
-//	ft_printf("%-7d|\n", 123);
-//	ft_printf("%d\n", 17);
-//	printf("%d\n", 17);
-//	ft_printf("ft[%7d]\n", 123);
-//	printf("pf[%7d]\n", 123);
-//	printf("%03d\n", 123);
-//	ft_printf("%03d\n", 123);
-//	ft_printf("[%010.5d]\n", -123);
-//	printf("[%010.5d]\n", -123);
-//
-//	ft_printf("%0.d\n", 0);
-//	printf("%d", 0);
-//	ft_printf("%d", 0);
-//	printf("%d", 0);
-//	ft_printf("%.3d\n", 000);
-//	printf("%.3d\n", 0);
-//	ft_printf("%.3d\n", 0);
-//	printf("%8.5d\n", 0);
-//	ft_printf("%8.5d\n", 0);
-//	printf("%5.0d\n", 0);
-//	ft_printf("%5.0d\n", 0);
-//	printf("%-5.0d\n", 0);
-//int main(void)
-//{
-//	printf("%d\n", 0);
-//	ft_printf("%d\n", 0);
-//	printf("%5.0d|\n", 0);
-//	ft_printf("%5.0d|\n", 0);
-// ========================
-//	printf("%-7d|\n", 33);
-//	ft_printf("%-7d|\n", 33);
-//	printf("%.0d|\n", 0);
-//	ft_printf("%.0d|\n", 0);
-//	printf("%.d|\n", 0);
-//	ft_printf("%.d|\n", 0);
-
+////	printf("%5c|\n", 0);
+////	ft_printf("%5c|\n", 0);
+////	printf("%c|\n", 0);
+////	ft_printf("%c|\n", 0);
+////	printf("%1c|\n", 'c');
+////	ft_printf("%1c|\n", 'c');
+////	printf("%-3c|\n", 'c');
+////	ft_printf("%-3c|\n", 'c');
+////	printf("%3c|\n", 'c');
+////	ft_printf("%3c|\n", 'c');
 //}
