@@ -6,38 +6,11 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/07/31 22:09:02 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/07/31 22:29:23 by jijunhyuk        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
-#include <stdio.h>
-#include <unistd.h>
-
-#define FLAG_LEFT			0b00000001
-#define FLAG_ZERO			0b00000010
-#define FLAG_HASH			0b00000100
-#define FLAG_SPACE			0b00001000
-#define FLAG_PLUS			0b00010000
-#define PRECISION			0b00100000
-
-typedef struct s_option
-{
-	int	flag;
-	int	width;
-	int	precision;
-}	t_option;	
-
-typedef struct s_tool
-{
-	int			c;
-	int			precision_value_zero;
-	int			sign;
-	int			len;
-	int			printed;
-	void		*functions[256];
-	char		*hex;
-}	t_tool;
+#include "ft_printf.h"
 
 int	find_len(long num)
 {
@@ -87,7 +60,6 @@ int	ft_putnbr_fd(int value, int fd, t_tool *tool)
 	}
 	return (0);
 }
-
 
 void	check_sign_un(t_option *option, t_tool *tool, unsigned int *value)
 {
@@ -655,7 +627,7 @@ int	parse_print(char **format, t_option *option, t_tool *tool, va_list *ap)
 	return (0);
 }
 
-int	ft_printf(char *format, ...)
+int	ft_printf(const char *format, ...)
 {
 	t_option	option;
 	t_tool		tool;
@@ -668,7 +640,7 @@ int	ft_printf(char *format, ...)
 		{
 			++format;
 			initializer(&option, &tool);
-			if (parse_print(&format, &option, &tool, &ap) == -1)
+			if (parse_print((char **)&format, &option, &tool, &ap) == -1)
 				return (-1);
 		}
 		else
@@ -680,21 +652,3 @@ int	ft_printf(char *format, ...)
 	}
 	return (tool.printed);
 }
-
-//int main(void)
-//{
-//	printf("%%");
-//	ft_printf("%%");
-////	printf("%x\n", 4294967295u);
-////	ft_printf("%x\n", 4294967295u);
-////	ft_printf("%u\n", 4294967295u);
-////	printf("%u\n", 4294967295u);
-////	printf("%7.0x|\n", 2147483); //20c49b
-////	ft_printf("%7.0x|\n", 2147483);
-////	printf("%7.6x|\n", 123);
-////	ft_printf("%7.6x|\n", 123);
-////	printf("%0#7x|\n", 123);
-////	ft_printf("%0#7x|\n", 123);
-////	printf("%-#7x|\n", 123);
-////	ft_printf("%-#7x|\n", 123);
-//}
