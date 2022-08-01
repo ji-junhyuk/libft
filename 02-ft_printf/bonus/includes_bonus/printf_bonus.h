@@ -6,7 +6,7 @@
 /*   By: jijunhyuk <marvin@42.fr>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 22:15:50 by jijunhyuk         #+#    #+#             */
-/*   Updated: 2022/08/01 11:25:17 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/01 15:46:22 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int		find_len(long num);
 int		find_len_hex(long num);
 
 void	check_prec_value(t_tool *tool, t_option *option);
-void	check_un_sign(t_option *option, t_tool *tool, unsigned int *value);
+void	check_un_sign(t_option *option, t_tool *tool);
 void	check_sign(t_option *option, t_tool *tool, long *value);
 
 int		is_num(char c);
@@ -64,7 +64,6 @@ void	check_flag(char **format, t_option *option);
 
 int		print_percent(t_option *option, t_tool *tool);
 
-void	check_width_printed(t_option *option, t_tool *tool);
 int		print_hex_small_2(t_option *option, t_tool *tool, int value);
 int		print_hex_small(t_option *option, t_tool *tool, va_list *ap);
 int		print_hex_big_2(t_option *option, t_tool *tool, int value);

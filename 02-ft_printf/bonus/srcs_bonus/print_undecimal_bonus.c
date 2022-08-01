@@ -6,11 +6,11 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:23:53 by junji             #+#    #+#             */
-/*   Updated: 2022/08/01 11:23:53 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/01 14:43:46 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf_bonus.h"
+#include "../includes_bonus/printf_bonus.h"
 
 int	print_un_decimal_2(t_option *option, t_tool *tool, unsigned int value)
 {
@@ -46,7 +46,7 @@ int	print_un_decimal(t_option *option, t_tool *tool, va_list *ap)
 		option->flag &= ~FLAG_ZERO;
 	if (option->flag & FLAG_ZERO)
 		tool->c = '0';
-	check_un_sign(option, tool, &value);
+	check_un_sign(option, tool);
 	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
 		if (print_width(tool, option) == -1)
 			return (-1);

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_flag_bonus.c                                 :+:      :+:    :+:   */
+/*   check_flag.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:23:00 by junji             #+#    #+#             */
-/*   Updated: 2022/08/01 11:23:01 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/01 14:40:17 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf_bonus.h"
+#include "../includes/printf.h"
 
 void	check_prec_value(t_tool *tool, t_option *option)
 {
@@ -18,9 +18,8 @@ void	check_prec_value(t_tool *tool, t_option *option)
 	++option->width;
 }
 
-void	check_un_sign(t_option *option, t_tool *tool, unsigned int *value)
+void	check_un_sign(t_option *option, t_tool *tool)
 {
-	(void)*value;
 	if (option->flag & FLAG_PLUS)
 	{
 		tool->sign = '+';

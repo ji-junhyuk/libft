@@ -1,30 +1,52 @@
-CC			= cc
+CC				=	cc
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS			=	-Wall -Wextra -Werror
 
-HEADER 		= printf_bonus.h
+HEADER 			=	includes/printf.h
 
-SRCS 		= print_address_bonus.c print_char_bonus.c print_decimal_bonus.c	\
-			  print_hex_bonus.c print_percent_bonus.c print_string_bonus.c		\
-			  print_undecimal_bonus.c printf_bonus.c utils_bonus.c				\
-			  check_flag_bonus.c parse_bonus.c
+SRC 			=	print_address.c print_char.c print_decimal.c						\
+					print_hex.c print_percent.c print_string.c							\
+					print_undecimal.c printf.c utils.c									\
+					check_flag.c parse.c
 
-OBJS 		= $(SRCS:c=o) 
+SRCS			= 	$(addprefix srcs/, $(SRC))
+OBJS			=	$(SRCS:c=o)
 
-NAME		= libftprintf.a
+BONUS_HEADER	=	includes_bonus/printf_bonus.h
+
+B_SRC 			=	print_address_bonus.c print_char_bonus.c print_decimal_bonus.c		\
+					print_hex_bonus.c print_percent_bonus.c print_string_bonus.c		\
+					print_undecimal_bonus.c printf_bonus.c utils_bonus.c				\
+					check_flag_bonus.c parse_bonus.c
+
+B_SRCS			=	$(addprefix srcs_bonus/, $(B_SRC))
+B_OBJS			=	$(B_SRCS:c=o) 
+
+NAME			=	libftprintf.a
+
+ifdef DEBUG
+	CFLAGS += -g -fsanitize=address
+endif
+
+
+ifdef BONUS_FLAG
+	ALLOBJ = $(B_OBJS)
+else
+	ALLOBJ = $(OBJS)
+endif
 
 all: $(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(HEADER)
+$(NAME): $(ALLOBJ)
+	rm -rf $@
+	ar rcs $@ $(ALLOBJ)
 
-$(NAME): $(OBJS)
-	ar rcs $@ $(OBJS)
-
-bonus : all
+bonus : 
+	make BONUS_FLAG=1
 
 clean:
 	rm -rf $(OBJS)
+	rm -rf $(B_OBJS) 
 
 fclean: clean
 	rm -rf $(NAME)

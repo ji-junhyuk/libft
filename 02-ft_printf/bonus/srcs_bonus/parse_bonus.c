@@ -6,11 +6,11 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:23:12 by junji             #+#    #+#             */
-/*   Updated: 2022/08/01 11:23:12 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/01 15:55:53 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf_bonus.h"
+#include "../includes_bonus/printf_bonus.h"
 
 int	is_alpha(char c)
 {
@@ -41,7 +41,8 @@ int	check_precision(char **format, t_option *option)
 		{
 			res *= 10;
 			res += (*(*format)) - '0';
-			if (res >= 214748364 && (*format + 1 && *(*format + 1) >= '7'))
+			if (res >= 214748364 && (*format + 1
+					&& (*(*format + 1) >= '7' && *(*format + 1) <= '9')))
 				return (-1);
 			++(*format);
 		}
@@ -59,7 +60,8 @@ int	check_width(char **format, t_option *option)
 	{
 		res *= 10;
 		res += (*(*format)) - '0';
-		if (res >= 214748364 && (*format + 1 && *(*format + 1) >= '7'))
+		if (res >= 214748364 && (*format + 1
+				&& (*(*format + 1) >= '7' && *(*format + 1) <= '9')))
 			return (-1);
 		++(*format);
 	}
