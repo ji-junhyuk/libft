@@ -18,6 +18,8 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	ar rcs $@ $(OBJS)
 
+bonus : all
+
 clean:
 	rm -rf $(OBJS)
 
@@ -28,4 +30,4 @@ re:
 	make fclean
 	make all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus

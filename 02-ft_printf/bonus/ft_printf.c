@@ -6,13 +6,13 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 15:45:46 by junji             #+#    #+#             */
-/*   Updated: 2022/08/01 08:01:34 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/08/01 10:19:05 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int write_tool(t_tool *tool, char c)
+int	write_tool(t_tool *tool, char c)
 {
 	if (write(1, &c, 1) == -1)
 		return (-1);
@@ -67,7 +67,7 @@ int	ft_putnbr_fd(long num, int fd, t_tool *tool)
 	return (0);
 }
 
-void	check_sign_un(t_option *option, t_tool *tool, unsigned int *value)
+void	check_sign(t_option *option, t_tool *tool, long *value)
 {
 	if (*value < 0)
 	{
@@ -87,7 +87,7 @@ void	check_sign_un(t_option *option, t_tool *tool, unsigned int *value)
 	}
 }
 
-void	check_sign(t_option *option, t_tool *tool, long *value)
+void	check_un_sign(t_option *option, t_tool *tool, unsigned int *value)
 {
 	if (*value < 0)
 	{
@@ -157,7 +157,7 @@ int	print_decimal(t_option *option, t_tool *tool, va_list *ap)
 		option->flag &= ~FLAG_ZERO;
 	if (option->flag & FLAG_ZERO)
 		tool->c = '0';
-	check_sign(option, tool, &value);
+	check_sign(option, tool, (long *)&value);
 	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
 		if (print_width(tool, option) == -1)
 			return (-1);
@@ -211,7 +211,6 @@ int	ft_strlen(unsigned char *str)
 	return (len);
 }
 
-
 int	print_str2(t_option *option, t_tool *tool, unsigned char *str)
 {
 	while (option->precision-- > 0)
@@ -235,11 +234,10 @@ int	print_str(t_option *option, t_tool *tool, va_list *ap)
 	tool->len = ft_strlen(str);
 	if (option->precision != -1 && option->precision > tool->len)
 		option->precision = tool->len;
-	if (option->precision == -1) 
+	if (option->precision == -1)
 		option->width -= tool->len;
 	else
 		option->width -= option->precision;
-
 	if (!(option->flag & PRECISION))
 		option->precision = tool->len;
 	if (!(option->flag & FLAG_LEFT))
@@ -247,25 +245,6 @@ int	print_str(t_option *option, t_tool *tool, va_list *ap)
 			return (-1);
 	if (print_str2(option, tool, str) == -1)
 		return (-1);
-	return (0);
-}
-
-int	ft_putnbr_fd_2(unsigned int num, int fd, t_tool *tool)
-{
-	char		c;
-
-	if (num < 10)
-	{
-		c = num + '0';
-		if (write(fd, &c, 1) == -1)
-			return (-1);
-		++tool->printed;
-	}	
-	else
-	{
-		ft_putnbr_fd_2(num / 10, fd, tool);
-		ft_putnbr_fd_2(num % 10, fd, tool);
-	}
 	return (0);
 }
 
@@ -278,7 +257,7 @@ int	print_un_decimal_2(t_option *option, t_tool *tool, unsigned int value)
 		if (write_tool(tool, '0') == -1)
 			return (-1);
 	if (!tool->precision_value_zero)
-		if (ft_putnbr_fd_2(value, 1, tool) == -1)
+		if (ft_putnbr_fd(value, 1, tool) == -1)
 			return (-1);
 	while ((option->width)-- > 0)
 		if (write_tool(tool, tool->c) == -1)
@@ -303,7 +282,7 @@ int	print_un_decimal(t_option *option, t_tool *tool, va_list *ap)
 		option->flag &= ~FLAG_ZERO;
 	if (option->flag & FLAG_ZERO)
 		tool->c = '0';
-	check_sign_un(option, tool, &value);
+	check_un_sign(option, tool, &value);
 	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
 		if (print_width(tool, option) == -1)
 			return (-1);
@@ -317,6 +296,8 @@ int	print_un_decimal(t_option *option, t_tool *tool, va_list *ap)
 
 int	print_address_hex(void *p, unsigned char *value, int idx, t_tool *tool)
 {
+	const char	*hex = "0123456789abcdef";
+
 	if (!p)
 	{
 		if (write(1, "0", 1) == -1)
@@ -327,17 +308,15 @@ int	print_address_hex(void *p, unsigned char *value, int idx, t_tool *tool)
 	{
 		if (value[idx] < 16)
 		{
-			if (write(1, &tool->hex[*(value + idx--) % 16], 1) == -1)
+			if (write_tool(tool, hex[*(value + idx--) % 16]) == -1)
 				return (-1);
-			++tool->printed;
 		}
 		while (idx >= 0)
 		{
-			if (write(1, &tool->hex[*(value + idx) / 16], 1) == -1)
+			if (write_tool(tool, hex[*(value + idx) / 16]) == -1)
 				return (-1);
-			if (write(1, &tool->hex[*(value + idx--) % 16], 1) == -1)
+			if (write_tool(tool, hex[*(value + idx--) % 16]) == -1)
 				return (-1);
-			tool->printed += 2;
 		}
 	}
 	return (0);
@@ -387,7 +366,7 @@ int	print_address(t_option *option, t_tool *tool, va_list *ap)
 
 int	ft_puthex_fd_2(unsigned int value, int fd, t_tool *tool)
 {
-	const char *hex = "0123456789ABCDEF";
+	const char	*hex = "0123456789ABCDEF";
 
 	if (value < 16)
 	{
@@ -403,8 +382,17 @@ int	ft_puthex_fd_2(unsigned int value, int fd, t_tool *tool)
 	return (0);
 }
 
-int print_hex_big_2(t_option *option, t_tool *tool, int value)
+void	check_width_printed(t_option *option, t_tool *tool)
 {
+	option->width -= 2;
+	tool->printed += 2;
+}
+
+int	print_hex_big_2(t_option *option, t_tool *tool, int value)
+{
+	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
+		if (print_width(tool, option) == -1)
+			return (-1);
 	if (tool->sign)
 		if (write_tool(tool, tool->sign) == -1)
 			return (-1);
@@ -439,17 +427,13 @@ int	print_hex_big(t_option *option, t_tool *tool, va_list *ap)
 		option->flag &= ~FLAG_ZERO;
 	if (option->flag & FLAG_ZERO)
 		tool->c = '0';
-	check_sign_un(option, tool, &value);
+	check_un_sign(option, tool, &value);
 	if (option->flag & FLAG_HASH && value != 0)
 	{
 		if (write(1, "0X", 2) == -1)
 			return (-1);
-		option->width -= 2;
-		tool->printed += 2;
+		check_width_printed(option, tool);
 	}
-	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
-		if (print_width(tool, option) == -1)
-			return (-1);
 	if (print_hex_big_2(option, tool, value) == -1)
 		return (-1);
 	return (0);
@@ -457,7 +441,7 @@ int	print_hex_big(t_option *option, t_tool *tool, va_list *ap)
 
 int	ft_puthex_fd(unsigned int value, int fd, t_tool *tool)
 {
-	const char *hex = "0123456789abcdef";
+	const char	*hex = "0123456789abcdef";
 
 	if (value < 16)
 	{
@@ -473,8 +457,11 @@ int	ft_puthex_fd(unsigned int value, int fd, t_tool *tool)
 	return (0);
 }
 
-int print_hex_small_2(t_option *option, t_tool *tool, int value)
+int	print_hex_small_2(t_option *option, t_tool *tool, int value)
 {
+	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
+		if (print_width(tool, option) == -1)
+			return (-1);
 	if (tool->sign)
 		if (write_tool(tool, tool->sign) == -1)
 			return (-1);
@@ -510,17 +497,13 @@ int	print_hex_small(t_option *option, t_tool *tool, va_list *ap)
 		option->flag &= ~FLAG_ZERO;
 	if (option->flag & FLAG_ZERO)
 		tool->c = '0';
-	check_sign_un(option, tool, &value);
+	check_un_sign(option, tool, &value);
 	if (option->flag & FLAG_HASH && value != 0)
 	{
 		if (write(1, "0x", 2) == -1)
 			return (-1);
-		option->width -= 2;
-		tool->printed += 2;
+		check_width_printed(option, tool);
 	}
-	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
-		if (print_width(tool, option) == -1)
-			return (-1);
 	if (print_hex_small_2(option, tool, value) == -1)
 		return (-1);
 	return (0);
@@ -543,11 +526,9 @@ void	initializer(t_option *option, t_tool *tool)
 	option->width = -1;
 	option->precision = -1;
 	tool->precision_value_zero = 0;
-//	tool->printed = 0;
 	tool->len = 0;
 	tool->c = ' ';
 	tool->sign = 0;
-	tool->hex = "0123456789abcdef";
 	idx = -1;
 	while (++idx < 256)
 		tool->functions[idx] = 0;
@@ -659,7 +640,7 @@ int	ft_printf(const char *format, ...)
 	va_list		ap;
 
 	va_start(ap, format);
-	tool.printed = 0;	
+	tool.printed = 0;
 	while (*format)
 	{
 		if (*format == '%')
@@ -678,9 +659,3 @@ int	ft_printf(const char *format, ...)
 	}
 	return (tool.printed);
 }
-//
-//int main(void)
-//{
-//	printf("%#X|\n", 42000);
-//	ft_printf("%#X|\n", 42000);
-//}
