@@ -28,21 +28,21 @@ ifdef DEBUG
 	CFLAGS += -g -fsanitize=address
 endif
 
+
+ifdef BONUS_FLAG
+	ALLOBJ = $(B_OBJS)
+else
+	ALLOBJ = $(OBJS)
+endif
+
 all: $(NAME)
 
-$(NAME): all_check
+$(NAME): $(ALLOBJ)
+	rm -rf $@
+	ar rcs $@ $(ALLOBJ)
 
-all_check: $(OBJS)
-	rm -rf bonus_check
-	rm -rf libftprintf.a
-	ar rcs $@ $(OBJS)
-
-bonus_check: $(B_OBJS)
-	rm -rf all_check
-	rm -rf libftprintf.a
-	ar rcs $@ $(B_OBJS)
-
-bonus: bonus_check
+bonus : 
+	make BONUS_FLAG=1
 
 clean:
 	rm -rf $(OBJS)
@@ -55,4 +55,4 @@ re:
 	make fclean
 	make all
 
-.PHONY: all clean fclean re bonus bonus_check all_check
+.PHONY: all clean fclean re bonus
