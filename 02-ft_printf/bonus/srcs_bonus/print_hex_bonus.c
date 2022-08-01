@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:23:35 by junji             #+#    #+#             */
-/*   Updated: 2022/08/01 15:44:42 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/01 16:42:34 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int	print_hex_small(t_option *option, t_tool *tool, va_list *ap)
 	if (option->precision < tool->len)
 		option->precision = tool->len;
 	option->width -= option->precision;
+	if (option->flag & FLAG_HASH && value != 0)
+		option->width -= 2;
 	if (option->flag & FLAG_LEFT)
 		option->flag &= ~FLAG_ZERO;
 	if (option->flag & PRECISION)
