@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_decimal_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 11:23:30 by junji             #+#    #+#             */
+/*   Updated: 2022/08/01 11:24:45 by junji            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "printf_bonus.h"
 
 int	print_decimal_2(t_option *option, t_tool *tool, long value)
@@ -44,4 +56,3 @@ int	print_decimal(t_option *option, t_tool *tool, va_list *ap)
 		return (-1);
 	return (0);
 }
-

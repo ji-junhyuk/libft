@@ -6,22 +6,22 @@
 /*   By: jijunhyuk <marvin@42.fr>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 22:15:50 by jijunhyuk         #+#    #+#             */
-/*   Updated: 2022/08/01 11:00:07 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/01 11:25:17 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#ifndef PRINTF_BONUS_H
+# define PRINTF_BONUS_H
 
-#include <stdarg.h>
-#include <unistd.h>
+# include <stdarg.h>
+# include <unistd.h>
 
-#define FLAG_LEFT			0b00000001
-#define FLAG_ZERO			0b00000010
-#define FLAG_HASH			0b00000100
-#define FLAG_SPACE			0b00001000
-#define FLAG_PLUS			0b00010000
-#define PRECISION			0b00100000
+# define FLAG_LEFT			0b00000001
+# define FLAG_ZERO			0b00000010
+# define FLAG_HASH			0b00000100
+# define FLAG_SPACE			0b00001000
+# define FLAG_PLUS			0b00010000
+# define PRECISION			0b00100000
 
 typedef struct s_option
 {
@@ -85,4 +85,5 @@ int		print_char(t_option *option, t_tool *tool, va_list *ap);
 
 int		print_decimal_2(t_option *option, t_tool *tool, long value);
 int		print_decimal(t_option *option, t_tool *tool, va_list *ap);
+
 #endif
