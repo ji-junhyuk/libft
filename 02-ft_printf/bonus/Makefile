@@ -2,9 +2,12 @@ CC			= cc
 
 CFLAGS		= -Wall -Wextra -Werror
 
-HEADER 		= ft_printf.h
+HEADER 		= printf_bonus.h
 
-SRCS 		= ft_printf.c
+SRCS 		= print_address_bonus.c print_char_bonus.c print_decimal_bonus.c	\
+			  print_hex_bonus.c print_percent_bonus.c print_string_bonus.c		\
+			  print_undecimal_bonus.c printf_bonus.c utils_bonus.c				\
+			  check_flag_bonus.c parse_bonus.c
 
 OBJS 		= $(SRCS:c=o) 
 
