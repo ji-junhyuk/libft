@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:23:25 by junji             #+#    #+#             */
-/*   Updated: 2022/08/01 12:12:09 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/02 06:52:28 by jijunhyuk        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 int	print_char(t_option *option, t_tool *tool, va_list *ap)
 {
-	int		value;
+	int				value;
+	unsigned char	c;
 
 	(void)	*tool;
 	value = va_arg(*ap, int);
+	c = (unsigned char)value;
 	if (!(option->flag & FLAG_LEFT))
 	{
 		while (--option->width > 0)
@@ -27,7 +29,7 @@ int	print_char(t_option *option, t_tool *tool, va_list *ap)
 			++tool->printed;
 		}
 	}
-	if (write(1, &value, 1) == -1)
+	if (write(1, &c, 1) == -1)
 		return (-1);
 	++tool->printed;
 	while (--option->width > 0)

@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:23:46 by junji             #+#    #+#             */
-/*   Updated: 2022/08/01 12:12:38 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/02 06:41:32 by jijunhyuk        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,18 @@
 
 int	ft_strlen(unsigned char *str)
 {
+	long long		len;
 	unsigned char	*init_pos;
-
+	
 	init_pos = str;
 	if (!str)
 		return (6);
 	while (*str)
 		++str;
-	return (str - init_pos);
+	len = str - init_pos;
+	if (len >= 2147483647)
+		return (-1);
+	return (len);
 }
 
 int	print_str2(t_option *option, t_tool *tool, unsigned char *str)
@@ -45,6 +49,8 @@ int	print_str(t_option *option, t_tool *tool, va_list *ap)
 	if (!str)
 		str = (unsigned char *)"(null)";
 	tool->len = ft_strlen(str);
+	if (tool->len == -1)
+		return (-1);
 	if (option->precision != -1 && option->precision > tool->len)
 		option->precision = tool->len;
 	if (option->precision == -1)
