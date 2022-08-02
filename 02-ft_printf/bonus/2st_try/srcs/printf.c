@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:23:59 by junji             #+#    #+#             */
-/*   Updated: 2022/08/01 12:11:16 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/02 10:43:18 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	print_width(t_tool *tool, t_option *option)
 
 int	parse_print(char **format, t_option *option, t_tool *tool, va_list *ap)
 {
-	void	(*func)(t_option *, t_tool *, va_list *);
+	int	(*func)(t_option *, t_tool *, va_list *);
 
 	check_flag(format, option);
 	if (check_width(format, option) == -1)
@@ -41,7 +41,8 @@ int	parse_print(char **format, t_option *option, t_tool *tool, va_list *ap)
 	if (check_precision(format, option) == -1)
 		return (-1);
 	func = tool->functions[(int)*(*format)];
-	func(option, tool, ap);
+	if (func(option, tool, ap) == -1)
+		return (-1);
 	++(*(format));
 	return (0);
 }

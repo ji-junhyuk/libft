@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:23:12 by junji             #+#    #+#             */
-/*   Updated: 2022/08/01 15:55:53 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/02 09:17:20 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	check_precision(char **format, t_option *option)
 	{
 		if (option->precision < 0)
 			option->precision = 0;
-		option->flag |= PRECISION;
 		++(*format);
 		while (*(*format) && is_num(*(*format)))
 		{

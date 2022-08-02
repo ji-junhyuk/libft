@@ -6,7 +6,7 @@
 /*   By: jijunhyuk <marvin@42.fr>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 22:15:50 by jijunhyuk         #+#    #+#             */
-/*   Updated: 2022/08/02 06:22:34 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/08/02 10:09:23 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # define FLAG_HASH			0b00000100
 # define FLAG_SPACE			0b00001000
 # define FLAG_PLUS			0b00010000
-# define PRECISION			0b00100000
 
 typedef struct s_option
 {
@@ -76,8 +75,8 @@ int		print_address(t_option *option, t_tool *tool, va_list *ap);
 int		print_un_decimal_2(t_option *option, t_tool *tool, unsigned int value);
 int		print_un_decimal(t_option *option, t_tool *tool, va_list *ap);
 
-int		ft_strlen(unsigned char *str);
-int		print_str2(t_option *option, t_tool *tool, unsigned char *str);
+int		ft_strlen(char *str);
+int		print_str2(t_option *option, t_tool *tool, char *str);
 int		print_str(t_option *option, t_tool *tool, va_list *ap);
 
 int		print_char(t_option *option, t_tool *tool, va_list *ap);

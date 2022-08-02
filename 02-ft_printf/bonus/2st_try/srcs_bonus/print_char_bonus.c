@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:23:25 by junji             #+#    #+#             */
-/*   Updated: 2022/08/02 06:52:28 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/08/02 10:01:48 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	print_char(t_option *option, t_tool *tool, va_list *ap)
 	int				value;
 	unsigned char	c;
 
-	(void)	*tool;
 	value = va_arg(*ap, int);
 	c = (unsigned char)value;
 	if (!(option->flag & FLAG_LEFT))

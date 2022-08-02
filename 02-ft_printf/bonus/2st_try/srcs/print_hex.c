@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:23:35 by junji             #+#    #+#             */
-/*   Updated: 2022/08/01 19:34:13 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/08/02 10:40:50 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,17 @@ int	print_hex_big(t_option *option, t_tool *tool, va_list *ap)
 	tool->len = find_len_hex(value);
 	if (option->precision == 0 && value == 0)
 		check_prec_value(tool, option);
+	if (option->flag & FLAG_LEFT)
+		option->flag &= ~FLAG_ZERO;
+	if (option->precision != -1)
+		option->flag &= ~FLAG_ZERO;
+	if (option->flag & FLAG_ZERO)
+		tool->c = '0';
 	if (option->precision < tool->len)
 		option->precision = tool->len;
 	option->width -= option->precision;
 	if (option->flag & FLAG_HASH && value != 0)
 		option->width -= 2;
-	if (option->flag & FLAG_LEFT)
-		option->flag &= ~FLAG_ZERO;
-	if (option->flag & PRECISION)
-		option->flag &= ~FLAG_ZERO;
-	if (option->flag & FLAG_ZERO)
-		tool->c = '0';
-	check_un_sign(option, tool);
 	if (print_hex_big_2(option, tool, value) == -1)
 		return (-1);
 	return (0);
@@ -102,18 +101,17 @@ int	print_hex_small(t_option *option, t_tool *tool, va_list *ap)
 	tool->len = find_len_hex(value);
 	if (option->precision == 0 && value == 0)
 		check_prec_value(tool, option);
+	if (option->flag & FLAG_LEFT)
+		option->flag &= ~FLAG_ZERO;
+	if (option->precision != -1)
+		option->flag &= ~FLAG_ZERO;
+	if (option->flag & FLAG_ZERO)
+		tool->c = '0';
 	if (option->precision < tool->len)
 		option->precision = tool->len;
 	option->width -= option->precision;
 	if (option->flag & FLAG_HASH && value != 0)
 		option->width -= 2;
-	if (option->flag & FLAG_LEFT)
-		option->flag &= ~FLAG_ZERO;
-	if (option->flag & PRECISION)
-		option->flag &= ~FLAG_ZERO;
-	if (option->flag & FLAG_ZERO)
-		tool->c = '0';
-	check_un_sign(option, tool);
 	if (print_hex_small_2(option, tool, value) == -1)
 		return (-1);
 	return (0);

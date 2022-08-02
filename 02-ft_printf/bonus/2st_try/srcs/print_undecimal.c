@@ -6,7 +6,7 @@
 /*   By: junji <junji@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:23:53 by junji             #+#    #+#             */
-/*   Updated: 2022/08/01 14:41:56 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/02 10:43:09 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ int	print_un_decimal(t_option *option, t_tool *tool, va_list *ap)
 	tool->len = find_len(value);
 	if (option->precision == 0 && value == 0)
 		check_prec_value(tool, option);
-	if (option->precision < tool->len)
-		option->precision = tool->len;
-	option->width -= option->precision;
 	if (option->flag & FLAG_LEFT)
 		option->flag &= ~FLAG_ZERO;
-	if (option->flag & PRECISION)
+	if (option->precision != -1)
 		option->flag &= ~FLAG_ZERO;
 	if (option->flag & FLAG_ZERO)
 		tool->c = '0';
+	if (option->precision < tool->len)
+		option->precision = tool->len;
+	option->width -= option->precision;
 	check_un_sign(option, tool);
 	if (!(option->flag & FLAG_ZERO || option->flag & FLAG_LEFT))
 		if (print_width(tool, option) == -1)
