@@ -34,8 +34,13 @@
 ## 소켓(socket)
 - 데이터를 주고 받을 때, 소켓에 데이터를 적어 보낸다.
 - 소켓은 `protocol`, `ip`, `port number`로 구성된다.
- 
+
+### 텔넷(telnet)과 SSH(Secure Shell)의 차이점
+- 텔넷은 정보를 byte스트림 형식으로 주고 받고, ssh는 DES, RSA등 암호화를 통해 통신을 한다.
 <사진3>
+
 ## 참고자료
 - 포트포워딩 https://lamanus.kr/59
 - 소켓 https://helloworld-88.tistory.com/215
+- root와 kurnel의 관계 https://unix.stackexchange.com/questions/121715/what-is-the-relationship-between-root-and-kernel 
+- SSH 통신 https://limvo.tistory.com/21
