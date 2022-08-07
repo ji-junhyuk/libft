@@ -40,8 +40,22 @@
 - 텔넷은 정보를 byte스트림 형식으로 주고 받고, ssh는 DES, RSA등 암호화를 통해 통신을 한다.
 <사진3>
 
+### LVM
+- LVM(Logical Volume Mangaer)란 논리적인 공간을 관리해주는 프로그램을 말한다.
+
+#### LVM을 사용하는 이유
+1. 여러개의 디스크 공간을 합쳐서 하나인양 사용하기 위해
+2. 사용하기 애매한 공간의 디스크 파티션(짜투리)들을 활용하기 위해
+3. 기존에 사용중인 디스크의 공간을 확장할 수 있기에
+
+### su와 sudo
+- su는"수퍼 사용자"를 나타내며 루트로 로그인하여 시스템에서 원하는 모든 작업을 수행할 수 있습니다. sudo는 "super user do"의 약자이며 현재 사용자 계정을 일시적으로 루트 권한으로 승격할 수 있습니다. 
+- 기본적으로 Linux 커널은 보안 목적을 위해 kurnel모드와 user모드로 나눈다. 일반 사용자가 애플리케이션을 설치할 수 있도록 일시적으로 super user권한을 준다. 이를 sudo라고 한다. 
+
 ## 참고자료
 - 포트포워딩 https://lamanus.kr/59
 - 소켓 https://helloworld-88.tistory.com/215
 - root와 kurnel의 관계 https://unix.stackexchange.com/questions/121715/what-is-the-relationship-between-root-and-kernel 
 - SSH 통신 https://limvo.tistory.com/21
+- LVM https://mamu2830.blogspot.com/2019/12/lvmpv-vg-lv-pe-lvm.html
+- sudo https://www.beyondtrust.com/blog/entry/unix-linux-privileged-management-should-you-sudo#:~:text=Allowing%20root%20user%20access%20using%20sudo&text=Sudo%20will%20allow%20your%20system,your%20security%20and%20compliance%20protocol.

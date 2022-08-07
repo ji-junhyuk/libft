@@ -19,7 +19,7 @@ diff < shasum signature.txt < ../junji's virtualbox/.vdi
 6. Crontab 10분마다 설정.
 $ crontab -e
 
-# 간단한 설정
+# 1. 간단한 설정
 1. 시작 시에 gui 있는지 확인한다.
 
 2. 루트가 아닌 `사용자`로 연결한다.
@@ -29,4 +29,111 @@ $ crontab -e
 4. UFW 서비스가 시작되었는지 확인한다.
 $ sudo UFW status verbose
 $ sudo UFW enable
-5. SSH
+
+5. SSH 서브시가 시작되었는지 확인한다.
+$ sudo systemctl status ssh
+
+6. 운영체제가 데비안인지 centOS인지 확인한다.
+$ uname -a
+
+# 2. 사용자
+1. 평가되는 학생의 id인 유저가 sudo,user42 그룹에 속하는지 확인한다.
+$ id junji
+
+2. 새 사용자를 만들고, 암호 규칙을 적용하여 암호 할당. (암호 규칙 설명)
+$ adduser hello
+
+3. evaluating 이라는 그룹을 만들고, 방금 만든 사용자가 여기에 속하게 한다.
+$ addgroup evaluating
+$ usermod -aG evaluating hello
+
+4. 이 암호정책의 장점과 단점
+- 평균적인 보안 수준을 올릴 수 있다.
+- 암호 정책이 알려지게 되면 보안 수준이 내려간다.
+
+# 3. 호스트 이름 및 파티션
+1. 시스템 호스트 이름이 42로 끝나는 지 확인한다.
+
+2. 로그인을 평가받는 junji로 바꾸고, 이 호스트의 이름을 수정한 후 재시작한다. 호스트 이름이 업데이트 되어야 한다.
+$ sudo hostnamectl set-hostname hello42
+
+3. 다시 복원해라
+$ sudo hostnamectl set-hostname hello42
+
+4. 가상 머신의 파티션을 보여준다.
+$ lsblk
+
+5. 파티션을 subject와 비교한다.
+
+6. LVM이 작동하는 방식은 무엇인가?
+LVM은 하드웨어를 partion 단위가 아닌 volume 단위로 다룬다. 저장소의 확장, 축소, 증설하는데 유리하다. 기존 방식의 경우 고정된 크기를 사용했기에 파티션 별로 옮겨쓰는 작업이 필요했다.
+
+7. LVM이 무엇인가?
+LVM(Logical Volume Manager)는 저장 공간을 효율적이고 유연하게 관리하기 위한 커널의 한 부분을 말한다.
+
+# 4. 수도
+1. 가상 머신에 sudo프로그램이 섳치되어 있는지 확인해라.
+$ dpkg -l sudo
+
+2. sudo 그룹에 새 사용자를 할당한다.
+$ sudo usermod -aG sudo hello
+
+3. sudo의 가치와 작동을 설명한다.
+- 리눅스 커널은 보안 목적을 위해 user모드와 kernel모드로 나뉜다. 유저가 함부로 시스템에 영향을 줄 수 있는 프로그램을 설치하는 것을 방지한다. sudo는 superuser로서 최종 관리자 권한을 임시로 얻어낸다. 이를 통해 유저가 프로그램을 설치할 수 있다.
+
+4. /var/log/sudo에 하나 이상의 파일이 있는지 확인한다. 내용을 확인하고 sudo와 함께 사용한 명령어 기록이 있어야 한다. sudo를 통해 명령어를 실행하고, 추가되었는지 확인한다.
+$ su - // 해당 경로에 들어가기 위해선 sudo권한으론 부족하고, root이어야 하다.
+
+# 5. UFW
+1. 가상 머신에 ufw프로그램이 설치되어 있는지 확인해라.
+$ sudo -l ufw
+
+2. ufw가 무엇인지, 사용 가치가 무엇인가?
+- ufw란 (uncomplicated firewall) 복잡하지 않은 방화벽으로 통신에서 원하는 대상에게만 port를 열거나 폐쇄할 수가 있다.
+- 굉장히 쉽고 직관적인 방법으로 보안 수준을 올릴 수 있따는 장점이 있다.
+
+3. ufw 활성 규칙을 나열한다. 포트 4242에 대한 규칙이 있어야 한다.
+$ sudo ufw status verbose
+
+4. 8080 port를 추가하라. 이 규칙이 추가되었는지 확인해라.
+$ sudo ufw allow 8080
+$ sudo ufw status verbose
+
+# 6. SSH
+1. 가상 머신에 ssh프로그램이 설치되어 있는지 확인하라.
+$ sudo dpkg -l ssh
+
+2. 제대로 작동하는지 확인하라.
+$ sudo systemctl status ssh
+
+3. ssh가 무엇인지, 사용가치는 무엇인가?
+- ssh란 (secure shell) 안전한 쉘로서 안전하게 통신을 하기 위한 네트워크 프로토콜(통신규약)이다. 기존 텔넷방식은스니핑(snipping)에 취약했다. ssh는 전송하는 데이터도 암호화하기에 데이터의 기밀성이 보장된다.
+
+4. ssh-service가 4242포트만 사용하는지 확인하라.
+$ sudo vi /etc/ssh/sshd_config
+
+5. 아까 만든 평가자 user로 ssh쉘에 로그인하라.
+$ ssh hello@localhost -p 2424
+
+# 7. Script Monitoring
+1. 스크립트 동작방식을 설명하라. (mpstat)
+$ su - // script가 /root/ 경로에 있다.
+
+2. 크론이란 무엇인가?
+- 일정 주기로 실행하는 프로그램을 말한다. 
+
+3. 10분 주기로 실행되도록 설정하는 방법은?  1분마다 실행되는지도 확인
+$ sudo crontab -e // 분, 시, 일(1~31), 월(1~12), 요일(0~7)
+
+# 8. Bonus
+1. 파티션 설정 확인하라
+$ lsblk
+
+2. wordpress와 mysql이 연결되어 있는지.
+$ mariadb
+$ SHOW DATABASE;
+// localhost:8080/wordpress
+
+3. ftp
+- ftp(file transfer protocol)로서 파일을 이동할 때 쓴다.
+- 
