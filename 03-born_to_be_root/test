@@ -1,0 +1,32 @@
+diff < shasum signature.txt < ../junji's virtualbox/.vdi
+
+# 프로젝트 개요
+1. 가상 머신의 작동 방식
+- 가상머신이란 가상 컴퓨터를 말하는데, 물리적 컴퓨터에서 빌려온 하드웨어를 가상화하여 구현하고 그 위 OS에서 작동하는 것을 말한다.
+
+2. 운영 체제 선택
+- 저는 debian을 선택했습니다.
+
+3. centOS와 Debian의 기본적인 차이점
+- centOS와 Debian 모두 Linux Kernel을 기반으로 하고 Debian은 오픈소스로 무료이고 사용하기 쉬운 반면 centOS는 redhet계열로 유료이고, 서버에 특화된 기능을 제공한다고 해요.
+
+4. apt와 aptitute의 차이점
+- apt(advanced packaing tool)로써 패키지 관리자를 말하며, 소프트웨어 관리를 쉽게 하는 소프트웨어를 말합니다. aptitute는 apt와 달리 gui interface를 제공하며, 추가 기능을 제공합니다. (예를 들어, apt의 autoremove처럼 불필요한 종속성 패키지들을 알아서 삭제하는 식)
+
+5. AppArmor
+- 데비안 보안 모듈로써 시스템 관리자가 프로그램 별로 기능을 제한하는 것이다. 보안 방식(MAC)를 사용한다. MAC란 (Mandatory Aceess Control)로써 다른 RBAC, DAC에 강제적인 보안 방법이다.
+
+6. Crontab 10분마다 설정.
+$ crontab -e
+
+# 간단한 설정
+1. 시작 시에 gui 있는지 확인한다.
+
+2. 루트가 아닌 `사용자`로 연결한다.
+
+3. 비밀번호가 엄격한 규칙을 따랐는지 확인한다.
+
+4. UFW 서비스가 시작되었는지 확인한다.
+$ sudo UFW status verbose
+$ sudo UFW enable
+5. SSH
