@@ -136,4 +136,55 @@ $ SHOW DATABASE;
 
 3. ftp
 - ftp(file transfer protocol)로서 파일을 이동할 때 쓴다.
-- 
+
+alias
+## 평가 때 사용해야 하는 명령어는 alias에 매핑해둬서 까먹으면 보자
+# CRONTAB
+```zsh
+alias CRONTAB1="sudo crontab -e"
+alias CRONTAB2="sudo crontab -l" 
+```
+# UFW
+```zsh
+alias UFW1="sudo ufw status verbose"
+alias UFW2="sudo ufw enable"
+alias UFW3="sudo ufw disable"
+alias UFW4="sudo ufw default deny"
+alias UFW5="sudo ufw allow 4242"
+alias UFW6="sudo ufw status numbered"
+alias UFW7="sudo ufw delete [number]"
+```
+# SSH
+```zsh
+alias SSH1="systemctl status ssh"
+```
+# OPERATING
+```zsh
+alias UNAME1="sudo uname -a"
+```
+# group
+```zsh
+alias GROUP1="adduser junji"
+alias GROUP2="id junji"
+alias GROUP3="passwd junji"
+alias GROUP4="passwd -e junji"
+alias GROUP5="chage -l junji"
+alias GROUP6="sudo vi /etc/shadow"
+alias GROUP7="usedel -f junji"
+alias GROUP8="addgroup 42seoul"
+alias GROUP9="addgroup -G 42seoul junji"
+```
+# path
+```zsh
+alias PORTNUMBER1="sudo vi /etc/ssh/sshd_config"
+alias PASSWORD1="sudo vi /etc/login.defs"
+alias PASSWORD2="sudo vi /etc/pam.d/common-password"
+alias PASSWORD3="passwd -e junji"
+alias VISUDO1="sudo vi/etc/sudoers"
+```
+
+# etc
+```zsh
+alias LSBLK1="lsblk"
+alias DPKG1="dpkg -l sudo" 
+```
