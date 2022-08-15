@@ -121,6 +121,8 @@ $ su - // script가 /root/ 경로에 있다.
 
 2. 크론이란 무엇인가?
 - 일정 주기로 실행하는 프로그램을 말한다. 
+$ /etc/init.d/cron stop
+$ /etc/init.d/cron restart
 
 3. 10분 주기로 실행되도록 설정하는 방법은?  1분마다 실행되는지도 확인
 $ sudo crontab -e // 분, 시, 일(1~31), 월(1~12), 요일(0~7)
