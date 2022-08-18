@@ -1,12 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/18 11:47:02 by junji             #+#    #+#             */
+/*   Updated: 2022/08/18 17:28:58 by junji            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-int ft_atoi(char *str)
+int	ft_atoi(char *str)
 {
 	int	result;
 	int	sign;
-	int	error;
 
 	result = 0;
 	sign = 1;
@@ -20,9 +31,8 @@ int ft_atoi(char *str)
 	{
 		result *= 10;
 		result += (*str - '0');
-		if (sign > 0 && result == 214748364 && (*(str + 1) >= '8' && *(str + 1) <= '9'))
-			return (0);
-		if (sign < 0 && result == 214748364 && (*(str + 1) == '9'))
+		if ((sign > 0 && result == 214748364 && (*(str + 1) >= '8'))
+			|| (sign < 0 && result == 214748364 && (*(str + 1) >= '9')))
 			return (0);
 		if (result > 214748364 && (*(str + 1) != 0))
 			return (0);
@@ -33,7 +43,7 @@ int ft_atoi(char *str)
 	return (sign * result);
 }
 
-int check_real_zero(char *str)
+int	check_real_zero(char *str)
 {
 	if (*str == '-' || *str == '+')
 		++str;
@@ -42,17 +52,9 @@ int check_real_zero(char *str)
 	return (0);
 }
 
-// 일부 인자가 정수가 아니거나, 정수 범위를 초과하거나, 중복이 있는 경우
-// 2147483647 -2147483648
-
-// "0 1 2"
-// ft_split
-// 1. split으로 개행 기준으로 나눈다.
-// 2. 나눠진 단어 갯수 만큼 ft_atoi를 실행한다.
-
 int	count_word(char *str)
 {
-	int cnt;
+	int	cnt;
 
 	cnt = 0;
 	while (*str)
@@ -71,14 +73,34 @@ int	count_word(char *str)
 
 int	find_word_len(char *str)
 {
-	return (0);
+	int	len;
+
+	len = 0;
+	while (*str && *str != ' ')
+	{
+		++len;
+		++str;
+	}
+	return (len);
 }
 
-char	**ft_split(char *str, char charset)
+void	free_arr(char **copy, int idx)
 {
-	char **copy;
-	int	idx;
-	int words;
+	int	index;
+
+	index = -1;
+	while (++index < idx)
+		free(copy[idx]);
+	free(copy);
+}
+
+char	**ft_split(char *str)
+{
+	char	**copy;
+	int		idx;
+	int		words;
+	int		word_len;
+	int		jdx;
 
 	words = count_word(str);
 	copy = malloc(sizeof(char *) * (words + 1));
@@ -89,26 +111,247 @@ char	**ft_split(char *str, char charset)
 	{
 		while (*str && *str == ' ')
 			++str;
-		copy[idx] = 
+		word_len = find_word_len(str);
+		*(copy + idx) = malloc(sizeof(char) * (word_len + 1));
+		if (*(copy + idx) == 0)
+			free_arr(copy, idx);
+		jdx = -1;
+		while (*str && *str != ' ')
+			(*(copy + idx))[++jdx] = *str++;
+		(*(copy + idx))[++jdx] = 0;
+	}
+	*(copy + idx) = 0;
+	return (copy);
+}
+
+typedef struct s_node
+{
+	int data;
+	struct s_node *next;
+}	t_node;
+
+typedef struct s_list
+{
+	t_node	*tail;
+	int		cnt;
+}	t_list;
+
+void	init_list(t_list *list)
+{
+	list->tail = NULL;
+	list->cnt = 0;
+}
+
+int	insert_list(t_list *list, int number)
+{
+	t_node *new_node = malloc(sizeof(t_node));
+	if (!new_node)
+	{
+		// free split;
+		return (1);
+	}
+	new_node->data = number;
+	if (list->tail == NULL)
+	{
+		list->tail = new_node;
+		new_node->next = new_node;
+	}
+	else
+	{
+		new_node->next = list->tail->next;
+		list->tail->next = new_node;
+		list->tail = new_node;
+	}
+	++(list->cnt);
+	return (0);
+}
+
+int	insert_front_list(t_list *list, int number)
+{
+	t_node *new_node = malloc(sizeof(t_node));
+	if (!new_node)
+	{
+		// free split;
+		return (1);
+	}
+	new_node->data = number;
+	if (list->tail == NULL)
+	{
+		list->tail = new_node;
+		new_node->next = new_node;
+	}
+	else
+	{
+		new_node->next = list->tail->next;
+		list->tail->next = new_node;
+	}
+	++(list->cnt);
+	return (0);
+}
+
+void	iterate_list(t_list list)
+{
+	t_node *cur;
+
+	if (list.cnt == 0)
+		return ;
+	cur = list.tail->next;
+	if (list.cnt == 1)
+		printf("%d\n", cur->data);
+	else
+	{
+		while (list.cnt--)
+		{
+			printf("%d\n", cur->data);
+			cur = cur->next;
+		}
 	}
 }
 
-int main(int argc, char *argv[])
+int	check_duplicate_number(t_list list)
 {
-	int	i;
-	int element;
+	t_node *cur;
 
+	if (list.cnt <= 1)
+		return (0);
+	cur = list.tail->next;
+	while (list.cnt)
+	{
+		while (cur != list.tail)
+		{
+			if (list.tail->data == cur->data)
+				return (1);
+			cur = cur->next;
+		}
+		list.tail = list.tail->next;
+		list.cnt--;
+	}
+	return (0);
+}
+
+int	delete_node(t_list *list)
+{
+	t_node *del_pos;
+	int		del_data;
+
+	if (list->cnt == 0)
+		return (0);
+	del_pos = list->tail->next;
+	del_data = del_pos->data;
+	list->tail->next = del_pos->next;
+	free(del_pos);
+	if (list->cnt == 1)
+		list->tail = NULL;
+	--(list->cnt);
+	return (del_data);
+}
+
+int sa(t_list *list)
+{
+	int	temp;
+	t_node *cur;
+
+	if (list->cnt <= 1)
+		return (0);
+	cur = list->tail->next;
+	temp = cur->data;
+	cur->data = cur->next->data;
+	cur->next->data = temp;
+	return (0);
+}
+
+int sb(t_list *list)
+{
+	int	temp;
+	t_node *cur;
+
+	if (list->cnt <= 1)
+		return (0);
+	cur = list->tail->next;
+	temp = cur->data;
+	cur->data = cur->next->data;
+	cur->next->data = temp;
+	return (0);
+}
+
+int ss(t_list *list1, t_list *list2)
+{
+	sa(list1);
+	sb(list2);
+	return (0);
+}
+
+int pb(t_list *list1, t_list *list2)
+{
+	int	number;
+
+	if (list1->cnt <= 0)
+		return (0);
+	number = delete_node(list1);
+	insert_front_list(list2, number);
+	return (0);
+}
+
+int	main(int argc, char *argv[])
+{
+	int		i;
+	int		j;
+	int		number;
+	int		element_cnt;
+	char	**element;
+	t_list	stack_a;
+	t_list	stack_b;
+
+	init_list(&stack_a);
+	init_list(&stack_b);
 	i = 0;
 	while (++i < argc)
 	{
-		element = ft_atoi(argv[i]);
-		if (element == 0 && !check_real_zero(argv[i]))
+		element_cnt = count_word(argv[i]);
+		element = ft_split(argv[i]);
+		j = -1;
+		while (++j < element_cnt)
 		{
-			printf("error\n");
-			break ;
+			number = ft_atoi(element[j]);
+			if (number == 0 && !check_real_zero(element[j]))
+			{
+				printf("error: invalid argument\n");
+				//free_split
+				//free_list
+				return (0);
+			}
+			else
+			{
+				if (insert_list(&stack_a, number) == 1)
+				{
+					printf("error: list malloc failed\n");
+					//free_split;
+					//free_list;
+					return (0);
+				}
+			}
 		}
-		else
-			printf("%d\n", element);
 	}
-	return 0;
+	if (check_duplicate_number(stack_a) == 1)
+	{
+		printf("error: duplicate number\n");
+		//free_split
+		//free_list
+		return (0);
+	}
+	printf("cnt:%d\n", stack_a.cnt);
+	iterate_list(stack_a);
+	sa(&stack_a);
+	iterate_list(stack_a);
+	pb(&stack_a, &stack_b);
+	printf("iter a\n");
+	iterate_list(stack_a);
+	printf("iter b\n");
+	iterate_list(stack_b);
+	pb(&stack_a, &stack_b);
+	printf("iter a\n");
+	iterate_list(stack_a);
+	printf("iter b\n");
+	iterate_list(stack_b);
+	return (0);
 }
