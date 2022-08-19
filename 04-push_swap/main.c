@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 11:47:02 by junji             #+#    #+#             */
-/*   Updated: 2022/08/18 17:28:58 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/19 17:04:38 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,11 @@ int	check_real_zero(char *str)
 {
 	if (*str == '-' || *str == '+')
 		++str;
-	if (*str == '0')
-		return (1);
-	return (0);
+	while (*str == '0')
+		++str;
+	if (*str != 0)
+		return (0);
+	return (1);
 }
 
 int	count_word(char *str)
@@ -292,6 +294,71 @@ int pb(t_list *list1, t_list *list2)
 	return (0);
 }
 
+int pa(t_list *list1, t_list *list2)
+{
+	int number;
+
+	if (list2->cnt <= 0)
+		return (0);
+	number = delete_node(list2);
+	insert_front_list(list1, number);
+	return (0);
+}
+
+int	ra(t_list *list)
+{
+	if (list->cnt <= 1)
+		return (0);
+	list->tail = list->tail->next;
+	return (0);
+}
+
+int rb(t_list *list)
+{
+	if (list->cnt <= 1)
+		return (0);
+	list->tail = list->tail->next;
+	return (0);
+}
+
+int rr(t_list *list1, t_list *list2)
+{
+	ra(list1);
+	rb(list2);
+	return (0);
+}
+
+int rra(t_list *list)
+{
+	int cnt;
+
+	cnt = list->cnt;
+	if (list->cnt <= 1)
+		return (0);
+	while (--cnt)
+		list->tail = list->tail->next;
+	return (0);
+}
+
+int rrb(t_list *list)
+{
+	int cnt;
+
+	cnt = list->cnt;
+	if (list->cnt <= 1)
+		return (0);
+	while (--cnt)
+		list->tail = list->tail->next;
+	return (0);
+}
+
+int rrr(t_list *list1, t_list *list2)
+{
+	rra(list1);
+	rrb(list2);
+	return (0);
+}
+
 int	main(int argc, char *argv[])
 {
 	int		i;
@@ -341,17 +408,11 @@ int	main(int argc, char *argv[])
 	}
 	printf("cnt:%d\n", stack_a.cnt);
 	iterate_list(stack_a);
-	sa(&stack_a);
+	printf("rra\n");
+	rra(&stack_a);
 	iterate_list(stack_a);
-	pb(&stack_a, &stack_b);
-	printf("iter a\n");
+	printf("rra\n");
+	rra(&stack_a);
 	iterate_list(stack_a);
-	printf("iter b\n");
-	iterate_list(stack_b);
-	pb(&stack_a, &stack_b);
-	printf("iter a\n");
-	iterate_list(stack_a);
-	printf("iter b\n");
-	iterate_list(stack_b);
 	return (0);
 }
