@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 11:47:02 by junji             #+#    #+#             */
-/*   Updated: 2022/08/19 17:04:38 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/21 17:19:23 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ char	**ft_split(char *str)
 typedef struct s_node
 {
 	int data;
+	int score;
 	struct s_node *next;
 }	t_node;
 
@@ -204,7 +205,8 @@ void	iterate_list(t_list list)
 	{
 		while (list.cnt--)
 		{
-			printf("%d\n", cur->data);
+			printf("cur->data:%d\n", cur->data);
+			printf("score:%d\n", cur->score);
 			cur = cur->next;
 		}
 	}
@@ -213,20 +215,21 @@ void	iterate_list(t_list list)
 int	check_duplicate_number(t_list list)
 {
 	t_node *cur;
+	t_node *tail;
 
+	tail = list.tail;
 	if (list.cnt <= 1)
 		return (0);
-	cur = list.tail->next;
-	while (list.cnt)
+	while (--list.cnt)
 	{
-		while (cur != list.tail)
+		cur = list.tail->next;;
+		while (cur != tail)
 		{
-			if (list.tail->data == cur->data)
+			if (cur->data == list.tail->data)
 				return (1);
 			cur = cur->next;
 		}
 		list.tail = list.tail->next;
-		list.cnt--;
 	}
 	return (0);
 }
@@ -359,6 +362,93 @@ int rrr(t_list *list1, t_list *list2)
 	return (0);
 }
 
+int	list_at(t_list *list, int left)
+{
+	t_node *first;
+
+	if (list->cnt <= 0)
+		return (0);
+	first = list->tail->next;
+	while (left--)
+		first = first->next;
+	return (first->data);
+}
+
+int ft_swap(t_list *list, int left, int right)
+{
+	int	temp;
+	t_node *first;
+	t_node *second;
+
+	if (list->cnt <= 1)
+		return (1);
+	first = list->tail->next;
+	second = list->tail->next;
+	while (left--)
+		first = first->next;
+	temp = first->data;
+	while (right--)
+		second = second->next;
+	first->data = second->data;
+	second->data = temp;
+	return (0);
+}
+
+void quick_sort(t_list *list, int start, int end)
+{
+	int pivot = start;
+	int left = start + 1;
+	int right = end;
+	if (start >= end)
+		return ;
+	while (left <= right)
+	{
+		while (left <= end && list_at(list, left) <= list_at(list, pivot))
+			++left;
+		while (right > start && list_at(list, right) >= list_at(list, pivot))
+			--right;
+		if (left > right)
+			ft_swap(list, pivot, right);
+		else
+			ft_swap(list, left, right);
+	}
+	quick_sort(list, start, right - 1);
+	quick_sort(list, right + 1, end);
+}
+
+void	mark_rank(t_list *temp, t_list *list)
+{
+	if (list->cnt <= 0)
+		return ;
+	t_node *temp_cur;
+	t_node *cur;
+	t_node *temp_tail;
+	t_node *cur_tail;
+	int score;
+	int temp_cnt;
+	int list_cnt;
+
+	score = 0;
+	temp_tail = temp->tail;
+	cur_tail = list->tail;
+	temp_cur = temp->tail->next; 
+	cur = list->tail->next;
+	temp_cnt = temp->cnt;
+	list_cnt = list->cnt;
+	while (temp_cnt--)
+	{
+		list_cnt = list->cnt;
+		cur = list->tail->next;
+		while (list_cnt--)
+		{
+			if (cur->data == temp_cur->data)
+				cur->score = score++;
+			cur = cur->next;
+		}
+		temp_cur = temp_cur->next;
+	}
+}
+
 int	main(int argc, char *argv[])
 {
 	int		i;
@@ -368,9 +458,11 @@ int	main(int argc, char *argv[])
 	char	**element;
 	t_list	stack_a;
 	t_list	stack_b;
+	t_list	temp;
 
 	init_list(&stack_a);
 	init_list(&stack_b);
+	init_list(&temp);
 	i = 0;
 	while (++i < argc)
 	{
@@ -389,7 +481,7 @@ int	main(int argc, char *argv[])
 			}
 			else
 			{
-				if (insert_list(&stack_a, number) == 1)
+				if (insert_list(&temp, number) == 1 || insert_list(&stack_a, number) == 1)
 				{
 					printf("error: list malloc failed\n");
 					//free_split;
@@ -406,13 +498,13 @@ int	main(int argc, char *argv[])
 		//free_list
 		return (0);
 	}
-	printf("cnt:%d\n", stack_a.cnt);
+	printf("iter a\n\n");
 	iterate_list(stack_a);
-	printf("rra\n");
-	rra(&stack_a);
-	iterate_list(stack_a);
-	printf("rra\n");
-	rra(&stack_a);
+	printf("iter temp\n\n");
+	iterate_list(temp);
+	quick_sort(&temp, 0, temp.cnt - 1);
+	printf("iter temp\n\n");
+	mark_rank(&temp, &stack_a);
 	iterate_list(stack_a);
 	return (0);
 }
