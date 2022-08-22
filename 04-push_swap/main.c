@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 11:47:02 by junji             #+#    #+#             */
-/*   Updated: 2022/08/21 17:19:23 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/22 15:53:33 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -374,6 +374,18 @@ int	list_at(t_list *list, int left)
 	return (first->data);
 }
 
+int	list_at_score(t_list *list, int left)
+{
+	t_node *first;
+
+	if (list->cnt <= 0)
+		return (0);
+	first = list->tail->next;
+	while (left--)
+		first = first->next;
+	return (first->score);
+}
+
 int ft_swap(t_list *list, int left, int right)
 {
 	int	temp;
@@ -506,5 +518,38 @@ int	main(int argc, char *argv[])
 	printf("iter temp\n\n");
 	mark_rank(&temp, &stack_a);
 	iterate_list(stack_a);
+	int pivot1 = stack_a.cnt / 3;
+	int pivot2 = stack_a.cnt / 3 * 2;
+
+	printf("pivot1: %d, pivot2: %d\n", pivot1, pivot2);
+	int cnt = stack_a.cnt;
+	while (pivot1 <= stack_a.cnt)
+	{
+		int differ = stack_a.cnt - pivot1 / 2;
+		while (cnt--)
+		{
+			if (list_at_score(&stack_a, 0) <= pivot1)
+				pb(&stack_a, &stack_b);
+			else
+				ra(&stack_a);
+		}
+		pivot1 +=
+	}
+	while (pivot2 <= stack_a.cnt)
+	{
+		int differ = stack_a.cnt - pivot2 / 2;
+		while (cnt--)
+		{
+			if (list_at_score(&stack_a, 0) <= pivot2)
+				pb(&stack_a, &stack_b);
+			else
+				ra(&stack_a);
+		}
+		pivot2 += differ;
+	}
+	printf("iter a\n");
+	iterate_list(stack_a);
+	printf("iter b\n");
+	iterate_list(stack_b);
 	return (0);
 }
