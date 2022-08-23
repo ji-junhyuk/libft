@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 11:47:02 by junji             #+#    #+#             */
-/*   Updated: 2022/08/23 16:23:53 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/23 17:41:34 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,24 +169,17 @@ int	insert_list(t_list *list, int number)
 	return (0);
 }
 
-int	insert_front_list(t_list *list, int number)
+int	insert_front_list(t_list *list, t_node *cur)
 {
-	t_node *new_node = malloc(sizeof(t_node));
-	if (!new_node)
-	{
-		// free split;
-		return (1);
-	}
-	new_node->data = number;
 	if (list->tail == NULL)
 	{
-		list->tail = new_node;
-		new_node->next = new_node;
+		list->tail = cur;
+		cur->next = cur;
 	}
 	else
 	{
-		new_node->next = list->tail->next;
-		list->tail->next = new_node;
+		cur->next = list->tail->next;
+		list->tail->next = cur;
 	}
 	++(list->cnt);
 	return (0);
@@ -308,11 +301,14 @@ int ss(t_list *list1, t_list *list2)
 int pb(t_list *list1, t_list *list2)
 {
 	int	number;
+	t_node *cur;
 
 	if (list1->cnt <= 0)
 		return (0);
-	number = delete_node(list1);
-	insert_front_list(list2, number);
+	cur = list1->tail->next;
+	list1->tail->next = list1->tail->next->next;
+	--(list1->cnt);
+	insert_front_list(list2, cur);
 	return (0);
 }
 
@@ -320,10 +316,13 @@ int pa(t_list *list1, t_list *list2)
 {
 	int number;
 
+	t_node *cur;
+
 	if (list2->cnt <= 0)
 		return (0);
-	number = delete_node(list2);
-	insert_front_list(list1, number);
+	cur = list2->tail->next;
+	list2->tail->next = list2->tail->next->next;
+	insert_front_list(list1, cur);
 	return (0);
 }
 
@@ -533,6 +532,7 @@ void push_stack_b(t_list *list1, t_list *list2, int pivot)
 	}
 	push_stack_b(list1, list2, pivot2);
 }
+push_stack_a(list1, list2, 
 
 int	main(int argc, char *argv[])
 {
@@ -596,6 +596,11 @@ int	main(int argc, char *argv[])
 	printf("iter a\n");
 	iterate_list(stack_a);
 
+	pb(&stack_a, &stack_b);
+	printf("iter a\n");
+	iterate_list(stack_a);
+	printf("iter b\n");
+	iterate_list(stack_b);
 //	int pivot1 = stack_a.cnt / 3; // 11
 //	int pivot2 = stack_a.cnt / 3 * 2; // 22
 //
