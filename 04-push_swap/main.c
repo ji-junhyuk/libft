@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 11:47:02 by junji             #+#    #+#             */
-/*   Updated: 2022/08/23 17:41:34 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/24 11:00:40 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -482,57 +482,49 @@ void push_stack_b(t_list *list1, t_list *list2, int pivot)
 {
 	int cnt;
 
+	int order_count = 0;
 	cnt = list1->cnt;
 	int pivot1 = pivot + cnt / 3;
 	int pivot2 = pivot + cnt / 3 * 2;
 	if (cnt <= 2)
 		return ;
-	printf("pivot1: %d\n", pivot1);
-	printf("pivot2: %d\n", pivot2);
+	int push_count = 0;
+
 	printf("cnt: %d\n", cnt);
-	while (cnt-- >= 0)
+	printf("pivot1: %d\n", pivot1);
+	while (--cnt >= 0)
 	{
 		if (list_at_score(list1, 0) <= pivot1)
 		{
-//			if (list1->tail != NULL)
-//			{
-//				printf("pv1 [ra]stack1 top, %d\n", list1->tail->next->data);
 			pb(list1, list2);
-//			}
+			++push_count;
 		}
 		else
-		{
-//			if (list1->tail != NULL)
-//			{
-//				printf("pv1 [ra]stack1 top, %d\n", list1->tail->next->data);
 			ra(list1);
-//			}
-		}
+		++order_count;
 	}
+	printf("push_count1:%d\n", push_count);
 	cnt = list1->cnt;
 	printf("cnt: %d\n", cnt);
-	while (cnt-- >= 0)
+	printf("pivot2: %d\n", pivot2);
+	push_count = 0;
+	while (--cnt >= 0)
 	{
 		if (list_at_score(list1, 0) <= pivot2)
 		{
-//			if (list1->tail != NULL)
-//			{
-//				printf("pv2 [pb]stack1 top, %d\n", list1->tail->next->data);
-				pb(list1, list2);
-//			}
+			pb(list1, list2);
+			++push_count;
 		}
 		else
 		{
-//			if (list1->tail != NULL)
-//			{
-//				printf("pv2 [ra]stack1 top, %d\n", list1->tail->next->data);
-				ra(list1);
-//			}
+			ra(list1);
 		}
+		++order_count;
 	}
+	printf("push_count2:%d\n", push_count);
+	printf("order_count:%d\n", order_count);
 	push_stack_b(list1, list2, pivot2);
 }
-push_stack_a(list1, list2, 
 
 int	main(int argc, char *argv[])
 {
@@ -584,58 +576,11 @@ int	main(int argc, char *argv[])
 		//free_list
 		return (0);
 	}
-	printf("iter a\n\n");
-	iterate_list(stack_a);
-	printf("iter temp\n\n");
-	iterate_list(temp);
 	quick_sort(&temp, 0, temp.cnt - 1);
-	printf("iter temp\n\n");
-	printf("sort? :%d\n", is_sorted(&temp));
+	printf("sort temp? :%d\n", is_sorted(&temp));
 	mark_rank(&temp, &stack_a);
 	printf("stack_a? sort? :%d\n", is_sorted(&stack_a));
-	printf("iter a\n");
-	iterate_list(stack_a);
-
-	pb(&stack_a, &stack_b);
-	printf("iter a\n");
-	iterate_list(stack_a);
-	printf("iter b\n");
-	iterate_list(stack_b);
-//	int pivot1 = stack_a.cnt / 3; // 11
-//	int pivot2 = stack_a.cnt / 3 * 2; // 22
-//
-//	int cnt = stack_a.cnt;
-//	while (cnt--)
-//	{
-//		if (list_at_score(&stack_a, 0) <= pivot1)
-//		{
-//			printf("pv1 [pb]stack1 top, %d\n", stack_a.tail->next->data);
-//			pb(&stack_a, &stack_b);
-//		}
-//		else
-//		{
-//			printf("pv1 [ra]stack1 top, %d\n", stack_a.tail->next->data);
-//			ra(&stack_a);
-//		}
-//	}
-//	cnt = stack_a.cnt;
-//	while (cnt--)
-//	{
-//		if (list_at_score(&stack_a, 0) <= pivot2)
-//		{
-//			printf("stack1 [pb]top, %d\n", stack_a.tail->next->data);
-//			pb(&stack_a, &stack_b);
-//		}
-//		else
-//		{
-//			printf("stack1 [ra]top, %d\n", stack_a.tail->next->data);
-//			ra(&stack_a);
-//		}
-//	}
 	push_stack_b(&stack_a, &stack_b, 0);
-//	(stack_a.cnt == 11)
-	
-
 	printf("iter a\n");
 	iterate_list(stack_a);
 	printf("iter b\n");
