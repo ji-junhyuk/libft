@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 11:47:02 by junji             #+#    #+#             */
-/*   Updated: 2022/08/24 11:00:40 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/25 14:42:08 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,13 @@ char	**ft_split(char *str)
 	return (copy);
 }
 
+typedef struct s_tool
+{
+	int dir;
+	int pivot;
+	int push_count;
+} t_tool;
+
 typedef struct s_node
 {
 	int data;
@@ -133,13 +140,32 @@ typedef struct s_node
 	struct s_node *next;
 }	t_node;
 
+typedef struct s_cmd_node
+{
+	struct s_cmd_node *next;
+	t_tool tool;
+}	t_cmd_node;
+
 typedef struct s_list
 {
 	t_node	*tail;
 	int		cnt;
 }	t_list;
 
+
+typedef struct s_cmd_list
+{
+	t_cmd_node	*tail;
+	int 	cnt;
+}	t_cmd_list;
+
 void	init_list(t_list *list)
+{
+	list->tail = NULL;
+	list->cnt = 0;
+}
+
+void	init_cmd_list(t_cmd_list *list)
 {
 	list->tail = NULL;
 	list->cnt = 0;
@@ -154,6 +180,32 @@ int	insert_list(t_list *list, int number)
 		return (1);
 	}
 	new_node->data = number;
+	if (list->tail == NULL)
+	{
+		list->tail = new_node;
+		new_node->next = new_node;
+	}
+	else
+	{
+		new_node->next = list->tail->next;
+		list->tail->next = new_node;
+		list->tail = new_node;
+	}
+	++(list->cnt);
+	return (0);
+}
+
+int	insert_cmd_list(t_cmd_list *list, int stack, int pivot, int push_count)
+{
+	t_cmd_node *new_node = malloc(sizeof(t_cmd_node));
+	if (!new_node)
+	{
+		// free split;
+		return (1);
+	}
+	new_node->tool.dir = stack;
+	new_node->tool.pivot = pivot;
+	new_node->tool.push_count = push_count;
 	if (list->tail == NULL)
 	{
 		list->tail = new_node;
@@ -200,6 +252,31 @@ void	iterate_list(t_list list)
 		{
 			printf("cur->data:%d\n", cur->data);
 			printf("score:%d\n", cur->score);
+			cur = cur->next;
+		}
+	}
+}
+
+void	iterate_cmd_list(t_cmd_list list)
+{
+	t_cmd_node *cur;
+
+	if (list.cnt == 0)
+		return ;
+	cur = list.tail->next;
+	if (list.cnt == 1)
+	{
+		printf("dir: %d\n", cur->tool.dir);
+		printf("pivot: %d\n", cur->tool.pivot);
+		printf("push_count: %d\n", cur->tool.push_count);
+	}
+	else
+	{
+		while (list.cnt--)
+		{
+			printf("dir: %d\n", cur->tool.dir);
+			printf("pivot: %d\n", cur->tool.pivot);
+			printf("push_count: %d\n", cur->tool.push_count);
 			cur = cur->next;
 		}
 	}
@@ -300,7 +377,6 @@ int ss(t_list *list1, t_list *list2)
 
 int pb(t_list *list1, t_list *list2)
 {
-	int	number;
 	t_node *cur;
 
 	if (list1->cnt <= 0)
@@ -314,8 +390,6 @@ int pb(t_list *list1, t_list *list2)
 
 int pa(t_list *list1, t_list *list2)
 {
-	int number;
-
 	t_node *cur;
 
 	if (list2->cnt <= 0)
@@ -478,7 +552,7 @@ void	mark_rank(t_list *temp, t_list *list)
 	}
 }
 
-void push_stack_b(t_list *list1, t_list *list2, int pivot)
+void push_stack_b(t_list *list1, t_list *list2, t_cmd_list *cmd_list, int pivot)
 {
 	int cnt;
 
@@ -503,6 +577,7 @@ void push_stack_b(t_list *list1, t_list *list2, int pivot)
 			ra(list1);
 		++order_count;
 	}
+	insert_cmd_list(cmd_list, 1, pivot1, push_count);
 	printf("push_count1:%d\n", push_count);
 	cnt = list1->cnt;
 	printf("cnt: %d\n", cnt);
@@ -523,24 +598,34 @@ void push_stack_b(t_list *list1, t_list *list2, int pivot)
 	}
 	printf("push_count2:%d\n", push_count);
 	printf("order_count:%d\n", order_count);
-	push_stack_b(list1, list2, pivot2);
+	insert_cmd_list(cmd_list, 1, pivot2, push_count);
+	push_stack_b(list1, list2, cmd_list, pivot2);
+}
+
+void	delete_cmd_node(t_list *list1, t_list *list2, t_cmd_list *cmd_list)
+{
+	while (cmd_list->cnt > 0)
+	{
+
+	}
 }
 
 int	main(int argc, char *argv[])
 {
 	int		i;
-	int		j;
-	int		number;
+	int		j; int		number;
 	int		element_cnt;
 	char	**element;
 
-	t_list	stack_a;
-	t_list	stack_b;
-	t_list	temp;
+	t_list		stack_a;
+	t_list		stack_b;
+	t_list		temp;
+	t_cmd_list	command;
 
 	init_list(&stack_a);
 	init_list(&stack_b);
 	init_list(&temp);
+	init_cmd_list(&command);
 	i = 0;
 	while (++i < argc)
 	{
@@ -580,10 +665,14 @@ int	main(int argc, char *argv[])
 	printf("sort temp? :%d\n", is_sorted(&temp));
 	mark_rank(&temp, &stack_a);
 	printf("stack_a? sort? :%d\n", is_sorted(&stack_a));
-	push_stack_b(&stack_a, &stack_b, 0);
+	push_stack_b(&stack_a, &stack_b, &command, 0); // 1. create_node;
+	delete_cmd_node(&stack_a, &stack_b, &command);
+
 	printf("iter a\n");
 	iterate_list(stack_a);
 	printf("iter b\n");
 	iterate_list(stack_b);
+	printf("iter command\n");
+	iterate_cmd_list(command);
 	return (0);
 }
