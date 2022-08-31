@@ -1,4 +1,3 @@
-# push_swap
 1. [O] parsing
 2. [ ] sort
 	- [ ] 작은 pivot(160 등)을 기준으로 작은 것을 stack_b에 푸쉬한다.

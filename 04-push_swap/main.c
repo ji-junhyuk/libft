@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 11:47:02 by junji             #+#    #+#             */
-/*   Updated: 2022/08/30 16:56:37 by junji            ###   ########.fr       */
+/*   Updated: 2022/08/31 16:03:10 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -610,7 +610,6 @@ void push_stack_b(t_list *list1, t_list *list2, t_cmd_list *cmd_list, int pivot)
 
 void	compare_two_sort_list(t_list *list1, t_list *list2, int flag)
 {
-	(void) flag;
 	int score1 = list_at_score(list2, 0);
 	int score2 = list_at_score(list2, 1);
 
@@ -618,10 +617,10 @@ void	compare_two_sort_list(t_list *list1, t_list *list2, int flag)
 	int score4 = list_at_score(list1, 1);
 	if (flag == 0)
 	{
-			if (score3 > score4)
-			{
-				sa(list1);
-			}
+		if (score3 > score4)
+		{
+			sa(list1);
+		}
 	}
 	else
 	{
@@ -739,8 +738,12 @@ void	push_stack_b_r(t_list *list1, t_list *list2, t_cmd_list *cmd_list)
 			pa(list1, list2);
 		else
 			compare_two_sort_list(list1, list2, 0);
+		printf("=========================\n");
+		printf("\niter command\n");
+		iterate_cmd_list(*cmd_list);
 		delete_cmd_list(&cmd_list);
-		printf("cmd_list2\n");
+		printf("=========================\n");
+		printf("\niter command\n");
 		iterate_cmd_list(*cmd_list);
 		return ;
 	}
@@ -748,29 +751,34 @@ void	push_stack_b_r(t_list *list1, t_list *list2, t_cmd_list *cmd_list)
 	{
 		int push_count = 0;
 		int cnt;
+		int rb_count = 0;
 		cnt = tool.push_count;
 		while (--cnt >= 0)
 		{
 			if (list_at_score(list1, 0) >= pivot1)
 			{
 				pa(list1, list2);
-				++command_cnt; ++push_count;
+				++command_cnt;
+				++push_count;
 				--tool.push_count;
 			}
 			else
 			{
 				rb(list2);
 				++command_cnt;
+				++rb_count;
 			}
 		}
-		delete_cmd_list(&cmd_list);
-		insert_cmd_list(cmd_list, 0, pivot1, push_count);
-		int rrb_count = tool.push_count - push_count;
+	//	delete_cmd_list(&cmd_list);
+		int rrb_count = rb_count;;
 		while (--rrb_count >= 0)
 			rrb(list2);
-		tool.push_count -= push_count;
-		printf("****cmd_list2\n");
+		cmd_list->tail->tool.pivot = pivot2;
+		cmd_list->tail->tool.push_count = tool.push_count;
+		printf("=========================\n");
+		printf("\niter command\n");
 		iterate_cmd_list(*cmd_list);
+		insert_cmd_list(cmd_list, 0, pivot1, push_count);
 		return ; 
 	} 
 } 
@@ -789,8 +797,12 @@ void	push_stack_a_r(t_list *list1, t_list *list2, t_cmd_list **cmd_list)
 		if (tool.push_count == 1)
 			pa(list1, list2);
 		else
-			compare_two_sort_list(list1, list2, 0);
+			compare_two_sort_list(list1, list2, 1);
+		printf("=========================\n");
+		printf("\niter command\n");
 		delete_cmd_list(cmd_list);
+		printf("=========================\n");
+		printf("\niter command\n");
 		return ;
 	}
 	else 
@@ -799,13 +811,10 @@ void	push_stack_a_r(t_list *list1, t_list *list2, t_cmd_list **cmd_list)
 		int cnt;
 		cnt = tool.push_count;
 		int rb_count = 0;
-		printf("\n\nbefore itera\n");
 		iterate_list(*list1);
-		printf("\niter b\n");
 		iterate_list(*list2);
 		while (--cnt >= 0)
 		{
-//			printf("\n*list_at_score:%d\n", list_at_score(list1, 0));
 			if (list_at_score(list2, 0) >= pivot1)
 			{
 				pa(list1, list2);
@@ -822,15 +831,16 @@ void	push_stack_a_r(t_list *list1, t_list *list2, t_cmd_list **cmd_list)
 		}
 		printf("\n\n itera\n");
 		iterate_list(*list1);
+		printf("=========================\n");
+		printf("\niter command\n");
+		iterate_cmd_list(*(*cmd_list));
 		int rrb_count = rb_count; //2
 		printf("push_stack_a_r, rrb_count:%d\n", rrb_count);
 		while (--rrb_count >= 0)
 			rrb(list2);
 		(*cmd_list)->tail->tool.pivot = pivot2;
-		(*cmd_list)->tail->tool.push_count = tool.push_count - push_count;
+		(*cmd_list)->tail->tool.push_count = tool.push_count;
 		insert_cmd_list(*cmd_list, 0, pivot1, push_count);
-		printf("\n****cmd_list2\n");
-		iterate_cmd_list(*(*cmd_list));
 		return ;
 
 //		cnt = tool.push_count;
@@ -864,17 +874,17 @@ void	delete_cmd_node(t_list *list1, t_list *list2, t_cmd_list *cmd_list)
 	t_cmd_node *cur;
 
 	cur = cmd_list->tail;
-	printf("=========================\n");
 	while (cmd_list->cnt > 0)
 	{
+		printf("=========================\n");
+		printf("\niter command\n");
+		iterate_cmd_list(*cmd_list);
 		sleep(2);
 		printf("cmd_list->cnt: %d\n", cmd_list->cnt);
-		printf("iter a\n");
+		printf("\niter a\n");
 		iterate_list(*list1);
-		printf("iter b\n");
+		printf("\niter b\n");
 		iterate_list(*list2);
-		printf("iter command\n");
-		iterate_cmd_list(*cmd_list);
 		if (cur->tool.dir == 1)
 		{
 			push_stack_a_r(list1, list2, &cmd_list);
