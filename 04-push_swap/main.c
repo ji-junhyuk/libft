@@ -1,6 +1,5 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
+/*                                                                            */ /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
@@ -678,10 +677,10 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 		return ;
 	}
 	p_count = 0;
-	if (list1->cnt == cur->tool.push_count)
-		alone = 1;
 	if (cur->tool.dir == 0)
 	{
+		if (list1->cnt == cur->tool.push_count)
+			alone = 1;
 		pivot1 = cur->tool.pivot - cur->tool.push_count / 3;
 		pivot2 = cur->tool.pivot - cur->tool.push_count / 3 * 2;
 
@@ -734,6 +733,7 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			}
 		}
 		origin_push_count -= p_count; 
+		alone = 0;
 		insert_pivot_list(*pivot_list, 1, pivot1, p_count);
 		rotate = origin_push_count;
 		while (!alone && --rotate >= 0)
@@ -746,6 +746,8 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	}
 	else
 	{
+		if (list2->cnt == cur->tool.push_count)
+			alone = 1;
 		int origin_push_count = cur->tool.push_count;
 		cnt = origin_push_count;
 		int rotate = 0;
