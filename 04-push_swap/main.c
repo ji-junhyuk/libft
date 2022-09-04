@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 13:40:33 by junji             #+#    #+#             */
-/*   Updated: 2022/09/04 15:51:51 by junji            ###   ########.fr       */
+/*   Updated: 2022/09/04 15:55:37 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -654,11 +654,11 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	int				pivot2;
 	int				cnt;
 	int				p_count;
-//	int				alone;
+	int				alone;
 
 	cur = (*pivot_list)->tail;
 	pivot = cur->tool.pivot;
-//	alone = 0;
+	alone = 0;
 	if (cur->tool.push_count <= 2)
 	{
 		if (cur->tool.push_count == 2)
@@ -678,10 +678,10 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 		return ;
 	}
 	p_count = 0;
+	if (list1->cnt == cur->tool.push_count)
+		alone = 1;
 	if (cur->tool.dir == 0)
 	{
-//		if (list1->cnt == cur->tool.push_count)
-//			alone = 1;
 		pivot1 = cur->tool.pivot - cur->tool.push_count / 3;
 		pivot2 = cur->tool.pivot - cur->tool.push_count / 3 * 2;
 
@@ -709,7 +709,7 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 		insert_pivot_list(*pivot_list, 1, pivot2, p_count);
 		rotate = origin_push_count - p_count;
 		(origin_push_count) -= p_count;
-		while (--rotate >= 0)
+		while (!alone && --rotate >= 0)
 		{
 			rra(list1);
 			printf("rra\n");
@@ -736,7 +736,7 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 		origin_push_count -= p_count; 
 		insert_pivot_list(*pivot_list, 1, pivot1, p_count);
 		rotate = origin_push_count;
-		while (--rotate >= 0)
+		while (!alone && --rotate >= 0)
 		{
 			rra(list1);
 			printf("rra\n");
@@ -771,7 +771,7 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 		insert_pivot_list(*pivot_list, 1, pivot - p_count, origin_push_count - p_count);
 		insert_pivot_list(*pivot_list, 0, pivot, p_count);
 		p_count = origin_push_count - p_count;
-		while (--p_count >= 0)
+		while (!alone && --p_count >= 0)
 		{
 			rrb(list2);
 			printf("rrb\n");
