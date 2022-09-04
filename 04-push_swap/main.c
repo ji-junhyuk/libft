@@ -5,6 +5,18 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/04 13:40:33 by junji             #+#    #+#             */
+/*   Updated: 2022/09/04 15:51:51 by junji            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 11:47:02 by junji             #+#    #+#             */
 /*   Updhted: 2022/09/01 10:05:47 by junji            ###   ########.fr       */
 /*                                                                            */
@@ -252,36 +264,11 @@ void	iterate_list(t_list list)
 	{
 		while (list.cnt--)
 		{
-			printf("cur->data:%d\n", cur->data);
-			printf("score:%d\n", cur->score);
+			printf("cur->data:%d ", cur->data);
+			printf("score:%d ", cur->score);
 			cur = cur->next;
 		}
 		printf("\n");
-	}
-}
-
-void	iterate_pivot_list(t_pivot_list list)
-{
-	t_pivot_node *cur;
-
-	if (list.cnt == 0)
-		return ;
-	cur = list.tail->next;
-	if (list.cnt == 1)
-	{
-		printf("dir: %d\n", cur->tool.dir);
-		printf("pivot: %d\n", cur->tool.pivot);
-		printf("push_count: %d\n", cur->tool.push_count);
-	}
-	else
-	{
-		while (list.cnt--)
-		{
-			printf("dir: %d\n", cur->tool.dir);
-			printf("pivot: %d\n", cur->tool.pivot);
-			printf("push_count: %d\n", cur->tool.push_count);
-			cur = cur->next;
-		}
 	}
 }
 
@@ -350,9 +337,6 @@ int sa(t_list *list)
 		temp->next = tail_prev;
 		return (0);
 	}
-//	temp = cur->data;
-//	cur->data = cur->next->data;
-//	cur->next->data = temp;
 	return (0);
 }
 
@@ -413,7 +397,6 @@ int pa(t_list *list1, t_list *list2)
 		return (0);
 	}
 	cur = list2->tail->next;
-	printf("pa_data:%d\n", cur->data);
 	list2->tail->next = list2->tail->next->next;
 	--(list2->cnt);
 	insert_front_list(list1, cur);
@@ -473,6 +456,7 @@ int rrr(t_list *list1, t_list *list2)
 	rrb(list2);
 	return (0);
 }
+
 int	list_at(t_list *list, int left)
 {
 	t_node *first;
@@ -480,7 +464,6 @@ int	list_at(t_list *list, int left)
 	if (list->cnt <= 0)
 		return (0);
 	first = list->tail->next;
-	//left >= 0
 	while (left--)
 		first = first->next;
 	return (first->data);
@@ -494,10 +477,7 @@ int	list_at_score(t_list *list, int left)
 		return (0);
 	first = list->tail->next;
 	while (left--)
-	{
-		printf("list_at_score\n");
 		first = first->next;
-	}
 	return (first->score);
 }
 
@@ -572,76 +552,6 @@ void	mark_rank(t_list *temp, t_list *list)
 	}
 }
 
-void compare_two(t_list *list)
-{
-	int score1 = list_at_score(list, 0);
-	int score2 = list_at_score(list, 1);
-	if (score1 > score2)
-	{
-		printf("compare: ra\n");
-		ra(list);
-		++command_cnt;
-	}
-}
-
-//void push_stack_b(t_list *list1, t_list *list2, t_pivot_list *pivot_list, int pivot)
-//{
-//	int cnt;
-//	int order_count = 0;
-//	cnt = list1->cnt;
-//	int pivot1 = pivot + cnt / 3;
-//	int pivot2 = pivot + cnt / 3 * 2;
-//	if (cnt <= 2)
-//	{
-//		printf("list1.cnt: %d\n", list1->cnt);
-//		compare_two(list1);
-//		return ;
-//	}
-//	int push_count = 0;
-//	printf("cnt: %d\n", cnt);
-//	printf("pivot1: %d\n", pivot1);
-//	while (--cnt >= 0)
-//	{
-//		if (list_at_score(list1, 0) <= pivot1)
-//		{
-//			pb(list1, list2);
-//			++command_cnt;
-//			++push_count;
-//		}
-//		else
-//		{
-//			ra(list1);
-//			++command_cnt;
-//		}
-//		++order_count;
-//	}
-//	insert_pivot_list(pivot_list, 1, pivot1, push_count);
-//	printf("push_count1:%d\n", push_count);
-//	cnt = list1->cnt;
-//	printf("cnt: %d\n", cnt);
-//	printf("pivot2: %d\n", pivot2);
-//	push_count = 0;
-//	while (--cnt >= 0)
-//	{
-//		if (list_at_score(list1, 0) <= pivot2)
-//		{
-//			pb(list1, list2);
-//			++push_count;
-//			++command_cnt;
-//		}
-//		else
-//		{
-//			ra(list1);
-//			++command_cnt;
-//		}
-//		++order_count;
-//	}
-//	printf("push_count2:%d\n", push_count);
-//	printf("order_count:%d\n", order_count);
-//	insert_pivot_list(pivot_list, 1, pivot2, push_count);
-//	push_stack_b(list1, list2, pivot_list, pivot2);
-//}
-
 void	compare_two_sort_list(t_list *list1, t_list *list2, int flag)
 {
 	int score1 = list_at_score(list2, 0);
@@ -651,39 +561,37 @@ void	compare_two_sort_list(t_list *list1, t_list *list2, int flag)
 	int score4 = list_at_score(list1, 1);
 	if (flag == 0)
 	{
-//		if (list1->cnt == 2)
-//		{
 			if (score3 > score4)
 			{
-				printf("sa햇따구요!!\n");
+				printf("sa\n");
 				sa(list1);
+				++command_cnt;
 			}
-//		}
-//		else
-//		{
-//		}
 	}
 	else
 	{
-		if (list2->cnt == 2) //  갯수가 2개일 때
+		if (list2->cnt == 2)
 		{
 			if (score1 < score2)
 			{
-				printf("너 여기 도착하니?1");
 				rb(list2);
 				pa(list1, list2);
 				pa(list1, list2);
+				printf("rb\n");
+				printf("pa\n");
+				printf("pa\n");
 				command_cnt += 3;
 			}
 			else
 			{
-				printf("너 여기 도착하니?");
 				pa(list1, list2);
 				pa(list1, list2);
+				printf("pa\n");
+				printf("pa\n");
 				command_cnt += 2;
 			}
 		}
-		else // 더 많을 때
+		else
 		{
 			if (score1 < score2)
 			{
@@ -691,58 +599,23 @@ void	compare_two_sort_list(t_list *list1, t_list *list2, int flag)
 				pa(list1, list2);
 				rrb(list2);
 				pa(list1, list2);
+				printf("rb\n");
+				printf("pa\n");
+				printf("rrb\n");
+				printf("pa\n");
 				command_cnt += 4;
 			}
 			else
 			{
 				pa(list1, list2);
 				pa(list1, list2);
+				printf("pa\n");
+				printf("pa\n");
 				command_cnt += 2;
 			}
 		}
 	}
 }
-
-int	delete_node(t_list *list)
-{
-	t_node *del_pos;
-	int		del_data;
-
-	if (list->cnt == 0)
-		return (0);
-	del_pos = list->tail->next;
-	//free(del_pos);
-	del_data = del_pos->data;
-	list->tail->next = del_pos->next;
-	free(del_pos);
-	if (list->cnt == 1)
-		list->tail = NULL;
-	--(list->cnt);
-	return (del_data);
-}
-
-//void	delete_cmd_list(t_cmd_list *cmd_list)
-//{
-//	t_cmd_node *temp;
-//	t_cmd_node *tail_prev;
-//	int			cnt;
-//
-//	printf("delete_cmd_list\n");
-//	printf("pivot: %d\n", cmd_list->tail->tool.pivot);
-//	cnt = cmd_list->cnt;
-//	if (cnt <= 0)
-//		return ;
-//	temp = cmd_list->tail;
-//	tail_prev = cmd_list->tail;
-//	while (--cnt)
-//		tail_prev = tail_prev->next;
-//	printf("delete_cmd_list, tail_prev->pivot: %d\n", tail_prev->tool.pivot);
-//	cmd_list->tail = tail_prev;
-//	tail_prev->next = cmd_list->tail->next;
-//	free(temp);
-//	temp = NULL;
-//	--(cmd_list->cnt);
-//}
 
 void	delete_pivot_node(t_pivot_list **pivot_list)
 {
@@ -750,7 +623,6 @@ void	delete_pivot_node(t_pivot_list **pivot_list)
 	t_pivot_node *tail_prev;
 	int			cnt;
 
-	printf("delete_cmd_list\n");
 	cnt = (*pivot_list)->cnt;
 	if (cnt <= 0)
 		return ;
@@ -759,181 +631,20 @@ void	delete_pivot_node(t_pivot_list **pivot_list)
 		--((*pivot_list)->cnt);
 		free((*pivot_list)->tail);
 		(*pivot_list)->tail = NULL;
-		return ;
 	}
-	temp = (*pivot_list)->tail;
-	tail_prev = (*pivot_list)->tail;
-	while (--cnt)
-		tail_prev = tail_prev->next;
-//	printf("delete_cmd_list, tail_prev->pivot: %d\n", tail_prev->tool.pivot);
-	tail_prev->next = (*pivot_list)->tail->next;
-	(*pivot_list)->tail = tail_prev;
-	free(temp);
-	temp = NULL;
-	--((*pivot_list)->cnt);
+	else
+	{
+		temp = (*pivot_list)->tail;
+		tail_prev = (*pivot_list)->tail;
+		while (--cnt)
+			tail_prev = tail_prev->next;
+		tail_prev->next = (*pivot_list)->tail->next;
+		(*pivot_list)->tail = tail_prev;
+		free(temp);
+		temp = NULL;
+		--((*pivot_list)->cnt);
+	}
 }
-
-//void	push_stack_b_r(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
-//{
-//	t_tool tool;
-//
-//	tool = (*pivot_list)->tail->tool;
-//	int pivot1 = tool.pivot + tool.push_count / 3; //11
-//	int pivot2 = tool.pivot + tool.push_count / 3 * 2; //12
-//	printf("push_stack_b_r, pivot1: %d\n", pivot1);
-//	printf("push_stack_b_r, pivot2: %d\n", pivot2);
-//	if (tool.push_count <= 2)
-//	{
-////		if (tool.push_count == 1)
-////			;
-////		else
-//		if (tool.push_count == 2)
-//			compare_two_sort_list(list1, list2, 0);
-////		printf("=========================\n");
-////		printf("\niter command\n");
-////		iterate_cmd_list(*(*cmd_list));
-//		delete_pivot_list(pivot_list);
-////		printf("=========================\n");
-////		printf("\niter command\n");
-////		iterate_cmd_list(*(*cmd_list));
-//		return ;
-//	}
-//	else 
-//	{
-//		int push_count = 0;
-//		int ra_count = 0;
-//		int cnt;
-//		cnt = tool.push_count;
-//		while (--cnt >= 0)
-//		{
-//			if (list_at_score(list1, 0) <= pivot1)
-//			{
-//				pb(list1, list2); 
-//				++command_cnt; 
-//				++push_count;
-//				--tool.push_count;
-//			}
-//			else
-//			{
-//				ra(list1);
-//				++command_cnt;
-//				++ra_count;
-//			}
-//		}
-////		printf("push_count: %d\n", push_count);
-////		iterate_cmd_list(*(*cmd_list));
-////		printf("\n itera\n");
-////		iterate_list(*list1);
-////		printf("\n iterb\n");
-////		iterate_list(*list2);
-//	//	delete_cmd_list(&cmd_list);
-//		int rra_count = ra_count;;
-//		while (--rra_count >= 0)
-//			rra(list1);
-////		if (tool.push_count > 2)
-////		{
-////			cnt = tool.push_count;
-////			while (--cnt >= 0)
-////			{
-////				if (list_at_score(list1, 0) <= pivot2)
-////				{
-////					pa 
-////
-////		}
-//		(*pivot_list)->tail->tool.pivot = pivot2;
-//		(*pivot_list)->tail->tool.push_count = tool.push_count;
-//		insert_pivot_list(*pivot_list, 1, pivot1, push_count);
-////		printf("=========================\n");
-////		printf("\niter command\n");
-//		return ; 
-//	} 
-//} 
-
-//void	push_stack_a_r(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
-//{
-//	t_tool tool;
-//
-//	tool = (*pivot_list)->tail->tool;
-//	int pivot1 = tool.pivot - tool.push_count / 3; //27
-//	int pivot2 = tool.pivot - tool.push_count / 3 * 2; //26
-//	printf("push_stack_a_r, pivot1: %d\n", pivot1);
-//	printf("push_stack_a_r, pivot2: %d\n", pivot2);
-//	if (tool.push_count <= 2)
-//	{
-//		if (tool.push_count == 1)
-//			pa(list1, list2);
-//		else if (tool.push_count == 2)
-//			compare_two_sort_list(list1, list2, 1);
-////		printf("=========================\n");
-////		printf("\niter command\n");
-//		delete_pivot_list(pivot_list);
-////		printf("=========================\n");
-////		printf("\niter command\n");
-//		return ;
-//	}
-//	else 
-//	{
-//		int push_count = 0;
-//		int cnt;
-//		cnt = tool.push_count;
-//		int rb_count = 0;
-////		iterate_list(*list1);
-////		iterate_list(*list2);
-//		while (--cnt >= 0)
-//		{
-//			if (list_at_score(list2, 0) >= pivot1)
-//			{
-//				pa(list1, list2);
-//				++command_cnt;
-//				++push_count;
-//				--tool.push_count;
-//			}
-//			else
-//			{
-//				rb(list2);
-//				++rb_count;
-//				++command_cnt;
-//			}
-//		}
-////		printf("\n\n itera\n");
-////		iterate_list(*list1);
-////		printf("=========================\n");
-////		printf("\niter command\n");
-////		iterate_cmd_list(*(*cmd_list));
-//		int rrb_count = rb_count; //2
-//		//printf("push_stack_a_r, rrb_count:%d\n", rrb_count);
-//		while (--rrb_count >= 0)
-//			rrb(list2);
-//		(*pivot_list)->tail->tool.pivot = pivot2;
-//		(*pivot_list)->tail->tool.push_count = tool.push_count;
-//		insert_pivot_list(*pivot_list, 0, pivot1, push_count);
-//		return ;
-//
-////		cnt = tool.push_count;
-////		push_count = 0;
-//		
-////		(*cmd_list)->tail->tool.pivot = pivot2;
-////		while (--cnt >= 0)
-////		{
-////			if (list_at_score(list1, 0) >= pivot2)
-////			{
-////				pa(list1, list2);
-////				++command_cnt;
-////				++push_count;
-////				--tool.push_count;
-////			}
-////			else
-////			{
-////				rb(list2);
-////				++rb_count;
-////				++command_cnt;
-////			}
-////		}
-////		while (--rb_count >= 0)
-////			rrb(list2);
-////		insert_cmd_list(cmd_list, 0, pivot2, push_count);
-//	}
-//}
 
 void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 {
@@ -943,16 +654,13 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	int				pivot2;
 	int				cnt;
 	int				p_count;
+//	int				alone;
 
 	cur = (*pivot_list)->tail;
 	pivot = cur->tool.pivot;
+//	alone = 0;
 	if (cur->tool.push_count <= 2)
 	{
-//		printf("\n\nbefore stack_a\n");
-//		iterate_list(*list1);
-//		printf("\n\nbefore stack_b\n");
-//		iterate_list(*list2);
-		printf("dir: %d, pivot: %d, push_count: %d\n", cur->tool.dir, cur->tool.pivot, cur->tool.push_count);
 		if (cur->tool.push_count == 2)
 		{
 			if (cur->tool.dir == 0)
@@ -960,27 +668,24 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			if (cur->tool.dir == 1)
 				compare_two_sort_list(list1, list2, 1);
 		}
-
 		if (cur->tool.dir == 1 && cur->tool.push_count == 1)
 		{
-			printf("========\n");
+			printf("pa\n");
 			pa(list1, list2);
+			++command_cnt;
 		}
 		delete_pivot_node(pivot_list);
 		return ;
 	}
 	p_count = 0;
-	// 0 12 4
-	//
-	//
-	if (cur->tool.dir == 0) // push_stack_b
+	if (cur->tool.dir == 0)
 	{
-		pivot1 = cur->tool.pivot - cur->tool.push_count / 3; // 11
-		pivot2 = cur->tool.pivot - cur->tool.push_count / 3 * 2; // 10
+//		if (list1->cnt == cur->tool.push_count)
+//			alone = 1;
+		pivot1 = cur->tool.pivot - cur->tool.push_count / 3;
+		pivot2 = cur->tool.pivot - cur->tool.push_count / 3 * 2;
 
-		
-		// cur->tail
-		int origin_push_count = cur->tool.push_count; // 4
+		int origin_push_count = cur->tool.push_count;
 		cnt = origin_push_count;
 		int rotate = 0;
 		while (--cnt >= 0)
@@ -988,134 +693,97 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			if (list_at_score(list1, 0) <= pivot2)
 			{
 				pb(list1, list2);
+				printf("pb\n");
 				++p_count;
 				++command_cnt;
 			}
 			else
 			{
 				ra(list1);
+				printf("ra\n");
 				++command_cnt;
 			}
 		}
 		delete_pivot_node(pivot_list);
 
-		printf("p_count:%d\n", p_count); // 2
-		//**************
-		insert_pivot_list(*pivot_list, 1, pivot2, p_count); // (1, 10, 2)
-		printf("&&&&&&&&&&pivot_list\n");
-		iterate_pivot_list(*(*(pivot_list)));
-
-		rotate = origin_push_count - p_count; // 4 - 2
-		printf("cur->tool.push_count:%d rotate: %d\n", origin_push_count, rotate);
-
-
-		(origin_push_count) -= p_count; // 2
+		insert_pivot_list(*pivot_list, 1, pivot2, p_count);
+		rotate = origin_push_count - p_count;
+		(origin_push_count) -= p_count;
 		while (--rotate >= 0)
 		{
 			rra(list1);
+			printf("rra\n");
 			++command_cnt;
 		}
 		p_count = 0;
 		cnt = origin_push_count; 
-		printf("cnt는 12여야 cnt:%d\n", cnt);
-		while (--cnt >= 0) // 2
+		while (--cnt >= 0)
 		{
 			if (list_at_score(list1, 0) <= pivot1)
 			{
 				pb(list1, list2);
+				printf("pb\n");
 				++p_count;
 				++command_cnt;
 			}
 			else
 			{
 				ra(list1);
+				printf("ra\n");
 				++command_cnt;
 			}
 		}
-		origin_push_count -= p_count; // 2 - 1
-		insert_pivot_list(*pivot_list, 1, pivot1, p_count); //(1, 11, 1)
-		printf("p_count:%d\n", p_count);
-		printf("&&&&&&&&&&pivot_list\n");
-		iterate_pivot_list(*(*(pivot_list)));
+		origin_push_count -= p_count; 
+		insert_pivot_list(*pivot_list, 1, pivot1, p_count);
 		rotate = origin_push_count;
-	//	rotate = origin_push_count - p_count; 왜 p_count를 뺐을까?
-	//	(origin_push_count) -= p_count;
 		while (--rotate >= 0)
 		{
 			rra(list1);
+			printf("rra\n");
 			++command_cnt;
 		}
 		insert_pivot_list(*pivot_list, 0, pivot, origin_push_count);
 	}
-	else //push_stack_a
+	else
 	{
-		//pivot: 7
-		int origin_push_count = cur->tool.push_count; // 7
+		int origin_push_count = cur->tool.push_count;
 		cnt = origin_push_count;
 		int rotate = 0;
-		pivot1 = cur->tool.pivot - cur->tool.push_count / 2; // 4
+		pivot1 = cur->tool.pivot - cur->tool.push_count / 2;
 		while (--cnt >= 0)
 		{
 			if (list_at_score(list2, 0) >= pivot1)
 			{
-				pa(list1, list2); // 4
+				pa(list1, list2);
+				printf("pa\n");
 				++p_count;
 				++command_cnt;
 			}
 			else
 			{
-				rb(list2); // 3
+				rb(list2);
+				printf("rb\n");
 				++command_cnt;
 			}
 		}
 		delete_pivot_node(pivot_list);
 
-		insert_pivot_list(*pivot_list, 1, pivot - p_count, origin_push_count - p_count); // (1, 4, 3)
-		insert_pivot_list(*pivot_list, 0, pivot, p_count); // (0, 7, 4)
-		p_count = origin_push_count - p_count; // 
+		insert_pivot_list(*pivot_list, 1, pivot - p_count, origin_push_count - p_count);
+		insert_pivot_list(*pivot_list, 0, pivot, p_count);
+		p_count = origin_push_count - p_count;
 		while (--p_count >= 0)
 		{
 			rrb(list2);
+			printf("rrb\n");
 			++command_cnt;
 		}
-//		while (--cnt >= 0)
-//		{
-//			if (list_at_score(list1, 0) <= pivot1)
-//			{
-//				pa(list1, list2);
-//				++p_count;
-//				++command_cnt;
-//			}
-//			else
-//			{
-//				rb(list1);
-//				++command_cnt;
-//			}
-//		}
-//		while (--p_count >= 0)
-//		{
-//			rrb(list1);
-//			++command_cnt;
-//		}
-//		insert_pivot_list(*pivot_list, 1, pivot1, p_count);
-//		insert_pivot_list(*pivot_list, 0, pivot, list1->cnt);
 	}
 }
 
 void	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 {
-//	t_pivot_node *cur;
-
-//	cur = pivot_list->tail;
 	while (pivot_list->cnt > 0)
 	{
-		//sleep(1);
-		printf("\n\n *******iteratepivot\n");
-		iterate_pivot_list(*pivot_list);
-		printf("\n\n");
-		printf("\n\nstack_a\n");
-		iterate_list(*list1);
-		printf("\n\n");
 		push_stack(list1, list2, &pivot_list);
 	}
 }
@@ -1132,9 +800,7 @@ int	main(int argc, char *argv[])
 	t_list		stack_b;
 	t_list		temp;
 	t_pivot_list	pivot_list;
-//	t_pivot_list*	pivot_list_ptr;
 
-//	pivot_list_ptr = &pivot_list;
 	init_list(&stack_a);
 	init_list(&stack_b);
 	init_list(&temp);
@@ -1178,16 +844,12 @@ int	main(int argc, char *argv[])
 	quick_sort(&temp, 0, temp.cnt - 1);
 	mark_rank(&temp, &stack_a);
 	insert_pivot_list(&pivot_list, 0, stack_a.cnt, stack_a.cnt);
-	printf("\n\niter pivot_list");
-	iterate_pivot_list(pivot_list);
-	printf("\n\n");
 
 	recur(&stack_a, &stack_b, &pivot_list);
-
 	printf("\n\nstack_a\n");
 	iterate_list(stack_a);
 	printf("\n\nstack_b\n");
 	iterate_list(stack_b);
-
+	printf("command_cnt: %d\n", command_cnt);
 	return (0);
 }
