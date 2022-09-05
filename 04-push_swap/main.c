@@ -992,24 +992,28 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 		}
 		p_count = 0;
 		cnt = origin_push_count; 
-		while (--cnt >= 0)
+		if (list1->cnt > 3)
 		{
-			if (list_at_score(list1, 0) <= pivot1)
+			while (--cnt >= 0)
 			{
-				pb(list1, list2);
-				printf("pb\n");
-				++p_count;
-				++command_cnt;
+				if (list_at_score(list1, 0) <= pivot1)
+				{
+					pb(list1, list2);
+					printf("pb\n");
+					++p_count;
+					++command_cnt;
+				}
+				else
+				{
+					ra(list1);
+					printf("ra\n");
+					++command_cnt;
+				}
 			}
-			else
-			{
-				ra(list1);
-				printf("ra\n");
-				++command_cnt;
-			}
+			insert_pivot_list(*pivot_list, 1, pivot1, p_count);
 		}
 		origin_push_count -= p_count; 
-		insert_pivot_list(*pivot_list, 1, pivot1, p_count);
+
 		rotate = origin_push_count;
 		while (!alone && --rotate >= 0)
 		{
@@ -1089,10 +1093,10 @@ void	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 	{
 		iterate_pivot_list(*pivot_list);
 		printf("\n\n");
-//		iterate_list(*list1);
-//		printf("\n\n");
-//		iterate_list(*list2);
-//		printf("\n\n");
+		iterate_list(*list1);
+		printf("\n\n");
+		iterate_list(*list2);
+		printf("\n\n");
 		push_stack(list1, list2, &pivot_list);
 	}
 }
