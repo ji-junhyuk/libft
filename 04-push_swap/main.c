@@ -634,6 +634,280 @@ void	delete_pivot_node(t_pivot_list **pivot_list)
 	}
 }
 
+
+void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
+{
+	int score4 = list_at_score(list2, 0);
+	int score5 = list_at_score(list2, 1);
+	int score6 = list_at_score(list2, 2);
+
+	int score1 = list_at_score(list1, 0);
+	int score2 = list_at_score(list1, 1);
+	int score3 = list_at_score(list1, 2);
+	if (flag == 0) // A stack
+	{
+		if (list1->cnt == 3)
+		{
+			if (score1 > score2 && score2 > score3)
+			{
+				ra(list1);
+				sa(list1);
+				printf("ra\n");
+				printf("sa\n");
+				command_cnt += 2;
+			}
+			else if (score1 > score2 && score1 > score3 && score2 < score3)
+			{
+				ra(list1);
+				printf("ra\n");
+				++command_cnt;
+			}
+			else if (score2 > score1 && score2 > score3 && score1 > score3)
+			{
+				rra(list1);
+				printf("rra\n");
+				++command_cnt;
+			}
+			else if (score2 > score1 && score2 > score3 && score3 > score1)
+			{
+				rra(list1);
+				sa(list1);
+				printf("rra\n");
+				printf("sa\n");
+				command_cnt += 2;
+			}
+			else if (score3 > score1 && score3 > score2 && score1 > score2)
+			{
+				sa(list1);
+				printf("sa\n");
+				++command_cnt;
+			}
+		}
+		else
+		{
+			if (score1 > score2 && score2 > score3)
+			{
+				pb(list1, list2);
+				ra(list1);
+				ra(list1);
+				pa(list1, list2);
+				rra(list1);
+				rra(list1);
+				sa(list1);
+				printf("pb\n");
+				printf("ra\n");
+				printf("ra\n");
+				printf("pa\n");
+				printf("rra\n");
+				printf("rra\n");
+				printf("sa\n");
+				command_cnt += 7;
+			}
+			else if (score1 > score2 && score1 > score3 && score2 < score3)
+			{
+				sa(list1);
+				ra(list1);
+				sa(list1);
+				rra(list1);
+				printf("sa\n");
+				printf("ra\n");
+				printf("sa\n");
+				printf("rra\n");
+				command_cnt += 4;
+			}
+			else if (score2 > score1 && score2 > score3 && score1 > score3)
+			{
+				ra(list1);
+				sa(list1);
+				rra(list1);
+				sa(list1);
+				printf("ra\n");
+				printf("sa\n");
+				printf("rra\n");
+				printf("sa\n");
+				command_cnt += 4;
+			}
+			else if (score2 > score1 && score2 > score3 && score3 > score1)
+			{
+				ra(list1);
+				sa(list1);
+				rra(list1);
+				printf("ra\n");
+				printf("sa\n");
+				printf("rra\n");
+				command_cnt += 3;
+			}
+			else if (score3 > score1 && score3 > score2 && score1 > score2)
+			{
+				sa(list1);
+				printf("sa\n");
+				++command_cnt;
+			}
+		}
+	}
+	else // B Stack
+	{
+		if (list2->cnt == 3)
+		{
+			if (score4 > score5 && score5 > score6)
+			{
+				pa(list1, list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				printf("pa\n");
+				printf("pa\n");
+				printf("pa\n");
+				command_cnt += 3;
+			}
+			else if (score4 > score5 && score4 > score6 && score5 < score6)
+			{
+				pa(list1, list2);
+				sb(list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				printf("pa\n");
+				printf("sb\n");
+				printf("pa\n");
+				printf("pa\n");
+				command_cnt += 4;
+			}
+			else if (score5 > score4 && score5 > score6 && score4 > score6)
+			{
+				sb(list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				printf("sb\n");
+				printf("pa\n");
+				printf("pa\n");
+				printf("pa\n");
+				command_cnt += 4;
+			}
+			else if (score5 > score4 && score5 > score6 && score6 > score4)
+			{
+				rb(list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				printf("rb\n");
+				printf("pa\n");
+				printf("pa\n");
+				printf("pa\n");
+				command_cnt += 4;
+			}
+			else if (score6 > score4 && score6 > score5 && score4 > score5)
+			{
+				rrb(list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				printf("rrb\n");
+				printf("pa\n");
+				printf("pa\n");
+				printf("pa\n");
+				command_cnt += 4;
+			}
+			else
+			{
+				rrb(list2);
+				pa(list1, list2);
+				rrb(list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				printf("rrb\n");
+				printf("pa\n");
+				printf("rrb\n");
+				printf("pa\n");
+				printf("pa\n");
+				command_cnt += 5;
+			}
+		}
+		else
+		{
+			if (score4 > score5 && score5 > score6)
+			{
+				pa(list1, list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				printf("pa\n");
+				printf("pa\n");
+				printf("pa\n");
+				command_cnt += 3;
+			}
+			else if (score4 > score5 && score4 > score6 && score5 < score6)
+			{
+				pa(list1, list2);
+				sb(list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				printf("pa\n");
+				printf("sb\n");
+				printf("pa\n");
+				printf("pa\n");
+				command_cnt += 4;
+			}
+			else if (score5 > score4 && score5 > score6 && score4 > score6)
+			{
+				sb(list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				printf("sb\n");
+				printf("pa\n");
+				printf("pa\n");
+				printf("pa\n");
+				command_cnt += 4;
+			}
+			else if (score5 > score4 && score5 > score6 && score6 > score4)
+			{
+				sb(list2);
+				pa(list1, list2);
+				sb(list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				printf("sb\n");
+				printf("pa\n");
+				printf("sb\n");
+				printf("pa\n");
+				printf("pa\n");
+				command_cnt += 5;
+			}
+			else if (score6 > score4 && score6 > score5 && score4 > score5)
+			{
+				rb(list2);
+				sb(list2);
+				pa(list1, list2);
+				rrb(list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				printf("rb\n");
+				printf("sb\n");
+				printf("pa\n");
+				printf("rrb\n");
+				printf("pa\n");
+				printf("pa\n");
+				command_cnt += 6;
+			}
+			else
+			{
+				rb(list2);
+				sb(list2);
+				pa(list1, list2);
+				pa(list1, list2);
+				rrb(list2);
+				pa(list1, list2);
+				printf("rb\n");
+				printf("sb\n");
+				printf("pa\n");
+				printf("pa\n");
+				printf("rrb\n");
+				printf("pa\n");
+				command_cnt += 6;
+			}
+		}
+	}
+}
+
 void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 {
 	t_pivot_node	*cur;
@@ -647,16 +921,29 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	cur = (*pivot_list)->tail;
 	pivot = cur->tool.pivot;
 	alone = 0;
-	if (cur->tool.push_count <= 2)
+	if (cur->tool.push_count <= 3)
 	{
-		if (cur->tool.push_count == 2)
+//		if (cur->tool.push_count == 5)
+//		{
+//		}
+//		else if (cur->tool.push_count == 4)
+//		{
+//		}
+		if (cur->tool.push_count == 3)
+		{
+			if (cur->tool.dir == 0)
+				compare_three_sort_list(list1, list2, 0);
+			else
+				compare_three_sort_list(list1, list2, 1);
+		}
+		else if (cur->tool.push_count == 2)
 		{
 			if (cur->tool.dir == 0)
 				compare_two_sort_list(list1, list2, 0);		
 			if (cur->tool.dir == 1)
 				compare_two_sort_list(list1, list2, 1);
 		}
-		if (cur->tool.dir == 1 && cur->tool.push_count == 1)
+		else if (cur->tool.dir == 1 && cur->tool.push_count == 1)
 		{
 			printf("pa\n");
 			pa(list1, list2);
@@ -770,10 +1057,42 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	}
 }
 
+void	iterate_pivot_list(t_pivot_list list)
+{
+	t_pivot_node *cur;
+
+	if (list.cnt == 0)
+		return ;
+	cur = list.tail->next;
+	if (list.cnt == 1)
+	{
+		printf("dir: %d\n", cur->tool.dir);
+		printf("pivot: %d\n", cur->tool.pivot);
+		printf("push_count: %d\n", cur->tool.push_count);
+	}
+	else
+	{
+		while (list.cnt--)
+		{
+			printf("dir: %d\n", cur->tool.dir);
+			printf("pivot: %d\n", cur->tool.pivot);
+			printf("push_count: %d\n", cur->tool.push_count);
+			cur = cur->next;
+		}
+	}
+	printf("current cmd: %d\n", command_cnt);
+}
+
 void	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 {
 	while (pivot_list->cnt > 0)
 	{
+		iterate_pivot_list(*pivot_list);
+		printf("\n\n");
+//		iterate_list(*list1);
+//		printf("\n\n");
+//		iterate_list(*list2);
+//		printf("\n\n");
 		push_stack(list1, list2, &pivot_list);
 	}
 }
