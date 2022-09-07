@@ -957,17 +957,25 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	{
 		if (list1->cnt == cur->tool.push_count)
 			alone = 1;
-		pivot1 = cur->tool.pivot - cur->tool.push_count / 3;
-		pivot2 = cur->tool.pivot - cur->tool.push_count / 3 * 2;
+		pivot1 = cur->tool.pivot - cur->tool.push_count / 3; // 8
+		pivot2 = cur->tool.pivot - cur->tool.push_count / 3 * 2; // 4
 
+		int pivot = cur->tool.pivot;
 		int origin_push_count = cur->tool.push_count;
 		cnt = origin_push_count;
 		int rotate = 0;
+		int ra_count = 0;
+		int rb_count = 0;
 		while (--cnt >= 0)
 		{
-			if (list_at_score(list1, 0) <= pivot2)
+			if (list_at_score(list1, 0) <= pivot1)
 			{
 				pb(list1, list2);
+				if (list_at_score(list2, 0) <= pivot2 && list2->cnt > 1)
+				{
+					rb(list2);
+					++rb_count;
+				}
 				printf("pb\n");
 				++p_count;
 				++command_cnt;
@@ -976,52 +984,62 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			{
 				ra(list1);
 				printf("ra\n");
+				++ra_count;
 				++command_cnt;
 			}
 		}
 		delete_pivot_node(pivot_list);
-
-		insert_pivot_list(*pivot_list, 1, pivot2, p_count);
-		rotate = origin_push_count - p_count;
-		(origin_push_count) -= p_count;
-		while (!alone && --rotate >= 0)
+		if (p_count < 8)
 		{
-			rra(list1);
-			printf("rra\n");
-			++command_cnt;
+			insert_pivot_list(*pivot_list, 1, pivot2, rb_count);
+			insert_pivot_list(*pivot_list, 1, pivot1, p_count - rb_count);
+			insert_pivot_list(*pivot_list, 0, pivot, origin_push_count - p_count);
 		}
-		p_count = 0;
-		cnt = origin_push_count; 
-		if (list1->cnt > 3)
+		else
 		{
-			while (--cnt >= 0)
-			{
-				if (list_at_score(list1, 0) <= pivot1)
-				{
-					pb(list1, list2);
-					printf("pb\n");
-					++p_count;
-					++command_cnt;
-				}
-				else
-				{
-					ra(list1);
-					printf("ra\n");
-					++command_cnt;
-				}
-			}
+			insert_pivot_list(*pivot_list, 0, pivot, origin_push_count - p_count);
 			insert_pivot_list(*pivot_list, 1, pivot1, p_count);
 		}
-		origin_push_count -= p_count; 
-
-		rotate = origin_push_count;
-		while (!alone && --rotate >= 0)
-		{
-			rra(list1);
-			printf("rra\n");
-			++command_cnt;
-		}
-		insert_pivot_list(*pivot_list, 0, pivot, origin_push_count);
+//		insert_pivot_list(*pivot_list, 1, pivot2, p_count);
+//		rotate = origin_push_count - p_count;
+//		(origin_push_count) -= p_count;
+//		while (!alone && --rotate >= 0)
+//		{
+//			rra(list1);
+//			printf("rra\n");
+//			++command_cnt;
+//		}
+//		p_count = 0;
+//		cnt = origin_push_count; 
+//		if (list1->cnt > 3)
+//		{
+//			while (--cnt >= 0)
+//			{
+//				if (list_at_score(list1, 0) <= pivot1)
+//				{
+//					pb(list1, list2);
+//					printf("pb\n");
+//					++p_count;
+//					++command_cnt;
+//				}
+//				else
+//				{
+//					ra(list1);
+//					printf("ra\n");
+//					++command_cnt;
+//				}
+//			}
+//			insert_pivot_list(*pivot_list, 1, pivot1, p_count);
+//		}
+//		origin_push_count -= p_count; 
+//		rotate = origin_push_count;
+//		while (!alone && --rotate >= 0)
+//		{
+//			rra(list1);
+//			printf("rra\n");
+//			++command_cnt;
+//		}
+//		insert_pivot_list(*pivot_list, 0, pivot, origin_push_count);
 	}
 	else
 	{
@@ -1030,12 +1048,22 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 		int origin_push_count = cur->tool.push_count;
 		cnt = origin_push_count;
 		int rotate = 0;
-		pivot1 = cur->tool.pivot - cur->tool.push_count / 2;
+		int ra_count = 0;
+		int rb_count = 0;
+		pivot1 = cur->tool.pivot - cur->tool.push_count / 2; // 6
+		pivot2 = cur->tool.pivot - cur->tool.push_count / 2; // 4
 		while (--cnt >= 0)
 		{
-			if (list_at_score(list2, 0) >= pivot1)
+			if (list_at_score(list2, 0) > pivot2)
 			{
 				pa(list1, list2);
+				if (list_at_score(list1, 0) < pivot1)
+				{
+					ra(list1);
+					++ra_count;
+					printf("ra\n");
+				
+				}
 				printf("pa\n");
 				++p_count;
 				++command_cnt;
@@ -1043,6 +1071,7 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			else
 			{
 				rb(list2);
+				++rb_count;
 				printf("rb\n");
 				++command_cnt;
 			}
