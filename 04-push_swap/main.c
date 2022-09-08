@@ -991,6 +991,7 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 		delete_pivot_node(pivot_list);
 		if (p_count < 8)
 		{
+			delete_pivot_node(pivot_list);
 			insert_pivot_list(*pivot_list, 1, pivot2, rb_count);
 			insert_pivot_list(*pivot_list, 1, pivot1, p_count - rb_count);
 			insert_pivot_list(*pivot_list, 0, pivot, origin_push_count - p_count);
@@ -1000,6 +1001,9 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			insert_pivot_list(*pivot_list, 0, pivot, origin_push_count - p_count);
 			insert_pivot_list(*pivot_list, 1, pivot1, p_count);
 		}
+			// (0, 12, 4) -> (1, 8, 8)
+			// (1, 4, 4) -> (0, 12, 8)
+			// (1, 4, 4) -> (1, 8, 4) (1, 10, 2) (0, 12, 2)
 //		insert_pivot_list(*pivot_list, 1, pivot2, p_count);
 //		rotate = origin_push_count - p_count;
 //		(origin_push_count) -= p_count;
@@ -1076,10 +1080,29 @@ void	push_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 				++command_cnt;
 			}
 		}
-		delete_pivot_node(pivot_list);
+		if ((*pivot_list)->cnt < 2)
+		{
+			//
+			//
+		}
+		else
+		{
+			// 2개를 삭제할 필요가 있을까? 값만 바꿔주면 될 거 같은데.
 
-		insert_pivot_list(*pivot_list, 1, pivot - p_count, origin_push_count - p_count);
-		insert_pivot_list(*pivot_list, 0, pivot, p_count);
+			delete_pivot_node(pivot_list);
+//			int o_pivot = ((*pivot_list)->tail->tool.pivot);
+//			int o_push_count = ((*pivot_list)->tail->tool.push_count); // 4
+//			delete_pivot_node(pivot_list);
+//			insert_pivot_list(*pivot_list, 1, pivot2, origin_push_count - p_count);
+//			insert_pivot_list(*pivot_list, 0, o_pivot, o_push_count + p_count);
+			delete_pivot_node(pivot_list);
+			insert_pivot_list(*pivot_list, 1, pivot2, origin_push_count - p_count);
+			insert_pivot_list(*pivot_list, 0, pivot1, rb_count);
+			insert_pivot_list(*pivot_list, 0, pivot, p_count - rb_count);
+			// (0, 12, 4) -> (1, 8, 8)
+			// (1, 4, 4) -> (0, 12, 8)
+			// (1, 4, 4) (0, 12, 2) (1, 10, 2) (1, 8, 4)
+		}
 		p_count = origin_push_count - p_count;
 		while (!alone && --p_count >= 0)
 		{
