@@ -628,6 +628,37 @@ void	compare_two_sort_list(t_list *list1, t_list *list2, int flag)
 		}
 	}
 }
+void	delete_stack(t_list **list)
+{
+	t_node *temp;
+	t_node *tail_prev;
+	int			cnt;
+
+	if ((*list)->cnt <= 0)
+		return ;
+	while ((*list)->cnt > 0)
+	{
+		if ((*list)->cnt == 1)
+		{
+			--((*list)->cnt);
+			free((*list)->tail);
+			(*list)->tail = NULL;
+		}
+		else
+		{
+			cnt = (*list)->cnt;
+			temp = (*list)->tail;
+			tail_prev = (*list)->tail;
+			while (--cnt)
+				tail_prev = tail_prev->next;
+			tail_prev->next = (*list)->tail->next;
+			(*list)->tail = tail_prev;
+			free(temp);
+			temp = NULL;
+			--((*list)->cnt);
+		}
+	}
+}
 
 void	delete_pivot_node(t_pivot_list **pivot_list)
 {
@@ -1255,7 +1286,11 @@ int	main(int argc, char *argv[])
 	t_list			stack_b;
 	t_list			temp;
 	t_pivot_list	pivot_list;
+	t_list			*stack_a_pointer;
+	t_list			*temp_pointer;
 
+	stack_a_pointer = &stack_a;
+	temp_pointer = &temp;
 	init_list(&stack_a);
 	init_list(&stack_b);
 	init_list(&temp);
@@ -1298,6 +1333,7 @@ int	main(int argc, char *argv[])
 	mark_rank(&temp, &stack_a);
 	insert_pivot_list(&pivot_list, 0, stack_a.cnt, stack_a.cnt);
 	recur(&stack_a, &stack_b, &pivot_list);
-	//free_arr(element, total_cnt);
+	delete_stack(&stack_a_pointer);
+	delete_stack(&temp_pointer);
 	return (0);
 }

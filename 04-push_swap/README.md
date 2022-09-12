@@ -2,7 +2,8 @@
 - norm test
 - leak test
 	- [X] split릭은 다잡음
-	- [ ] insert_list leak잡아야함.
+	- [X] insert_list leak잡아야함.
+- [ ] checker잡기
 - func naming, var naming
 - bonus 
  
