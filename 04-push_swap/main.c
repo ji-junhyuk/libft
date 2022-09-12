@@ -1324,7 +1324,11 @@ void	sort_list(t_list *list1, t_list *list2, int dir, int count)
 	else if (count == 1)
 	{
 		if (dir == 1)
+		{
 			pa(list1, list2);
+			printf("pa\n");
+			++command_cnt;
+		}
 	}
 }
 
@@ -1347,7 +1351,7 @@ void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	t_tool2 tool3;
 	int		cnt;
 
-	printf("push_stack_b\n");
+//	printf("push_stack_b\n");
 	tool = (*pivot_list)->tail->tool;
 	if (tool.push_count == list1->cnt)
 		tool2.alone = 1;
@@ -1386,7 +1390,7 @@ void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			++command_cnt;
 		}
 	}
-	printf("pb_count: %d, rb_count: %d, ra_count: %d\n", tool2.p_count, tool2.rb_count, tool2.ra_count);
+//	printf("pb_count: %d, rb_count: %d, ra_count: %d\n", tool2.p_count, tool2.rb_count, tool2.ra_count);
 	tool3 = tool2;
 	if (tool2.ra_count <= tool2.rb_count)
 	{
@@ -1432,7 +1436,7 @@ void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	t_tool	tool;
 	t_tool2	tool2;
 
-	printf("push_stack_a\n");
+//	printf("push_stack_a\n");
 	tool = (*pivot_list)->tail->tool;
 	if (tool.push_count == list2->cnt)
 		tool2.alone = 1;
@@ -1470,7 +1474,7 @@ void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			++command_cnt;
 		}
 	}
-	printf("pb_count: %d, rb_count: %d, ra_count: %d\n", tool2.p_count, tool2.rb_count, tool2.ra_count);
+//	printf("pb_count: %d, rb_count: %d, ra_count: %d\n", tool2.p_count, tool2.rb_count, tool2.ra_count);
 //	if (tool2.p_count - tool2.ra_count > 3)
 //	{
 //		tool2.flag = 1;
@@ -1520,11 +1524,11 @@ void	rotate_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	t_pivot_node *cur;
 	t_tool tool;
 
-	printf("rotate_stack\n");
+//	printf("rotate_stack\n");
 	tool = (*pivot_list)->tail->tool;
 	int	ra_count = tool.pivot;
 	int rb_count = tool.push_count;
-	printf("ra_count:%d, rb_count:%d\n", ra_count, rb_count);
+//	printf("ra_count:%d, rb_count:%d\n", ra_count, rb_count);
 	int	rrr_count;
 	if (ra_count <= rb_count)
 	{
@@ -1560,8 +1564,8 @@ void	rotate_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			++command_cnt;
 		}
 	}
-	iterate_list(*list1);
-	iterate_list(*list2);
+//	iterate_list(*list1);
+//	iterate_list(*list2);
 	delete_pivot_node(pivot_list);
 }
 
@@ -1580,13 +1584,13 @@ void	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 			push_stack_a(list1, list2, &pivot_list);
 		else if (cur->tool.dir == 2)
 			rotate_stack(list1, list2, &pivot_list);
-		printf("\n\n");
-		iterate_pivot_list(*pivot_list);
-		printf("\n\nA\n");
-		iterate_list(*list1);
-		printf("\n\nb\n");
-		iterate_list(*list2);
-		printf("\n\n");
+//		printf("\n\n");
+//		iterate_pivot_list(*pivot_list);
+//		printf("\n\nA\n");
+//		iterate_list(*list1);
+//		printf("\n\nb\n");
+//		iterate_list(*list2);
+//		printf("\n\n");
 		//sleep(2);
 
 	}
@@ -1632,7 +1636,7 @@ int	main(int argc, char *argv[])
 	init_list(&temp);
 	init_pivot_list(&pivot_list);
 	i = 0;
-	printf("argc: %d\n", argc);
+//	printf("argc: %d\n", argc);
 	while (++i < argc)
 	{
 		element_cnt = count_word(argv[i]);
@@ -1671,10 +1675,10 @@ int	main(int argc, char *argv[])
 	mark_rank(&temp, &stack_a);
 	insert_pivot_list(&pivot_list, 0, stack_a.cnt, stack_a.cnt);
 	recur(&stack_a, &stack_b, &pivot_list);
-	printf("\n\nstack_a\n");
-	iterate_list(stack_a);
-	printf("\n\nstack_b\n");
-	iterate_list(stack_b);
+//	printf("\n\nstack_a\n");
+//	iterate_list(stack_a);
+//	printf("\n\nstack_b\n");
+//	iterate_list(stack_b);
 	printf("command_cnt: %d\n", command_cnt);
 	return (0);
 }
