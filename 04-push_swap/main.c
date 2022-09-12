@@ -47,11 +47,15 @@ int	ft_atoi(char *str)
 
 int	check_real_zero(char *str)
 {
+	if (*str == 0)
+		return (0);
 	if (*str == '-' || *str == '+')
 		++str;
 	while (*str == '0')
 		++str;
 	if (*str != 0)
+		return (0);
+	if (*(str - 1) != '0')
 		return (0);
 	return (1);
 }
@@ -61,6 +65,8 @@ int	count_word(char *str)
 	int	cnt;
 
 	cnt = 0;
+	if (*str == '\0')
+		return (1);
 	while (*str)
 	{
 		while (*str && *str == ' ')
@@ -1353,8 +1359,6 @@ void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 
 //	printf("push_stack_b\n");
 	tool = (*pivot_list)->tail->tool;
-	if (tool.push_count == list1->cnt)
-		tool2.alone = 1;
 	if (tool.push_count <= 3)
 	{
 		sort_list(list1, list2, tool.dir, tool.push_count);
@@ -1362,103 +1366,23 @@ void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 		return ;
 	}
 	init_tool2(&tool2);
-	tool2.pivot1 = tool.pivot - tool.push_count / 3; // 8
-	tool2.pivot2 = tool.pivot - tool.push_count / 3 * 2; // 4
 	cnt = tool.push_count;
 	delete_pivot_node(pivot_list);
-	while (--cnt >= 0)
-	{
-		if (list_at_score(list1, 0) <= tool2.pivot1)
+	if (tool.push_count == list1->cnt)
+		tool2.alone = 1;
+	if (tool.push_count <= 6)
+	{		
+		tool2.pivot1 = tool.pivot - tool.push_count / 2;
+		while (--cnt >= 0)
 		{
-			pb(list1, list2);
-			++tool2.p_count;
-			++command_cnt;
-			printf("pb\n");
-			if (list_at_score(list2, 0) > tool2.pivot2)
+			if (list_at_score(list1, 0) <= tool2.pivot1)
 			{
-				rb(list2);
-				printf("rb\n");
-				++tool2.rb_count;
+				pb(list1, list2);
+				printf("pb\n");
+				++tool2.p_count;
 				++command_cnt;
 			}
-		}
-		else
-		{
-			ra(list1);
-			++tool2.ra_count;
-			printf("ra\n");
-			++command_cnt;
-		}
-	}
-//	printf("pb_count: %d, rb_count: %d, ra_count: %d\n", tool2.p_count, tool2.rb_count, tool2.ra_count);
-	tool3 = tool2;
-	if (tool2.ra_count <= tool2.rb_count)
-	{
-		tool2.rrr_count = tool2.ra_count;
-		while (--tool2.rrr_count >= 0)
-		{
-			rrr(list1, list2);
-			printf("rrr\n");
-			++command_cnt;
-		}
-		tool2.rb_count -= tool2.ra_count;
-		while (--tool2.rb_count >= 0)
-		{
-			rrb(list2);
-			printf("rrb\n");
-			++command_cnt;
-		}
-	}
-	else if (tool2.ra_count > tool2.rb_count)
-	{
-		tool2.rrr_count = tool2.rb_count;
-		while (--tool2.rrr_count >= 0)
-		{
-			rrr(list1, list2);
-			printf("rrr\n");
-			++command_cnt;
-		}
-		tool2.ra_count -= tool2.rb_count;
-		while (tool2.alone == 0 && --tool2.ra_count >= 0)
-		{
-			rra(list1);
-			printf("rra\n");
-			++command_cnt;
-		}
-	}
-	insert_pivot_list(*pivot_list, 1, tool3.pivot2, tool3.p_count - tool3.rb_count);
-	insert_pivot_list(*pivot_list, 1, tool3.pivot1, tool3.rb_count);
-	insert_pivot_list(*pivot_list, 0, tool.pivot, tool.push_count - tool3.p_count);
-}
-
-void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
-{
-	t_tool	tool;
-	t_tool2	tool2;
-
-//	printf("push_stack_a\n");
-	tool = (*pivot_list)->tail->tool;
-	if (tool.push_count == list2->cnt)
-		tool2.alone = 1;
-	if (tool.push_count <= 3)
-	{
-		sort_list(list1, list2, tool.dir, tool.push_count);
-		delete_pivot_node(pivot_list);
-		return ;
-	}
-	init_tool2(&tool2);
-	tool2.pivot1 = tool.pivot - tool.push_count / 3; // 10
-	tool2.pivot2 = tool.pivot - tool.push_count / 3 * 2; // 8
-	delete_pivot_node(pivot_list);
-	while (--tool.push_count >= 0)
-	{
-		if (list_at_score(list2, 0) > tool2.pivot2)
-		{
-			pa(list1, list2);
-			++tool2.p_count;
-			printf("pa\n");
-			++command_cnt;
-			if (list_at_score(list1, 0) <= tool2.pivot1 && list1->cnt > 1)
+			else
 			{
 				ra(list1);
 				printf("ra\n");
@@ -1466,62 +1390,216 @@ void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 				++command_cnt;
 			}
 		}
-		else
+		if (!(tool2.alone))
 		{
-			rb(list2);
-			++tool2.rb_count;
-			printf("rb\n");
-			++command_cnt;
+			while (--tool2.ra_count >= 0)
+			{
+				rra(list1);
+				printf("rra\n");
+				++command_cnt;
+			}
 		}
+		insert_pivot_list(*pivot_list, 1, tool2.pivot1, tool2.p_count);
+		insert_pivot_list(*pivot_list, 0, tool.pivot, tool.push_count - tool2.p_count);
 	}
-//	printf("pb_count: %d, rb_count: %d, ra_count: %d\n", tool2.p_count, tool2.rb_count, tool2.ra_count);
-//	if (tool2.p_count - tool2.ra_count > 3)
-//	{
-//		tool2.flag = 1;
-//		if (tool2.ra_count <= tool2.rb_count)
-//		{
-//			tool2.rrr_count = tool2.ra_count;
-//			while (--tool2.rrr_count >= 0)
-//			{
-//				rrr(list1, list2);
-//				printf("rrr\n");
-//				++command_cnt;
-//			}
-//			tool2.rb_count -= tool2.ra_count;
-//			while (--tool2.rb_count >= 0)
-//			{
-//				printf("rrb\n");
-//				++command_cnt;
-//				rrb(list2);
-//			}
-//		}
-//		else if (tool2.ra_count > tool2.rb_count)
-//		{
-//			tool2.rrr_count = tool2.rb_count;
-//			while (--tool2.rrr_count >= 0)
-//			{
-//				rrr(list1, list2);
-//				printf("rrr\n");
-//				++command_cnt;
-//			}
-//			tool2.ra_count -= tool2.rb_count;
-//			while (tool2.alone == 0 && --tool2.ra_count >= 0)
-//			{
-//				rra(list1);
-//				printf("rra\n");
-//				++command_cnt;
-//			}
-//		}
-//	}
-	insert_pivot_list(*pivot_list, 1, tool2.pivot2, tool2.rb_count);
-	insert_pivot_list(*pivot_list, 0, tool2.pivot1, tool2.ra_count);
-	insert_pivot_list(*pivot_list, 2, tool2.ra_count, tool2.rb_count);
-	insert_pivot_list(*pivot_list, 0, tool.pivot, tool2.p_count - tool2.ra_count);
+	else
+	{
+		tool2.pivot1 = tool.pivot - tool.push_count / 3; // 8
+		tool2.pivot2 = tool.pivot - tool.push_count / 3 * 2; // 4
+		while (--cnt >= 0)
+		{
+			if (list_at_score(list1, 0) <= tool2.pivot1)
+			{
+				pb(list1, list2);
+				++tool2.p_count;
+				++command_cnt;
+				printf("pb\n");
+				if (list_at_score(list2, 0) > tool2.pivot2)
+				{
+					rb(list2);
+					printf("rb\n");
+					++tool2.rb_count;
+					++command_cnt;
+				}
+			}
+			else
+			{
+				ra(list1);
+				++tool2.ra_count;
+				printf("ra\n");
+				++command_cnt;
+			}
+		}
+	//	printf("pb_count: %d, rb_count: %d, ra_count: %d\n", tool2.p_count, tool2.rb_count, tool2.ra_count);
+		tool3 = tool2;
+		if (tool2.ra_count <= tool2.rb_count)
+		{
+			tool2.rrr_count = tool2.ra_count;
+			while (--tool2.rrr_count >= 0)
+			{
+				rrr(list1, list2);
+				printf("rrr\n");
+				++command_cnt;
+			}
+			tool2.rb_count -= tool2.ra_count;
+			while (--tool2.rb_count >= 0)
+			{
+				rrb(list2);
+				printf("rrb\n");
+				++command_cnt;
+			}
+		}
+		else if (tool2.ra_count > tool2.rb_count)
+		{
+			tool2.rrr_count = tool2.rb_count;
+			while (--tool2.rrr_count >= 0)
+			{
+				rrr(list1, list2);
+				printf("rrr\n");
+				++command_cnt;
+			}
+			tool2.ra_count -= tool2.rb_count;
+			while (tool2.alone == 0 && --tool2.ra_count >= 0)
+			{
+				rra(list1);
+				printf("rra\n");
+				++command_cnt;
+			}
+		}
+		insert_pivot_list(*pivot_list, 1, tool3.pivot2, tool3.p_count - tool3.rb_count);
+		insert_pivot_list(*pivot_list, 1, tool3.pivot1, tool3.rb_count);
+		insert_pivot_list(*pivot_list, 0, tool.pivot, tool.push_count - tool3.p_count);
+	}
+}
+
+void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
+{
+	t_tool	tool;
+	t_tool2	tool2;
+	int		cnt;
+
+//	printf("push_stack_a\n");
+	tool = (*pivot_list)->tail->tool;
+	if (tool.push_count <= 3)
+	{
+		sort_list(list1, list2, tool.dir, tool.push_count);
+		delete_pivot_node(pivot_list);
+		return ;
+	}
+	init_tool2(&tool2);
+	delete_pivot_node(pivot_list);
+	cnt = tool.push_count;
+	if (tool.push_count == list2->cnt)
+		tool2.alone = 1;
+	if (tool.push_count <= 6)
+	{
+		tool2.pivot1 = tool.pivot - tool.push_count / 2;
+		while (--cnt >= 0)
+		{
+			if (list_at_score(list2, 0) > tool2.pivot1)
+			{
+				pa(list1, list2);
+				++tool2.p_count;
+				printf("pa\n");
+				++command_cnt;
+			}
+			else
+			{
+				rb(list2);
+				++tool2.rb_count;
+				printf("rb\n");
+				++command_cnt;
+			}
+		}
+		if (!(tool2.alone))
+		{
+			while (--tool2.rb_count >= 0)
+			{
+				rrb(list2);
+				printf("rrb\n");
+				++command_cnt;
+			}
+		}
+		insert_pivot_list(*pivot_list, 1, tool2.pivot1, tool.push_count - tool2.p_count);
+		insert_pivot_list(*pivot_list, 0, tool.pivot, tool2.p_count);
+	}
+	else
+	{
+
+		tool2.pivot1 = tool.pivot - tool.push_count / 3; // 10
+		tool2.pivot2 = tool.pivot - tool.push_count / 3 * 2; // 8
+		while (--tool.push_count >= 0)
+		{
+			if (list_at_score(list2, 0) > tool2.pivot2)
+			{
+				pa(list1, list2);
+				++tool2.p_count;
+				printf("pa\n");
+				++command_cnt;
+				if (list_at_score(list1, 0) <= tool2.pivot1 && list1->cnt > 1)
+				{
+					ra(list1);
+					printf("ra\n");
+					++tool2.ra_count;
+					++command_cnt;
+				}
+			}
+			else
+			{
+				rb(list2);
+				++tool2.rb_count;
+				printf("rb\n");
+				++command_cnt;
+			}
+		}
+	//	printf("pb_count: %d, rb_count: %d, ra_count: %d\n", tool2.p_count, tool2.rb_count, tool2.ra_count);
+	//	if (tool2.p_count - tool2.ra_count > 3)
+	//	{
+	//		tool2.flag = 1;
+	//		if (tool2.ra_count <= tool2.rb_count)
+	//		{
+	//			tool2.rrr_count = tool2.ra_count;
+	//			while (--tool2.rrr_count >= 0)
+	//			{
+	//				rrr(list1, list2);
+	//				printf("rrr\n");
+	//				++command_cnt;
+	//			}
+	//			tool2.rb_count -= tool2.ra_count;
+	//			while (--tool2.rb_count >= 0)
+	//			{
+	//				printf("rrb\n");
+	//				++command_cnt;
+	//				rrb(list2);
+	//			}
+	//		}
+	//		else if (tool2.ra_count > tool2.rb_count)
+	//		{
+	//			tool2.rrr_count = tool2.rb_count;
+	//			while (--tool2.rrr_count >= 0)
+	//			{
+	//				rrr(list1, list2);
+	//				printf("rrr\n");
+	//				++command_cnt;
+	//			}
+	//			tool2.ra_count -= tool2.rb_count;
+	//			while (tool2.alone == 0 && --tool2.ra_count >= 0)
+	//			{
+	//				rra(list1);
+	//				printf("rra\n");
+	//				++command_cnt;
+	//			}
+	//		}
+	//	}
+		insert_pivot_list(*pivot_list, 1, tool2.pivot2, tool2.rb_count);
+		insert_pivot_list(*pivot_list, 0, tool2.pivot1, tool2.ra_count);
+		insert_pivot_list(*pivot_list, 2, tool2.ra_count, tool2.rb_count);
+		insert_pivot_list(*pivot_list, 0, tool.pivot, tool2.p_count - tool2.ra_count);
+	}
 }
 
 void	rotate_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 {
-	t_pivot_node *cur;
 	t_tool tool;
 
 //	printf("rotate_stack\n");
@@ -1618,6 +1696,7 @@ void	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 //		sleep(2);
 //	}
 
+#include <stdio.h>
 int	main(int argc, char *argv[])
 {
 	int		i;
@@ -1626,6 +1705,8 @@ int	main(int argc, char *argv[])
 	int		element_cnt;
 	char	**element;
 
+//	printf("%p\n", *argv[2]);
+	printf("argc:%d\n", argc);
 	t_list			stack_a;
 	t_list			stack_b;
 	t_list			temp;
@@ -1639,6 +1720,7 @@ int	main(int argc, char *argv[])
 //	printf("argc: %d\n", argc);
 	while (++i < argc)
 	{
+		printf("argv[i]:[%x]\n", *argv[i]);
 		element_cnt = count_word(argv[i]);
 		element = ft_split(argv[i]);
 		j = -1;
@@ -1675,10 +1757,10 @@ int	main(int argc, char *argv[])
 	mark_rank(&temp, &stack_a);
 	insert_pivot_list(&pivot_list, 0, stack_a.cnt, stack_a.cnt);
 	recur(&stack_a, &stack_b, &pivot_list);
-//	printf("\n\nstack_a\n");
-//	iterate_list(stack_a);
-//	printf("\n\nstack_b\n");
-//	iterate_list(stack_b);
+	printf("\n\nstack_a\n");
+	iterate_list(stack_a);
+	printf("\n\nstack_b\n");
+	iterate_list(stack_b);
 	printf("command_cnt: %d\n", command_cnt);
 	return (0);
 }
