@@ -1370,7 +1370,7 @@ void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			++tool2.p_count;
 			++command_cnt;
 			printf("pb\n");
-			if (list_at_score(list2, 0) >= tool2.pivot2 && list2->cnt > 1)
+			if (list_at_score(list2, 0) > tool2.pivot2)
 			{
 				rb(list2);
 				printf("rb\n");
@@ -1456,7 +1456,7 @@ void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			++command_cnt;
 			if (list_at_score(list1, 0) <= tool2.pivot1 && list1->cnt > 1)
 			{
-				ra(list2);
+				ra(list1);
 				printf("ra\n");
 				++tool2.ra_count;
 				++command_cnt;
@@ -1464,55 +1464,54 @@ void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 		}
 		else
 		{
-			rb(list1);
+			rb(list2);
 			++tool2.rb_count;
 			printf("rb\n");
 			++command_cnt;
 		}
 	}
 	printf("pb_count: %d, rb_count: %d, ra_count: %d\n", tool2.p_count, tool2.rb_count, tool2.ra_count);
-	if (tool2.p_count - tool2.ra_count > 3)
-	{
-		tool2.flag = 1;
-		if (tool2.ra_count <= tool2.rb_count)
-		{
-			tool2.rrr_count = tool2.ra_count;
-			while (--tool2.rrr_count >= 0)
-			{
-				rrr(list1, list2);
-				printf("rrr\n");
-				++command_cnt;
-			}
-			tool2.rb_count -= tool2.ra_count;
-			while (--tool2.rb_count >= 0)
-			{
-				printf("rrb\n");
-				++command_cnt;
-				rrb(list2);
-			}
-		}
-		else if (tool2.ra_count > tool2.rb_count)
-		{
-			tool2.rrr_count = tool2.rb_count;
-			while (--tool2.rrr_count >= 0)
-			{
-				rrr(list1, list2);
-				printf("rrr\n");
-				++command_cnt;
-			}
-			tool2.ra_count -= tool2.rb_count;
-			while (tool2.alone == 0 && --tool2.ra_count >= 0)
-			{
-				rra(list1);
-				printf("rra\n");
-				++command_cnt;
-			}
-		}
-	}
+//	if (tool2.p_count - tool2.ra_count > 3)
+//	{
+//		tool2.flag = 1;
+//		if (tool2.ra_count <= tool2.rb_count)
+//		{
+//			tool2.rrr_count = tool2.ra_count;
+//			while (--tool2.rrr_count >= 0)
+//			{
+//				rrr(list1, list2);
+//				printf("rrr\n");
+//				++command_cnt;
+//			}
+//			tool2.rb_count -= tool2.ra_count;
+//			while (--tool2.rb_count >= 0)
+//			{
+//				printf("rrb\n");
+//				++command_cnt;
+//				rrb(list2);
+//			}
+//		}
+//		else if (tool2.ra_count > tool2.rb_count)
+//		{
+//			tool2.rrr_count = tool2.rb_count;
+//			while (--tool2.rrr_count >= 0)
+//			{
+//				rrr(list1, list2);
+//				printf("rrr\n");
+//				++command_cnt;
+//			}
+//			tool2.ra_count -= tool2.rb_count;
+//			while (tool2.alone == 0 && --tool2.ra_count >= 0)
+//			{
+//				rra(list1);
+//				printf("rra\n");
+//				++command_cnt;
+//			}
+//		}
+//	}
 	insert_pivot_list(*pivot_list, 1, tool2.pivot2, tool2.rb_count);
 	insert_pivot_list(*pivot_list, 0, tool2.pivot1, tool2.ra_count);
-	if (!tool2.flag)
-		insert_pivot_list(*pivot_list, 2, tool2.ra_count, tool2.rb_count);
+	insert_pivot_list(*pivot_list, 2, tool2.ra_count, tool2.rb_count);
 	insert_pivot_list(*pivot_list, 0, tool.pivot, tool2.p_count - tool2.ra_count);
 }
 
@@ -1521,28 +1520,48 @@ void	rotate_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	t_pivot_node *cur;
 	t_tool tool;
 
-	cur = (*pivot_list)->tail;
+	printf("rotate_stack\n");
+	tool = (*pivot_list)->tail->tool;
 	int	ra_count = tool.pivot;
 	int rb_count = tool.push_count;
+	printf("ra_count:%d, rb_count:%d\n", ra_count, rb_count);
 	int	rrr_count;
 	if (ra_count <= rb_count)
 	{
 		rrr_count = ra_count;
 		while (--rrr_count >= 0)
+		{
 			rrr(list1, list2);
+			printf("rrr\n");
+			++command_cnt;
+		}
 		rb_count -= ra_count;
 		while (--rb_count >= 0)
+		{
 			rrb(list2);
+			printf("rrb\n");
+			++command_cnt;
+		}
 	}
 	else if (ra_count > rb_count)
 	{
 		rrr_count = rb_count;
 		while (--rrr_count >= 0)
+		{
 			rrr(list1, list2);
+			printf("rrr\n");
+			++command_cnt;
+		}
 		ra_count -= rb_count;
 		while (--ra_count >= 0)
+		{
 			rra(list1);
+			printf("rra\n");
+			++command_cnt;
+		}
 	}
+	iterate_list(*list1);
+	iterate_list(*list2);
 	delete_pivot_node(pivot_list);
 }
 
@@ -1566,9 +1585,9 @@ void	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 		printf("\n\nA\n");
 		iterate_list(*list1);
 		printf("\n\nb\n");
-		iterate_list(*list1);
+		iterate_list(*list2);
 		printf("\n\n");
-		sleep(2);
+		//sleep(2);
 
 	}
 }
