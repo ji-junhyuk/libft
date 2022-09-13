@@ -14,6 +14,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+void	*ft_memset(void *b, int c, size_t len)
+{
+	unsigned char	*p;
+	size_t			idx;
+
+	idx = -1;
+	p = (unsigned char *)b;
+	while (++idx < len)
+		p[idx] = c;
+	return (b);
+}
+
 size_t	ft_strlen(char *str)
 {
 	char	*init_pos;
@@ -29,9 +41,19 @@ void	ft_putstr(char *str)
 	size_t	len;
 
 	len = ft_strlen(str);
-	write(2, str, len);
+	if (write(1, str, len) != len)
+		exit(1);
 }
-int command_cnt;
+
+void	put_error(char *str)
+{
+	size_t	len;
+
+	len = ft_strlen(str);
+	write(2, str, len);
+	exit(1);
+}
+
 int	ft_atoi(char *str)
 {
 	int	result;
@@ -81,7 +103,7 @@ int	count_word(char *str)
 	int	cnt;
 
 	cnt = 0;
-	if (*str == '\0')
+	if (*str == 0)
 		return (1);
 	while (*str)
 	{
@@ -138,13 +160,6 @@ char	**ft_split(char *str)
 		while (*str && *str == ' ')
 			++str;
 		word_len = find_word_len(str);
-//		copy[idx] = malloc(sizeof(char) * (word_len + 1));
-//		if (!copy[idx])
-//			free_arr(copy, idx);
-//		jdx = -1;
-//		while (*str && *str != ' ')
-//			copy[idx][++jdx] = *str++;
-//		copy[idx][++jdx] = 0;
 		*(copy + idx) = malloc(sizeof(char) * (word_len + 1));
 		if (*(copy + idx) == 0)
 			free_arr(copy, idx);
@@ -157,16 +172,12 @@ char	**ft_split(char *str)
 	return (copy);
 }
 
-typedef struct s_tool
+typedef struct s_pivot_origin
 {
 	int dir;
 	int pivot;
 	int push_count;
-//	int stack_a_cnt;
-//	int stack_b_cnt;
-//	int stack_a_pivot;
-//	int stack_b_pivot;
-} t_tool;
+} t_pivot_origin;
 
 typedef struct s_node
 {
@@ -178,7 +189,7 @@ typedef struct s_node
 typedef struct s_pivot_node
 {
 	struct s_pivot_node *next;
-	t_tool tool;
+	t_pivot_origin tool;
 }	t_pivot_node;
 
 typedef struct s_list
@@ -195,7 +206,7 @@ typedef struct s_pivot_list
 }	t_pivot_list;
 
 
-typedef struct s_tool2
+typedef struct s_pivot_new
 {
 	int pivot1;
 	int pivot2;
@@ -205,12 +216,15 @@ typedef struct s_tool2
 	int rrr_count;
 	int alone;
 	int flag;
-} t_tool2;
+} t_pivot_new;
 
-void	init_list(t_list *list)
+
+void	init_list(t_list *list1, t_list *list2, t_list *list3, t_pivot_list *list4)
 {
-	list->tail = NULL;
-	list->cnt = 0;
+	ft_memset(list1, 0, sizeof(*list1));
+	ft_memset(list2, 0, sizeof(*list2));
+	ft_memset(list3, 0, sizeof(*list3));
+	ft_memset(list4, 0, sizeof(*list4));
 }
 
 void	init_pivot_list(t_pivot_list *list)
@@ -247,10 +261,7 @@ int	insert_pivot_list(t_pivot_list *list, int dir, int pivot, int push_count)
 {
 	t_pivot_node *new_node = malloc(sizeof(t_pivot_node));
 	if (!new_node)
-	{
-		exit(1);
 		return (1);
-	}
 	new_node->tool.dir = dir;
 	new_node->tool.pivot = pivot;
 	new_node->tool.push_count = push_count;
@@ -577,7 +588,6 @@ void	compare_two_sort_list(t_list *list1, t_list *list2, int flag)
 			{
 				ft_putstr("sa\n");
 				sa(list1);
-				++command_cnt;
 			}
 	}
 	else
@@ -592,7 +602,6 @@ void	compare_two_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("rb\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 3;
 			}
 			else
 			{
@@ -600,7 +609,6 @@ void	compare_two_sort_list(t_list *list1, t_list *list2, int flag)
 				pa(list1, list2);
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 2;
 			}
 		}
 		else
@@ -615,7 +623,6 @@ void	compare_two_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("pa\n");
 				ft_putstr("rrb\n");
 				ft_putstr("pa\n");
-				command_cnt += 4;
 			}
 			else
 			{
@@ -623,12 +630,11 @@ void	compare_two_sort_list(t_list *list1, t_list *list2, int flag)
 				pa(list1, list2);
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 2;
 			}
 		}
 	}
 }
-void	delete_stack(t_list **list)
+void	delete_all_stack(t_list **list)
 {
 	t_node *temp;
 	t_node *tail_prev;
@@ -709,19 +715,16 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				sa(list1);
 				ft_putstr("ra\n");
 				ft_putstr("sa\n");
-				command_cnt += 2;
 			}
 			else if (score1 > score2 && score1 > score3 && score2 < score3)
 			{
 				ra(list1);
 				ft_putstr("ra\n");
-				++command_cnt;
 			}
 			else if (score2 > score1 && score2 > score3 && score1 > score3)
 			{
 				rra(list1);
 				ft_putstr("rra\n");
-				++command_cnt;
 			}
 			else if (score2 > score1 && score2 > score3 && score3 > score1)
 			{
@@ -729,13 +732,11 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				sa(list1);
 				ft_putstr("rra\n");
 				ft_putstr("sa\n");
-				command_cnt += 2;
 			}
 			else if (score3 > score1 && score3 > score2 && score1 > score2)
 			{
 				sa(list1);
 				ft_putstr("sa\n");
-				++command_cnt;
 			}
 		}
 		else
@@ -756,7 +757,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("rra\n");
 				ft_putstr("rra\n");
 				ft_putstr("sa\n");
-				command_cnt += 7;
 			}
 			else if (score1 > score2 && score1 > score3 && score2 < score3)
 			{
@@ -768,7 +768,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("ra\n");
 				ft_putstr("sa\n");
 				ft_putstr("rra\n");
-				command_cnt += 4;
 			}
 			else if (score2 > score1 && score2 > score3 && score1 > score3)
 			{
@@ -780,7 +779,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("sa\n");
 				ft_putstr("rra\n");
 				ft_putstr("sa\n");
-				command_cnt += 4;
 			}
 			else if (score2 > score1 && score2 > score3 && score3 > score1)
 			{
@@ -790,13 +788,11 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("ra\n");
 				ft_putstr("sa\n");
 				ft_putstr("rra\n");
-				command_cnt += 3;
 			}
 			else if (score3 > score1 && score3 > score2 && score1 > score2)
 			{
 				sa(list1);
 				ft_putstr("sa\n");
-				++command_cnt;
 			}
 		}
 	}
@@ -812,7 +808,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 3;
 			}
 			else if (score4 > score5 && score4 > score6 && score5 < score6)
 			{
@@ -824,7 +819,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("sb\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 4;
 			}
 			else if (score5 > score4 && score5 > score6 && score4 > score6)
 			{
@@ -836,7 +830,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 4;
 			}
 			else if (score5 > score4 && score5 > score6 && score6 > score4)
 			{
@@ -848,7 +841,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 4;
 			}
 			else if (score6 > score4 && score6 > score5 && score4 > score5)
 			{
@@ -860,7 +852,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 4;
 			}
 			else
 			{
@@ -874,7 +865,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("rrb\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 5;
 			}
 		}
 		else
@@ -887,7 +877,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 3;
 			}
 			else if (score4 > score5 && score4 > score6 && score5 < score6)
 			{
@@ -899,7 +888,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("sb\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 4;
 			}
 			else if (score5 > score4 && score5 > score6 && score4 > score6)
 			{
@@ -911,7 +899,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 4;
 			}
 			else if (score5 > score4 && score5 > score6 && score6 > score4)
 			{
@@ -925,7 +912,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("sb\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 5;
 			}
 			else if (score6 > score4 && score6 > score5 && score4 > score5)
 			{
@@ -941,7 +927,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("rrb\n");
 				ft_putstr("pa\n");
 				ft_putstr("pa\n");
-				command_cnt += 6;
 			}
 			else
 			{
@@ -957,7 +942,6 @@ void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 				ft_putstr("pa\n");
 				ft_putstr("rrb\n");
 				ft_putstr("pa\n");
-				command_cnt += 6;
 			}
 		}
 	}
@@ -985,12 +969,11 @@ void	sort_list(t_list *list1, t_list *list2, int dir, int count)
 		{
 			pa(list1, list2);
 			ft_putstr("pa\n");
-			++command_cnt;
 		}
 	}
 }
 
-void	init_tool2(t_tool2	*tool2)
+void	init_pivot_new(t_pivot_new	*tool2)
 {
 	tool2->pivot1 = 0;
 	tool2->pivot2 = 0;
@@ -1002,21 +985,21 @@ void	init_tool2(t_tool2	*tool2)
 	tool2->flag = 0;
 }
 
-void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
+int		push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 {
-	t_tool	tool;
-	t_tool2	tool2;
-	t_tool2 tool3;
-	int		cnt;
+	t_pivot_origin		tool;
+	t_pivot_new			tool2;
+	t_pivot_new			tool3;
+	int					cnt;
 
 	tool = (*pivot_list)->tail->tool;
 	if (tool.push_count <= 3)
 	{
 		sort_list(list1, list2, tool.dir, tool.push_count);
 		delete_pivot_node(pivot_list);
-		return ;
+		return 0;
 	}
-	init_tool2(&tool2);
+	init_pivot_new(&tool2);
 	cnt = tool.push_count;
 	delete_pivot_node(pivot_list);
 	if (tool.push_count == list1->cnt)
@@ -1031,14 +1014,12 @@ void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 				pb(list1, list2);
 				ft_putstr("pb\n");
 				++tool2.p_count;
-				++command_cnt;
 			}
 			else
 			{
 				ra(list1);
 				ft_putstr("ra\n");
 				++tool2.ra_count;
-				++command_cnt;
 			}
 		}
 		if (!(tool2.alone))
@@ -1047,11 +1028,12 @@ void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			{
 				rra(list1);
 				ft_putstr("rra\n");
-				++command_cnt;
 			}
 		}
-		insert_pivot_list(*pivot_list, 1, tool2.pivot1, tool2.p_count);
-		insert_pivot_list(*pivot_list, 0, tool.pivot, tool.push_count - tool2.p_count);
+		if (insert_pivot_list(*pivot_list, 1, tool2.pivot1, tool2.p_count) == 1)
+			return (1);
+		if (insert_pivot_list(*pivot_list, 0, tool.pivot, tool.push_count - tool2.p_count) == 1)
+			return (1);
 	}
 	else
 	{
@@ -1063,14 +1045,12 @@ void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			{
 				pb(list1, list2);
 				++tool2.p_count;
-				++command_cnt;
 				ft_putstr("pb\n");
 				if (list_at_score(list2, 0) > tool2.pivot2)
 				{
 					rb(list2);
 					ft_putstr("rb\n");
 					++tool2.rb_count;
-					++command_cnt;
 				}
 			}
 			else
@@ -1078,7 +1058,6 @@ void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 				ra(list1);
 				++tool2.ra_count;
 				ft_putstr("ra\n");
-				++command_cnt;
 			}
 		}
 		tool3 = tool2;
@@ -1089,14 +1068,12 @@ void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			{
 				rrr(list1, list2);
 				ft_putstr("rrr\n");
-				++command_cnt;
 			}
 			tool2.rb_count -= tool2.ra_count;
 			while (--tool2.rb_count >= 0)
 			{
 				rrb(list2);
 				ft_putstr("rrb\n");
-				++command_cnt;
 			}
 		}
 		else if (tool2.ra_count > tool2.rb_count)
@@ -1106,26 +1083,28 @@ void	push_stack_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			{
 				rrr(list1, list2);
 				ft_putstr("rrr\n");
-				++command_cnt;
 			}
 			tool2.ra_count -= tool2.rb_count;
 			while (tool2.alone == 0 && --tool2.ra_count >= 0)
 			{
 				rra(list1);
 				ft_putstr("rra\n");
-				++command_cnt;
 			}
 		}
-		insert_pivot_list(*pivot_list, 1, tool3.pivot2, tool3.p_count - tool3.rb_count);
-		insert_pivot_list(*pivot_list, 1, tool3.pivot1, tool3.rb_count);
-		insert_pivot_list(*pivot_list, 0, tool.pivot, tool.push_count - tool3.p_count);
+		if (insert_pivot_list(*pivot_list, 1, tool3.pivot2, tool3.p_count - tool3.rb_count) == 1)
+			return (1);
+		if (insert_pivot_list(*pivot_list, 1, tool3.pivot1, tool3.rb_count))
+			return (1);
+		if (insert_pivot_list(*pivot_list, 0, tool.pivot, tool.push_count - tool3.p_count) == 1)
+			return (1);
 	}
+	return (0);
 }
 
-void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
+int	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 {
-	t_tool	tool;
-	t_tool2	tool2;
+	t_pivot_origin	tool;
+	t_pivot_new	tool2;
 	int		cnt;
 
 	tool = (*pivot_list)->tail->tool;
@@ -1133,9 +1112,9 @@ void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	{
 		sort_list(list1, list2, tool.dir, tool.push_count);
 		delete_pivot_node(pivot_list);
-		return ;
+		return	(0);
 	}
-	init_tool2(&tool2);
+	init_pivot_new(&tool2);
 	delete_pivot_node(pivot_list);
 	cnt = tool.push_count;
 	if (tool.push_count == list2->cnt)
@@ -1150,14 +1129,12 @@ void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 				pa(list1, list2);
 				++tool2.p_count;
 				ft_putstr("pa\n");
-				++command_cnt;
 			}
 			else
 			{
 				rb(list2);
 				++tool2.rb_count;
 				ft_putstr("rb\n");
-				++command_cnt;
 			}
 		}
 		if (!(tool2.alone))
@@ -1166,11 +1143,12 @@ void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 			{
 				rrb(list2);
 				ft_putstr("rrb\n");
-				++command_cnt;
 			}
 		}
-		insert_pivot_list(*pivot_list, 1, tool2.pivot1, tool.push_count - tool2.p_count);
-		insert_pivot_list(*pivot_list, 0, tool.pivot, tool2.p_count);
+		if (insert_pivot_list(*pivot_list, 1, tool2.pivot1, tool.push_count - tool2.p_count) == 1)
+			return (1);
+		if (insert_pivot_list(*pivot_list, 0, tool.pivot, tool2.p_count) == 1)
+			return (1);
 	}
 	else
 	{
@@ -1184,13 +1162,11 @@ void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 				pa(list1, list2);
 				++tool2.p_count;
 				ft_putstr("pa\n");
-				++command_cnt;
 				if (list_at_score(list1, 0) <= tool2.pivot1 && list1->cnt > 1)
 				{
 					ra(list1);
 					ft_putstr("ra\n");
 					++tool2.ra_count;
-					++command_cnt;
 				}
 			}
 			else
@@ -1198,62 +1174,74 @@ void	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 				rb(list2);
 				++tool2.rb_count;
 				ft_putstr("rb\n");
-				++command_cnt;
 			}
 		}
-		insert_pivot_list(*pivot_list, 1, tool2.pivot2, tool2.rb_count);
-		insert_pivot_list(*pivot_list, 0, tool2.pivot1, tool2.ra_count);
-		insert_pivot_list(*pivot_list, 2, tool2.ra_count, tool2.rb_count);
-		insert_pivot_list(*pivot_list, 0, tool.pivot, tool2.p_count - tool2.ra_count);
+		if (insert_pivot_list(*pivot_list, 1, tool2.pivot2, tool2.rb_count) == 1)
+			return (1);
+		if (insert_pivot_list(*pivot_list, 0, tool2.pivot1, tool2.ra_count) == 1)
+			return (1);
+		if (insert_pivot_list(*pivot_list, 2, tool2.ra_count, tool2.rb_count) == 1)
+			return (1);
+		if (insert_pivot_list(*pivot_list, 0, tool.pivot, tool2.p_count - tool2.ra_count) == 1)
+			return (1);
+	}
+	return (0);
+}
+
+void	rotate_a(t_list *list1, t_list *list2, int ra_count, int rb_count)
+{
+	int	rrr_count;
+
+	rrr_count = rb_count;
+	while (--rrr_count >= 0)
+	{
+		rrr(list1, list2);
+		ft_putstr("rrr\n");
+	}
+	ra_count -= rb_count;
+	while (--ra_count >= 0)
+	{
+		rra(list1);
+		ft_putstr("rra\n");
+	}
+}
+
+void	rotate_b(t_list *list1, t_list *list2, int ra_count, int rb_count)
+{
+	int	rrr_count;
+
+	rrr_count = ra_count;
+	while (--rrr_count >= 0)
+	{
+		rrr(list1, list2);
+		ft_putstr("rrr\n");
+	}
+	rb_count -= ra_count;
+	while (--rb_count >= 0)
+	{
+		rrb(list2);
+		ft_putstr("rrb\n");
 	}
 }
 
 void	rotate_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 {
-	t_tool tool;
+	t_pivot_origin	tool;
+	int				ra_count;
+	int				rb_count;
+	int				rrr_count;
 
 	tool = (*pivot_list)->tail->tool;
-	int	ra_count = tool.pivot;
-	int rb_count = tool.push_count;
-	int	rrr_count;
+	ra_count = tool.pivot;
+	rb_count = tool.push_count;
 	if (ra_count <= rb_count)
-	{
-		rrr_count = ra_count;
-		while (--rrr_count >= 0)
-		{
-			rrr(list1, list2);
-			ft_putstr("rrr\n");
-			++command_cnt;
-		}
-		rb_count -= ra_count;
-		while (--rb_count >= 0)
-		{
-			rrb(list2);
-			ft_putstr("rrb\n");
-			++command_cnt;
-		}
-	}
+		rotate_a(list1, list2, ra_count, rb_count);
 	else if (ra_count > rb_count)
-	{
-		rrr_count = rb_count;
-		while (--rrr_count >= 0)
-		{
-			rrr(list1, list2);
-			ft_putstr("rrr\n");
-			++command_cnt;
-		}
-		ra_count -= rb_count;
-		while (--ra_count >= 0)
-		{
-			rra(list1);
-			ft_putstr("rra\n");
-			++command_cnt;
-		}
-	}
+		rotate_b(list1, list2, ra_count, rb_count);
 	delete_pivot_node(pivot_list);
 }
 
-void	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
+int	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 {
 	t_pivot_node *cur;
 
@@ -1263,77 +1251,111 @@ void	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 			break ;
 		cur = pivot_list->tail;
 		if (cur->tool.dir == 0)
-			push_stack_b(list1, list2, &pivot_list);
+		{
+			if (push_stack_b(list1, list2, &pivot_list) == 1)
+				return (1);
+		}
 		else if (cur->tool.dir == 1)
-			push_stack_a(list1, list2, &pivot_list);
+		{
+			if (push_stack_a(list1, list2, &pivot_list) == 1)
+				return (1);
+		}
 		else if (cur->tool.dir == 2)
 			rotate_stack(list1, list2, &pivot_list);
 	}
 	delete_pivot_node(&pivot_list);
+	return (0);
 }
 
-#include <stdio.h>
-int	main(int argc, char *argv[])
+typedef struct s_info_input
 {
 	int		i;
-	int		j; 
-	int		number;
+	int		j;
 	int		element_cnt;
-	int		total_cnt;
+	int		number;
 	char	**element;
+} t_info_input;
 
-	t_list			stack_a;
-	t_list			stack_b;
-	t_list			temp;
-	t_pivot_list	pivot_list;
-	t_list			*stack_a_pointer;
-	t_list			*temp_pointer;
 
-	stack_a_pointer = &stack_a;
-	temp_pointer = &temp;
-	init_list(&stack_a);
-	init_list(&stack_b);
-	init_list(&temp);
-	init_pivot_list(&pivot_list);
-	element_cnt = 0;
-	element = NULL;
-	total_cnt = 0;
-	i = 0;
-	while (++i < argc)
+int		check_valid_input(int argc, char *argv[], t_list *temp, t_list *stack_a)
+{
+	t_info_input	input;
+
+	ft_memset(&input, 0, sizeof(input));
+	while (++input.i < argc)
 	{
-		element_cnt = count_word(argv[i]);
-		element = ft_split(argv[i]);
-		total_cnt += element_cnt;
-		j = -1;
-		while (++j < element_cnt)
+		input.element_cnt = count_word(argv[input.i]);
+		input.element = ft_split(argv[input.i]);
+		input.j = -1;
+		while (++input.j < input.element_cnt)
 		{
-			number = ft_atoi(element[j]);
-			if (number == 0 && !check_real_zero(element[j]))
-			{
-				ft_putstr("Error\n");
-				exit(1);
-			}
+			input.number = ft_atoi(input.element[input.j]);
+			if (input.number == 0 && !check_real_zero(input.element[input.j]))
+				return (1);
 			else
 			{
-				if (insert_list(&temp, number) == 1 || insert_list(&stack_a, number) == 1)
-				{
-					ft_putstr("Error\n");
-					exit(1);
-				}
+				if (insert_list(temp, input.number) == 1 || insert_list(stack_a, input.number) == 1)
+					return (1);
 			}
 		}
-		free_arr(element, element_cnt);
+		free_arr(input.element, input.element_cnt);
 	}
-	if (check_duplicate_number(stack_a) == 1)
+	return (0);
+}
+
+int	check_duplicate_list(t_list list)
+{
+	t_node *cur;
+	t_node *tail;
+
+	tail = list.tail;
+	if (list.cnt <= 1)
+		return (0);
+	while (--list.cnt)
 	{
-		ft_putstr("Error\n");
-		exit(1);
+		cur = list.tail->next;;
+		while (cur != tail)
+		{
+			if (cur->data == list.tail->data)
+				return (1);
+			cur = cur->next;
+		}
+		list.tail = list.tail->next;
 	}
-	quick_sort(&temp, 0, temp.cnt - 1);
-	mark_rank(&temp, &stack_a);
-	insert_pivot_list(&pivot_list, 0, stack_a.cnt, stack_a.cnt);
-	recur(&stack_a, &stack_b, &pivot_list);
-	delete_stack(&stack_a_pointer);
-	delete_stack(&temp_pointer);
+	return (0);
+}
+
+int	rank_score(t_list *sorted_stack, t_list *stack_a, t_pivot_list *pivot_list)
+{
+	quick_sort(sorted_stack, 0, sorted_stack->cnt - 1);
+	mark_rank(sorted_stack, stack_a);
+	if (insert_pivot_list(pivot_list, 0, stack_a->cnt, stack_a->cnt) == 1)
+		return (1);
+	return (0);
+}
+
+void	free_stack(t_list *list1, t_list *list2)
+{
+	delete_all_stack(&list1);
+	delete_all_stack(&list2);
+}
+
+int	main(int argc, char *argv[])
+{
+	t_list			stack_a;
+	t_list			stack_b;
+	t_list			sorted_stack;
+	t_pivot_list	pivot_list;
+	
+	init_list(&stack_a, &stack_b, &sorted_stack, &pivot_list);
+	if (check_valid_input(argc, argv, &sorted_stack, &stack_a) == 1)
+		put_error("Error\n");
+	if (check_duplicate_list(stack_a) == 1)
+		put_error("Error\n");
+	if (rank_score(&sorted_stack, &stack_a, &pivot_list) == 1)
+		put_error("Error\n");
+	if (recur(&stack_a, &stack_b, &pivot_list) == 1)
+		put_error("Error\n");
+	free_stack(&stack_a, &sorted_stack);
 	return (0);
 }
