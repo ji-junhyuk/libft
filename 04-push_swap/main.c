@@ -1193,7 +1193,133 @@ int		push_a_to_b(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	else
 	{
 		use_two_pivot_a_to_b(list1, list2, &old_pivot, &new_pivot);
-		push_a_to_b_2(pivot_list, &old_pivot, &new_pivot);
+		if (push_a_to_b_2(pivot_list, &old_pivot, &new_pivot) == 1)
+			return (1);
+	}
+	return (0);
+}
+
+void	use_one_pivot_b_to_a_2(t_list *list1, t_list *list2, t_pivot_origin *pivot_origin, t_pivot_new *pivot_new)
+{
+	if (!(pivot_new->alone))
+	{
+		while (--(pivot_new->rb_count) >= 0)
+		{
+			rrb(list2);
+			ft_putstr("rrb\n");
+		}
+	}
+}
+
+void	use_one_pivot_b_to_a(t_list *list1, t_list *list2, t_pivot_origin *pivot_origin, t_pivot_new *pivot_new)
+{
+	int	cnt;
+
+	cnt = pivot_origin->push_count;
+	if (pivot_origin->push_count == list2->cnt)
+		pivot_new->alone = 1;
+	pivot_new->pivot1 = pivot_origin->pivot - pivot_origin->push_count / 2;
+	while (--cnt >= 0)
+	{
+		if (list_at_score(list2, 0) > pivot_new->pivot1)
+		{
+			pa(list1, list2);
+			ft_putstr("pa\n");
+			++(pivot_new->p_count);
+		}
+		else
+		{
+			rb(list2);
+			ft_putstr("rb\n");
+			++(pivot_new->rb_count);
+		}
+	}
+	use_one_pivot_b_to_a_2(list1, list2, pivot_origin, pivot_new);
+}
+
+int	insert_pivot_list_b_to_a_6(t_pivot_list **pivot_list, t_pivot_origin *old_pivot, t_pivot_new *new_pivot)
+{
+	if (insert_pivot_list(*pivot_list, 1, new_pivot->pivot1, old_pivot->push_count - new_pivot->p_count) == 1)
+		return (1);
+	if (insert_pivot_list(*pivot_list, 0, old_pivot->pivot, new_pivot->p_count) == 1)
+		return (1);
+	return (0);
+}
+
+void	use_two_pivot_b_to_a_2(t_list *list1, t_list *list2, t_pivot_origin *pivot_origin, t_pivot_new *pivot_new)
+{
+	if (pivot_new->ra_count <= pivot_new->rb_count)
+		rotate_b(list1, list2, pivot_new);
+	else
+		rotate_a(list1, list2, pivot_new);
+}
+
+void	use_two_pivot_b_to_a(t_list *list1, t_list *list2, t_pivot_origin *pivot_origin, t_pivot_new *pivot_new)
+{
+	find_two_pivot_alone(list1, pivot_origin, pivot_new);
+	pivot_origin->cnt = pivot_origin->push_count;
+	while (--(pivot_origin->cnt) >= 0)
+	{
+		if (list_at_score(list2, 0) > pivot_new->pivot2)
+		{
+			pa(list1, list2);
+			++pivot_new->p_count;
+			ft_putstr("pa\n");
+			if (list_at_score(list1, 0) > pivot_new->pivot1 && list1->cnt > 1) // list1->cnt > 1
+			{
+				ra(list1);
+				ft_putstr("ra\n");
+				++pivot_new->ra_count;
+			}
+		}
+		else
+		{
+			rb(list2);
+			++pivot_new->rb_count;
+			ft_putstr("rb\n");
+		}
+	}
+//	use_two_pivot_b_to_a_2(list1, list2, pivot_origin, pivot_new);
+}
+
+int		push_b_to_a_2(t_pivot_list **pivot_list, t_pivot_origin *old_pivot, t_pivot_new *new_pivot)
+{
+	if (insert_pivot_list(*pivot_list, 1, new_pivot->pivot2, new_pivot->rb_count) == 1)
+		return (1);
+	if (insert_pivot_list(*pivot_list, 0, new_pivot->pivot1, new_pivot->ra_count) == 1)
+		return (1);
+	if (insert_pivot_list(*pivot_list, 2, new_pivot->ra_count, new_pivot->rb_count) == 1)
+		return (1);
+	if (insert_pivot_list(*pivot_list, 0, old_pivot->pivot, new_pivot->p_count - new_pivot->ra_count) == 1)
+		return (1);
+	return (0);
+}
+
+int	push_b_to_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
+{
+	t_pivot_origin		old_pivot;
+	t_pivot_new			new_pivot;
+
+	old_pivot = (*pivot_list)->tail->tool;
+	if (old_pivot.push_count <= 3)
+	{
+		sort_list(list1, list2, old_pivot.dir, old_pivot.push_count);
+		delete_pivot_node(pivot_list);
+		return (0);
+	}
+	memset(&new_pivot, 0, sizeof(new_pivot));
+	delete_pivot_node(pivot_list);
+	if (old_pivot.push_count <= 6)
+	{
+		use_one_pivot_b_to_a(list1, list2, &old_pivot, &new_pivot);
+		if (insert_pivot_list_b_to_a_6(pivot_list, &old_pivot, &new_pivot) == 1)
+			return (1);
+	}
+	else
+	{
+		use_two_pivot_b_to_a(list1, list2, &old_pivot, &new_pivot);
+		if (push_b_to_a_2(pivot_list, &old_pivot, &new_pivot) == 1)
+			return (1);
 	}
 	return (0);
 }
@@ -1298,9 +1424,9 @@ void	rotate_stack(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	ra_count = tool.pivot;
 	rb_count = tool.push_count;
 	if (ra_count <= rb_count)
-		rotate_stack_a(list1, list2, ra_count, rb_count);
-	else if (ra_count > rb_count)
 		rotate_stack_b(list1, list2, ra_count, rb_count);
+	else if (ra_count > rb_count)
+		rotate_stack_a(list1, list2, ra_count, rb_count);
 	delete_pivot_node(pivot_list);
 }
 
@@ -1357,10 +1483,10 @@ int	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 
 	while (pivot_list->cnt > 0)
 	{
-//		iterate_pivot_list(*pivot_list);
-//		iterate_list(*list1);
-//		iterate_list(*list2);
-//		sleep(2);
+		iterate_pivot_list(*pivot_list);
+		iterate_list(*list1);
+		iterate_list(*list2);
+		//sleep(2);
 		if (is_sorted(list1) == 1 && list2->cnt == 0)
 			break ;
 		cur = pivot_list->tail;
@@ -1371,7 +1497,7 @@ int	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 		}
 		else if (cur->tool.dir == 1)
 		{
-			if (push_stack_a(list1, list2, &pivot_list) == 1)
+			if (push_b_to_a(list1, list2, &pivot_list) == 1)
 				return (1);
 		}
 		else if (cur->tool.dir == 2)
