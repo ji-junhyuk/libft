@@ -697,266 +697,571 @@ void	delete_pivot_node(t_pivot_list **pivot_list)
 	}
 }
 
-
-void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
+typedef struct s_score
 {
-	int score4 = list_at_score(list2, 0);
-	int score5 = list_at_score(list2, 1);
-	int score6 = list_at_score(list2, 2);
+	int score1;
+	int score2;
+	int score3;
+} t_score;
 
-	int score1 = list_at_score(list1, 0);
-	int score2 = list_at_score(list1, 1);
-	int score3 = list_at_score(list1, 2);
-	if (flag == 0)
+void	sort_three_a_stack_5(t_list *list1, t_list *list2, t_score score)
+{
+	if (score.score2 > score.score1 && score.score2 > score.score3 && score.score3 > score.score1)
 	{
-		if (list1->cnt == 3)
-		{
-			if (score1 > score2 && score2 > score3)
-			{
-				ra(list1);
-				sa(list1);
-				ft_putstr("ra\n");
-				ft_putstr("sa\n");
-			}
-			else if (score1 > score2 && score1 > score3 && score2 < score3)
-			{
-				ra(list1);
-				ft_putstr("ra\n");
-			}
-			else if (score2 > score1 && score2 > score3 && score1 > score3)
-			{
-				rra(list1);
-				ft_putstr("rra\n");
-			}
-			else if (score2 > score1 && score2 > score3 && score3 > score1)
-			{
-				rra(list1);
-				sa(list1);
-				ft_putstr("rra\n");
-				ft_putstr("sa\n");
-			}
-			else if (score3 > score1 && score3 > score2 && score1 > score2)
-			{
-				sa(list1);
-				ft_putstr("sa\n");
-			}
-		}
-		else
-		{
-			if (score1 > score2 && score2 > score3)
-			{
-				pb(list1, list2);
-				ra(list1);
-				ra(list1);
-				pa(list1, list2);
-				rra(list1);
-				rra(list1);
-				sa(list1);
-				ft_putstr("pb\n");
-				ft_putstr("ra\n");
-				ft_putstr("ra\n");
-				ft_putstr("pa\n");
-				ft_putstr("rra\n");
-				ft_putstr("rra\n");
-				ft_putstr("sa\n");
-			}
-			else if (score1 > score2 && score1 > score3 && score2 < score3)
-			{
-				sa(list1);
-				ra(list1);
-				sa(list1);
-				rra(list1);
-				ft_putstr("sa\n");
-				ft_putstr("ra\n");
-				ft_putstr("sa\n");
-				ft_putstr("rra\n");
-			}
-			else if (score2 > score1 && score2 > score3 && score1 > score3)
-			{
-				ra(list1);
-				sa(list1);
-				rra(list1);
-				sa(list1);
-				ft_putstr("ra\n");
-				ft_putstr("sa\n");
-				ft_putstr("rra\n");
-				ft_putstr("sa\n");
-			}
-			else if (score2 > score1 && score2 > score3 && score3 > score1)
-			{
-				ra(list1);
-				sa(list1);
-				rra(list1);
-				ft_putstr("ra\n");
-				ft_putstr("sa\n");
-				ft_putstr("rra\n");
-			}
-			else if (score3 > score1 && score3 > score2 && score1 > score2)
-			{
-				sa(list1);
-				ft_putstr("sa\n");
-			}
-		}
+		ra(list1);
+		sa(list1);
+		rra(list1);
+		ft_putstr("ra\n");
+		ft_putstr("sa\n");
+		ft_putstr("rra\n");
 	}
-	else
+	else if (score.score3 > score.score1 && score.score3 > score.score2 && score.score1 > score.score2)
 	{
-		if (list2->cnt == 3)
-		{
-			if (score4 > score5 && score5 > score6)
-			{
-				pa(list1, list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-			}
-			else if (score4 > score5 && score4 > score6 && score5 < score6)
-			{
-				pa(list1, list2);
-				sb(list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				ft_putstr("pa\n");
-				ft_putstr("sb\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-			}
-			else if (score5 > score4 && score5 > score6 && score4 > score6)
-			{
-				sb(list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				ft_putstr("sb\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-			}
-			else if (score5 > score4 && score5 > score6 && score6 > score4)
-			{
-				rb(list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				ft_putstr("rb\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-			}
-			else if (score6 > score4 && score6 > score5 && score4 > score5)
-			{
-				rrb(list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				ft_putstr("rrb\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-			}
-			else
-			{
-				rrb(list2);
-				pa(list1, list2);
-				rrb(list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				ft_putstr("rrb\n");
-				ft_putstr("pa\n");
-				ft_putstr("rrb\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-			}
-		}
-		else
-		{
-			if (score4 > score5 && score5 > score6)
-			{
-				pa(list1, list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-			}
-			else if (score4 > score5 && score4 > score6 && score5 < score6)
-			{
-				pa(list1, list2);
-				sb(list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				ft_putstr("pa\n");
-				ft_putstr("sb\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-			}
-			else if (score5 > score4 && score5 > score6 && score4 > score6)
-			{
-				sb(list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				ft_putstr("sb\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-			}
-			else if (score5 > score4 && score5 > score6 && score6 > score4)
-			{
-				sb(list2);
-				pa(list1, list2);
-				sb(list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				ft_putstr("sb\n");
-				ft_putstr("pa\n");
-				ft_putstr("sb\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-			}
-			else if (score6 > score4 && score6 > score5 && score4 > score5)
-			{
-				rb(list2);
-				sb(list2);
-				pa(list1, list2);
-				rrb(list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				ft_putstr("rb\n");
-				ft_putstr("sb\n");
-				ft_putstr("pa\n");
-				ft_putstr("rrb\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-			}
-			else
-			{
-				rb(list2);
-				sb(list2);
-				pa(list1, list2);
-				pa(list1, list2);
-				rrb(list2);
-				pa(list1, list2);
-				ft_putstr("rb\n");
-				ft_putstr("sb\n");
-				ft_putstr("pa\n");
-				ft_putstr("pa\n");
-				ft_putstr("rrb\n");
-				ft_putstr("pa\n");
-			}
-		}
+		sa(list1);
+		ft_putstr("sa\n");
 	}
 }
+void	sort_three_a_stack_4(t_list *list1, t_list *list2, t_score score)
+{
+	if (score.score1 > score.score2 && score.score1 > score.score3 && score.score2 < score.score3)
+	{
+		sa(list1);
+		ra(list1);
+		sa(list1);
+		rra(list1);
+		ft_putstr("sa\n");
+		ft_putstr("ra\n");
+		ft_putstr("sa\n");
+		ft_putstr("rra\n");
+	}
+	else if (score.score2 > score.score1 && score.score2 > score.score3 && score.score1 > score.score3)
+	{
+		ra(list1);
+		sa(list1);
+		rra(list1);
+		sa(list1);
+		ft_putstr("ra\n");
+		ft_putstr("sa\n");
+		ft_putstr("rra\n");
+		ft_putstr("sa\n");
+	}
+	sort_three_a_stack_5(list1, list2, score);
+}
+
+void	sort_three_a_stack_3(t_list *list1, t_list *list2, t_score score)
+{
+	if (score.score1 > score.score2 && score.score2 > score.score3)
+	{
+		pb(list1, list2);
+		ra(list1);
+		ra(list1);
+		pa(list1, list2);
+		rra(list1);
+		rra(list1);
+		sa(list1);
+		ft_putstr("pb\n");
+		ft_putstr("ra\n");
+		ft_putstr("ra\n");
+		ft_putstr("pa\n");
+		ft_putstr("rra\n");
+		ft_putstr("rra\n");
+		ft_putstr("sa\n");
+	}
+	sort_three_a_stack_4(list1, list2, score);
+}
+
+void	sort_three_a_stack_2(t_list *list1, t_list *list2, t_score score)
+{
+	if (score.score2 > score.score1 && score.score2 > score.score3 && score.score1 > score.score3)
+	{
+		rra(list1);
+		ft_putstr("rra\n");
+	}
+	else if (score.score2 > score.score1 && score.score2 > score.score3 && score.score3 > score.score1)
+	{
+		rra(list1);
+		sa(list1);
+		ft_putstr("rra\n");
+		ft_putstr("sa\n");
+	}
+	else if (score.score3 > score.score1 && score.score3 > score.score2 && score.score1 > score.score2)
+	{
+		sa(list1);
+		ft_putstr("sa\n");
+	}
+}
+
+void	sort_three_a_stack(t_list *list1, t_list *list2)
+{
+	t_score score;
+	
+	score.score1 = list_at_score(list1, 0);
+	score.score2 = list_at_score(list1, 1);
+	score.score3 = list_at_score(list1, 2);
+	if (list1->cnt == 3)
+	{
+		if (score.score1 > score.score2 && score.score2 > score.score3)
+		{
+			ra(list1);
+			sa(list1);
+			ft_putstr("ra\n");
+			ft_putstr("sa\n");
+		}
+		else if (score.score1 > score.score2 && score.score1 > score.score3 && score.score2 < score.score3)
+		{
+			ra(list1);
+			ft_putstr("ra\n");
+		}
+		sort_three_a_stack_2(list1, list2, score); 
+	}
+	else
+		sort_three_a_stack_3(list1, list2, score);
+}
+
+void	sort_three_b_stack_4(t_list *list1, t_list *list2, t_score score)
+{
+	if (score.score1 > score.score2 && score.score1 > score.score3 && score.score2 > score.score3)
+	{
+		rrb(list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		ft_putstr("rrb\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+	}
+	else if (score.score1 > score.score2 && score.score1 > score.score3 && score.score2 < score.score3)
+	{
+		rrb(list2);
+		pa(list1, list2);
+		rrb(list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		ft_putstr("rrb\n");
+		ft_putstr("pa\n");
+		ft_putstr("rrb\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+	}
+}
+
+void	sort_three_b_stack_3(t_list *list1, t_list *list2, t_score score)
+{
+	if (score.score3 > score.score2 && score.score3 > score.score1 && score.score2 > score.score1)
+	{
+		sb(list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		ft_putstr("sb\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+	}
+	else if (score.score3 > score.score2 && score.score3 > score.score1 && score.score1 > score.score2)
+	{
+		rb(list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		ft_putstr("rb\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+	}
+	sort_three_b_stack_4(list1, list2, score);
+	
+}
+
+void	sort_three_b_stack_2(t_list *list1, t_list *list2, t_score score)
+{
+	if (score.score2 > score.score3 && score.score3 > score.score1)
+	{
+		pa(list1, list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+	}
+	else if (score.score2 > score.score3 && score.score2 > score.score1 && score.score3 < score.score1)
+	{
+		pa(list1, list2);
+		sb(list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		ft_putstr("pa\n");
+		ft_putstr("sb\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+	}
+	sort_three_b_stack_3(list1, list2, score);
+}
+void	sort_three_b_stack_8(t_list *list1, t_list *list2, t_score score)
+{
+	if (score.score1 > score.score2 && score.score1 > score.score3 && score.score2 < score.score3)
+	{
+		rb(list2);
+		sb(list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		rrb(list2);
+		pa(list1, list2);
+		ft_putstr("rb\n");
+		ft_putstr("sb\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+		ft_putstr("rrb\n");
+		ft_putstr("pa\n");
+	}
+}
+
+void	sort_three_b_stack_7(t_list *list1, t_list *list2, t_score score)
+{
+	if (score.score1 > score.score2 && score.score1 > score.score3 && score.score2 > score.score3)
+	{
+		rb(list2);
+		sb(list2);
+		pa(list1, list2);
+		rrb(list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		ft_putstr("rb\n");
+		ft_putstr("sb\n");
+		ft_putstr("pa\n");
+		ft_putstr("rrb\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+	}
+	sort_three_b_stack_8(list1, list2, score);
+}
+void	sort_three_b_stack_6(t_list *list1, t_list *list2, t_score score)
+{
+	if (score.score3 > score.score2 && score.score3 > score.score1 && score.score2 > score.score1)
+	{
+		sb(list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		ft_putstr("sb\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+	}
+	else if (score.score3 > score.score2 && score.score3 > score.score1 && score.score1 > score.score2)
+	{
+		sb(list2);
+		pa(list1, list2);
+		sb(list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		ft_putstr("sb\n");
+		ft_putstr("pa\n");
+		ft_putstr("sb\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+	}
+	sort_three_b_stack_7(list1, list2, score);
+}
+
+void	sort_three_b_stack_5(t_list *list1, t_list *list2, t_score score)
+{
+	if (score.score2 > score.score3 && score.score3 > score.score1)
+	{
+		pa(list1, list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+	}
+	else if (score.score2 > score.score3 && score.score2 > score.score1 && score.score3 < score.score1)
+	{
+		pa(list1, list2);
+		sb(list2);
+		pa(list1, list2);
+		pa(list1, list2);
+		ft_putstr("pa\n");
+		ft_putstr("sb\n");
+		ft_putstr("pa\n");
+		ft_putstr("pa\n");
+	}
+	sort_three_b_stack_6(list1, list2, score);
+}
+
+void	sort_three_b_stack(t_list *list1, t_list *list2)
+{
+	t_score score;
+	
+	score.score1 = list_at_score(list1, 0);
+	score.score2 = list_at_score(list1, 1);
+	score.score3 = list_at_score(list1, 2);
+	if (list2->cnt == 3)
+		sort_three_b_stack_2(list1, list2, score);
+	else
+		sort_three_b_stack_5(list1, list2, score);
+}
+
+//void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
+//{
+//	int score4 = list_at_score(list2, 0);
+//	int score5 = list_at_score(list2, 1);
+//	int score6 = list_at_score(list2, 2);
+//
+//	int score1 = list_at_score(list1, 0);
+//	int score2 = list_at_score(list1, 1);
+//	int score3 = list_at_score(list1, 2);
+//	if (flag == 0)
+//	{
+//		if (list1->cnt == 3)
+//		{
+//			if (score1 > score2 && score2 > score3)
+//			{
+//				ra(list1);
+//				sa(list1);
+//				ft_putstr("ra\n");
+//				ft_putstr("sa\n");
+//			}
+//			else if (score1 > score2 && score1 > score3 && score2 < score3)
+//			{
+//				ra(list1);
+//				ft_putstr("ra\n");
+//			}
+//			else if (score2 > score1 && score2 > score3 && score1 > score3)
+//			{
+//				rra(list1);
+//				ft_putstr("rra\n");
+//			}
+//			else if (score2 > score1 && score2 > score3 && score3 > score1)
+//			{
+//				rra(list1);
+//				sa(list1);
+//				ft_putstr("rra\n");
+//				ft_putstr("sa\n");
+//			}
+//			else if (score3 > score1 && score3 > score2 && score1 > score2)
+//			{
+//				sa(list1);
+//				ft_putstr("sa\n");
+//			}
+//		}
+//		else
+//		{
+//			if (score1 > score2 && score2 > score3)
+//			{
+//				pb(list1, list2);
+//				ra(list1);
+//				ra(list1);
+//				pa(list1, list2);
+//				rra(list1);
+//				rra(list1);
+//				sa(list1);
+//				ft_putstr("pb\n");
+//				ft_putstr("ra\n");
+//				ft_putstr("ra\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("rra\n");
+//				ft_putstr("rra\n");
+//				ft_putstr("sa\n");
+//			}
+//			else if (score1 > score2 && score1 > score3 && score2 < score3)
+//			{
+//				sa(list1);
+//				ra(list1);
+//				sa(list1);
+//				rra(list1);
+//				ft_putstr("sa\n");
+//				ft_putstr("ra\n");
+//				ft_putstr("sa\n");
+//				ft_putstr("rra\n");
+//			}
+//			else if (score2 > score1 && score2 > score3 && score1 > score3)
+//			{
+//				ra(list1);
+//				sa(list1);
+//				rra(list1);
+//				sa(list1);
+//				ft_putstr("ra\n");
+//				ft_putstr("sa\n");
+//				ft_putstr("rra\n");
+//				ft_putstr("sa\n");
+//			}
+//			else if (score2 > score1 && score2 > score3 && score3 > score1)
+//			{
+//				ra(list1);
+//				sa(list1);
+//				rra(list1);
+//				ft_putstr("ra\n");
+//				ft_putstr("sa\n");
+//				ft_putstr("rra\n");
+//			}
+//			else if (score3 > score1 && score3 > score2 && score1 > score2)
+//			{
+//				sa(list1);
+//				ft_putstr("sa\n");
+//			}
+//		}
+//	}
+//	else
+//	{
+//		if (list2->cnt == 3)
+//		{
+//			if (score4 > score5 && score5 > score6)
+//			{
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//			}
+//			else if (score4 > score5 && score4 > score6 && score5 < score6)
+//			{
+//				pa(list1, list2);
+//				sb(list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				ft_putstr("pa\n");
+//				ft_putstr("sb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//			}
+//			else if (score5 > score4 && score5 > score6 && score4 > score6)
+//			{
+//				sb(list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				ft_putstr("sb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//			}
+//			else if (score5 > score4 && score5 > score6 && score6 > score4)
+//			{
+//				rb(list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				ft_putstr("rb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//			}
+//			else if (score6 > score4 && score6 > score5 && score4 > score5)
+//			{
+//				rrb(list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				ft_putstr("rrb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//			}
+//			else
+//			{
+//				rrb(list2);
+//				pa(list1, list2);
+//				rrb(list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				ft_putstr("rrb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("rrb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//			}
+//		}
+//		else
+//		{
+//			if (score4 > score5 && score5 > score6)
+//			{
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//			}
+//			else if (score4 > score5 && score4 > score6 && score5 < score6)
+//			{
+//				pa(list1, list2);
+//				sb(list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				ft_putstr("pa\n");
+//				ft_putstr("sb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//			}
+//			else if (score5 > score4 && score5 > score6 && score4 > score6)
+//			{
+//				sb(list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				ft_putstr("sb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//			}
+//			else if (score5 > score4 && score5 > score6 && score6 > score4)
+//			{
+//				sb(list2);
+//				pa(list1, list2);
+//				sb(list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				ft_putstr("sb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("sb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//			}
+//			else if (score6 > score4 && score6 > score5 && score4 > score5)
+//			{
+//				rb(list2);
+//				sb(list2);
+//				pa(list1, list2);
+//				rrb(list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				ft_putstr("rb\n");
+//				ft_putstr("sb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("rrb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//			}
+//			else
+//			{
+//				rb(list2);
+//				sb(list2);
+//				pa(list1, list2);
+//				pa(list1, list2);
+//				rrb(list2);
+//				pa(list1, list2);
+//				ft_putstr("rb\n");
+//				ft_putstr("sb\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("pa\n");
+//				ft_putstr("rrb\n");
+//				ft_putstr("pa\n");
+//			}
+//		}
+//	}
+//}
 
 void	sort_list(t_list *list1, t_list *list2, int dir, int count)
 {
 	if (count == 3)
 	{
 		if (dir == 0)
-			compare_three_sort_list(list1, list2, 0);
+			sort_three_a_stack(list1, list2);
 		else
-			compare_three_sort_list(list1, list2, 1);
+			sort_three_b_stack(list1, list2);
 	}
 	else if (count == 2)
 	{
@@ -1486,7 +1791,7 @@ int	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 		iterate_pivot_list(*pivot_list);
 		iterate_list(*list1);
 		iterate_list(*list2);
-		//sleep(2);
+		sleep(2);
 		if (is_sorted(list1) == 1 && list2->cnt == 0)
 			break ;
 		cur = pivot_list->tail;
@@ -1599,5 +1904,7 @@ int	main(int argc, char *argv[])
 	if (recur(&stack_a, &stack_b, &pivot_list) == 1)
 		put_error(ERROR_MESSAGE);
 	free_stack(&stack_a, &sorted_stack);
+		iterate_list(stack_a);
+		iterate_list(stack_b);
 	return (0);
 }
