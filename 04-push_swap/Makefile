@@ -2,43 +2,47 @@ CC			= cc
 
 CFLAGS		= -Wall -Wextra -Werror
 
-HEADER 		= push_swap.h
+HEADER 		= ./includes/push_swap.h
+B_HEADER	= ./bonus_includes/checker.h
 
-SRCS 		= main.c 																	\
+SRC 		= main.c 																	\
 			  free.c init.c malloc.c operator_1.c operator_2.c operator_3.c				\
-			  print.c push_a_to_b.c push_b_to_a.c rank_score.c rotate.c			\
+			  print.c push_a_to_b.c push_b_to_a.c rank_score.c rotate.c					\
 			  sort_three_stack_a_1.c sort_three_stack_a_2.c sort_three_stack_b_1.c		\
 			  sort_three_stack_b_2.c sort_two_stack.c split.c							\
-			  use_one_pivot_a_to_b.c use_one_pivot_b_to_a.c check_valid_input.c
+			  use_one_pivot_a_to_b.c use_one_pivot_b_to_a.c check_valid_input.c			\
 
-BONUS		= ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
-			  ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c 
+SRCS		= $(addprefix ./srcs/, $(SRC))
+
+B_SRC		= main.c hello.c																	\
+B_SRCS		= $(addprefix ./bonus_srcs/, $(B_SRC))
 
 OBJS 		= $(SRCS:c=o) 
-
-OBJS_BONUS	= $(BONUS:c=o)
-
-ifdef BONUSFLAG
-	ALLOBJ 	= $(OBJS) $(OBJS_BONUS)
-else
-	ALLOBJ 	= $(OBJS)
-endif
+B_OBJS		= $(B_SRCS:c=o)
 
 NAME		= push_swap
+BONUS_NAME	= checker
 
 all: $(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(HEADER)
+#%.o: %.c
+#	$(CC) $(CFLAGS) -c $< -o $@ -I $(HEADER)
+#
+#%.o: %.c
+#	$(CC) $(CFLAGS) -c $< -o $@ -I $(BHEADER)
 
-$(NAME): $(ALLOBJ)
-	$(CC) $(CFLAGS) $(ALLOBJ) -o $@ -I $(HEADER)
+$(NAME): all_check
 
-bonus:
-	make BONUSFLAG=1
+all_check: $(B_OBJS)
+	$(CC) $(CFLAGS) $(B_OBJS) -o chcker -I $(B_HEADER)
+
+#bonus: bonus_check
+#
+#bonus_check: $(B_OBJS)
+#	$(CC) $(CFLAGS) $(B_OBJS) -o $(BONUS_NAME) -I $(B_HEADER)
 
 clean:
-	rm -rf $(OBJS) $(OBJS_BONUS)
+	rm -rf $(OBJS) $(BOBJS) bonus_check all_check
 
 fclean: clean
 	rm -f $(NAME)
