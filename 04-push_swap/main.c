@@ -697,7 +697,6 @@ void	delete_pivot_node(t_pivot_list **pivot_list)
 	}
 }
 
-
 void	compare_three_sort_list(t_list *list1, t_list *list2, int flag)
 {
 	int score4 = list_at_score(list2, 0);
@@ -1246,13 +1245,13 @@ int	insert_pivot_list_b_to_a_6(t_pivot_list **pivot_list, t_pivot_origin *old_pi
 	return (0);
 }
 
-void	use_two_pivot_b_to_a_2(t_list *list1, t_list *list2, t_pivot_origin *pivot_origin, t_pivot_new *pivot_new)
-{
-	if (pivot_new->ra_count <= pivot_new->rb_count)
-		rotate_b(list1, list2, pivot_new);
-	else
-		rotate_a(list1, list2, pivot_new);
-}
+//void	use_two_pivot_b_to_a_2(t_list *list1, t_list *list2, t_pivot_origin *pivot_origin, t_pivot_new *pivot_new)
+//{
+//	if (pivot_new->ra_count <= pivot_new->rb_count)
+//		rotate_b(list1, list2, pivot_new);
+//	else
+//		rotate_a(list1, list2, pivot_new);
+//}
 
 void	use_two_pivot_b_to_a(t_list *list1, t_list *list2, t_pivot_origin *pivot_origin, t_pivot_new *pivot_new)
 {
@@ -1265,7 +1264,7 @@ void	use_two_pivot_b_to_a(t_list *list1, t_list *list2, t_pivot_origin *pivot_or
 			pa(list1, list2);
 			++pivot_new->p_count;
 			ft_putstr("pa\n");
-			if (list_at_score(list1, 0) > pivot_new->pivot1 && list1->cnt > 1) // list1->cnt > 1
+			if (list_at_score(list1, 0) <= pivot_new->pivot1 && list1->cnt > 1) // list1->cnt > 1
 			{
 				ra(list1);
 				ft_putstr("ra\n");
@@ -1319,95 +1318,6 @@ int	push_b_to_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
 	{
 		use_two_pivot_b_to_a(list1, list2, &old_pivot, &new_pivot);
 		if (push_b_to_a_2(pivot_list, &old_pivot, &new_pivot) == 1)
-			return (1);
-	}
-	return (0);
-}
-
-int	push_stack_a(t_list *list1, t_list *list2, t_pivot_list **pivot_list)
-{
-	t_pivot_origin	tool;
-	t_pivot_new	tool2;
-	t_pivot_new	tool3;
-	int		cnt;
-
-	tool = (*pivot_list)->tail->tool;
-	if (tool.push_count <= 3)
-	{
-		sort_list(list1, list2, tool.dir, tool.push_count);
-		delete_pivot_node(pivot_list);
-		return	(0);
-	}
-	init_pivot_new(&tool2);
-	delete_pivot_node(pivot_list);
-	cnt = tool.push_count;
-	if (tool.push_count == list2->cnt)
-		tool2.alone = 1;
-	if (tool.push_count <= 6)
-	{
-		tool2.pivot1 = tool.pivot - tool.push_count / 2;
-		while (--cnt >= 0)
-		{
-			if (list_at_score(list2, 0) > tool2.pivot1)
-			{
-				pa(list1, list2);
-				++tool2.p_count;
-				ft_putstr("pa\n");
-			}
-			else
-			{
-				rb(list2);
-				++tool2.rb_count;
-				ft_putstr("rb\n");
-			}
-		}
-		if (!(tool2.alone))
-		{
-			while (--tool2.rb_count >= 0)
-			{
-				rrb(list2);
-				ft_putstr("rrb\n");
-			}
-		}
-		tool3 = tool2;
-		if (insert_pivot_list(*pivot_list, 1, tool3.pivot1, tool.push_count - tool3.p_count) == 1)
-			return (1);
-		if (insert_pivot_list(*pivot_list, 0, tool.pivot, tool3.p_count) == 1)
-			return (1);
-	}
-	else
-	{
-
-		tool2.pivot1 = tool.pivot - tool.push_count / 3;
-		tool2.pivot2 = tool.pivot - tool.push_count / 3 * 2;
-		while (--tool.push_count >= 0)
-		{
-			if (list_at_score(list2, 0) > tool2.pivot2)
-			{
-				pa(list1, list2);
-				++tool2.p_count;
-				ft_putstr("pa\n");
-				if (list_at_score(list1, 0) <= tool2.pivot1 && list1->cnt > 1)
-				{
-					ra(list1);
-					ft_putstr("ra\n");
-					++tool2.ra_count;
-				}
-			}
-			else
-			{
-				rb(list2);
-				++tool2.rb_count;
-				ft_putstr("rb\n");
-			}
-		}
-		if (insert_pivot_list(*pivot_list, 1, tool2.pivot2, tool2.rb_count) == 1)
-			return (1);
-		if (insert_pivot_list(*pivot_list, 0, tool2.pivot1, tool2.ra_count) == 1)
-			return (1);
-		if (insert_pivot_list(*pivot_list, 2, tool2.ra_count, tool2.rb_count) == 1)
-			return (1);
-		if (insert_pivot_list(*pivot_list, 0, tool.pivot, tool2.p_count - tool2.ra_count) == 1)
 			return (1);
 	}
 	return (0);
@@ -1483,10 +1393,6 @@ int	recur(t_list *list1, t_list *list2, t_pivot_list *pivot_list)
 
 	while (pivot_list->cnt > 0)
 	{
-		iterate_pivot_list(*pivot_list);
-		iterate_list(*list1);
-		iterate_list(*list2);
-		//sleep(2);
 		if (is_sorted(list1) == 1 && list2->cnt == 0)
 			break ;
 		cur = pivot_list->tail;
