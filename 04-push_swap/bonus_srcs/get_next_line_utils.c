@@ -6,7 +6,7 @@
 /*   By: junji <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/15 14:12:30 by junji             #+#    #+#             */
-/*   Updated: 2022/09/16 06:25:11 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/09/16 07:32:28 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	size = s1_size + s2_size;
 	copy = malloc(sizeof(char) * (size + 1));
 	if (!copy)
-	{
-		free(s1);
-		s1 = 0;
-		return (0);
-	}
+		exit(1);
 	while (*s1)
 		*copy++ = *s1++;
 	s1 -= s1_size;
@@ -76,7 +72,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (0);
 	copy = malloc(sizeof(char) * (len + 1));
 	if (!copy)
-		return (0);
+		exit(1);
 	idx = -1;
 	while (++idx < len)
 		copy[idx] = s[start++];
@@ -92,7 +88,7 @@ char	*ft_strdup(const char *src)
 	src_len = ft_strlen(src);
 	copy = malloc(sizeof(char) * (src_len + 1));
 	if (!copy)
-		return (0);
+		exit(1);
 	while (*src)
 		*copy++ = *src++;
 	*copy = '\0';

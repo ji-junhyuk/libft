@@ -3,7 +3,7 @@ CC			= cc
 CFLAGS		= -Wall -Wextra -Werror
 
 HEADER 		= ./includes/push_swap.h
-B_HEADER	= ./bonus_includes/checker.h
+B_HEADER	= 
 
 SRC 		= main.c 																	\
 			  free.c init.c malloc.c operator_1.c operator_2.c operator_3.c				\
@@ -14,7 +14,7 @@ SRC 		= main.c 																	\
 
 SRCS		= $(addprefix ./srcs/, $(SRC))
 
-B_SRC		= main.c hello.c																	\
+B_SRC		= test.c
 B_SRCS		= $(addprefix ./bonus_srcs/, $(B_SRC))
 
 OBJS 		= $(SRCS:c=o) 
@@ -25,21 +25,17 @@ BONUS_NAME	= checker
 
 all: $(NAME)
 
-#%.o: %.c
-#	$(CC) $(CFLAGS) -c $< -o $@ -I $(HEADER)
-#
-#%.o: %.c
-#	$(CC) $(CFLAGS) -c $< -o $@ -I $(BHEADER)
-
 $(NAME): all_check
 
-all_check: $(B_OBJS)
-	$(CC) $(CFLAGS) $(B_OBJS) -o chcker -I $(B_HEADER)
+all_check: $(OBJS)
+	touch $@
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-#bonus: bonus_check
-#
-#bonus_check: $(B_OBJS)
-#	$(CC) $(CFLAGS) $(B_OBJS) -o $(BONUS_NAME) -I $(B_HEADER)
+bonus: bonus_check
+
+bonus_check: $(B_OBJS)
+	touch $@
+	$(CC) $(CFLAGS) $(B_OBJS) -o $(BONUS_NAME)
 
 clean:
 	rm -rf $(OBJS) $(BOBJS) bonus_check all_check
@@ -51,4 +47,4 @@ re:
 	make fclean
 	make all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all bonus clean fclean re 

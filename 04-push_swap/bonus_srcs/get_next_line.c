@@ -1,12 +1,11 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
+/*   get_next_line.c                                    :+:      :+:    :+:   */ /*                                                    +:+ +:+         +:+     */
 /*   By: junji <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/15 15:15:52 by junji             #+#    #+#             */
-/*   Updated: 2022/09/16 06:24:47 by jijunhyuk        ###   ########.fr       */
+/*   Updated: 2022/09/16 08:04:43 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +33,6 @@ char	*read_line(int fd, char *buffer)
 			buffer = ft_strdup(temp);
 		else
 			buffer = ft_strjoin(buffer, temp);
-		if (!buffer)
-			return (0);
 	}
 	return (buffer);
 }
