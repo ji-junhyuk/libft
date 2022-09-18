@@ -48,6 +48,6 @@ int	main(int argc, char *argv[])
 	if (is_sorted(&stack_a) && stack_b.cnt == 0)
 		write(1, "OK\n", 3);
 	else
-		write(2, "Error\n", 6);
+		write(1, "KO\n", 3);
 	free_stack(&stack_a, &stack_b);
 }
