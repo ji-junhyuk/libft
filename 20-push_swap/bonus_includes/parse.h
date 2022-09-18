@@ -6,7 +6,7 @@
 /*   By: junji <student.42seoul.kr>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 14:04:22 by junji             #+#    #+#             */
-/*   Updated: 2022/09/17 14:04:43 by junji            ###   ########.fr       */
+/*   Updated: 2022/09/18 09:22:48 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ char	**ft_split(char *str);
 
 int		insert_list(t_list *list, int number);
 void	free_arr(char **copy, int idx);
+int		free_split(char **copy, int idx);
 
 #endif

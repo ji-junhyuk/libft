@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 14:09:29 by junji             #+#    #+#             */
-/*   Updated: 2022/09/17 15:48:56 by junji            ###   ########.fr       */
+/*   Updated: 2022/09/18 09:09:37 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	check_valid_input(int argc, char *argv[], t_list *temp, t_list *stack_a)
 		{
 			input.number = ft_atoi(input.element[input.j]);
 			if (input.number == 0 && !check_real_zero(input.element[input.j]))
-				return (1);
+				return (free_split(input.element, input.element_cnt));
 			else
 			{
 				if (insert_list(temp, input.number) == 1

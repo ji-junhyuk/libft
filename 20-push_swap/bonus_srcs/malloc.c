@@ -6,7 +6,7 @@
 /*   By: junji <student.42seoul.kr>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 07:58:08 by junji             #+#    #+#             */
-/*   Updated: 2022/09/17 14:11:40 by junji            ###   ########.fr       */
+/*   Updated: 2022/09/18 09:22:06 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,17 @@ void	free_stack(t_list *list1, t_list *list2)
 {
 	delete_all_stack(&list1);
 	delete_all_stack(&list2);
+}
+
+int	free_split(char **copy, int idx)
+{
+	int	index;
+
+	index = -1;
+	while (++index < idx)
+		free(copy[index]);
+	free(copy);
+	return (1);
 }
 
 void	free_arr(char **copy, int idx)

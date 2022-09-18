@@ -6,12 +6,23 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 14:07:46 by junji             #+#    #+#             */
-/*   Updated: 2022/09/17 11:17:39 by junji            ###   ########.fr       */
+/*   Updated: 2022/09/18 09:10:15 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/push_swap.h"
 #include <stdlib.h>
+
+int	free_split(char **copy, int idx)
+{
+	int	index;
+
+	index = -1;
+	while (++index < idx)
+		free(copy[index]);
+	free(copy);
+	return (1);
+}
 
 void	free_arr(char **copy, int idx)
 {

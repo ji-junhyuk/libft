@@ -1,6 +1,19 @@
 # TDL
 
 ### 9.17(일)
+
+```c
+valgrind still reachable 문제.
+
+exit를 쓰면, still reachable까지는 잡을 필요 없다고 본다.
+그런데 명백히 함수에서 나와 leak이 보이는데(바로 exit을 안하고 return을 하기 때문)
+어차피 exit한다고 이걸 무시하는 건 찜찜해서 딱 leak부분만 잡아줬다.
+
++ 바로 exit을 안하고 return을 하는 이유는
+호출 스택이 다른 함수들이 제각각 exit로 프로그램을 종료시키면
+나중에 관리하기가 힘들다고 생각했기에 다 return문으로 main함수에서
+exit을 하게끔 구조를 만들어줬다.
+```
 - 평가받기
 - 평가 받기 전 
 	- 불필요한 파일 있는지 확인

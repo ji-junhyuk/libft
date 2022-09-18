@@ -6,7 +6,7 @@
 /*   By: junji <student.42seoul.kr>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 14:07:57 by junji             #+#    #+#             */
-/*   Updated: 2022/09/17 14:08:29 by junji            ###   ########.fr       */
+/*   Updated: 2022/09/18 09:11:05 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int		insert_pivot_list_b_to_a_6(t_pivot_list **pivot_list,
 void	delete_pivot_node(t_pivot_list **pivot_list);
 void	free_stack(t_list *list1, t_list *list2);
 void	free_arr(char **copy, int idx);
+int		free_split(char **copy, int idx);
 
 void	*ft_memset(void *b, int c, size_t len);
 

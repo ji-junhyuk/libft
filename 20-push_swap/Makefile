@@ -2,9 +2,6 @@ CC			= cc
 
 CFLAGS		= -Wall -Wextra -Werror
 
-HEADER 		= ./includes/push_swap.h
-B_HEADER	= 
-
 SRC 		= main.c 																	\
 			  init.c malloc.c free.c operator_1.c operator_2.c operator_3.c				\
 			  operator_4.c print.c push_a_to_b.c push_b_to_a.c rank_score.c rotate.c	\
