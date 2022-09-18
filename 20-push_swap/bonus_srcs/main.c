@@ -6,7 +6,7 @@
 /*   By: junji <student.42seoul.kr>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 14:10:55 by junji             #+#    #+#             */
-/*   Updated: 2022/09/17 14:14:34 by junji            ###   ########.fr       */
+/*   Updated: 2022/09/18 14:37:05 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	main(int argc, char *argv[])
 	t_list			stack_b;
 
 	init_list(&stack_a, &stack_b);
+	if (argc == 1)
+		return (0);
 	if (check_valid_input(argc, argv, &stack_a) == 1)
 		put_error(ERROR_MESSAGE);
 	if (check_duplicate_list(stack_a) == 1)

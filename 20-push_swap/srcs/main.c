@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 11:06:04 by junji             #+#    #+#             */
-/*   Updated: 2022/09/17 17:49:50 by junji            ###   ########.fr       */
+/*   Updated: 2022/09/18 14:36:21 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int	main(int argc, char *argv[])
 	t_pivot_list	pivot_list;
 
 	init_list(&stack_a, &stack_b, &sorted_stack, &pivot_list);
+	if (argc == 1)
+		return (0);
 	if (check_valid_input(argc, argv, &sorted_stack, &stack_a) == 1)
 		put_error(ERROR_MESSAGE);
 	if (check_duplicate_list(stack_a) == 1)
