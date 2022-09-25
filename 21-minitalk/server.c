@@ -27,7 +27,7 @@ void	ft_putnbr(int n)
 	}
 }
 
-void	rec_zero_bit(int signum, siginfo_t *info, void *context)
+void	recd_one_bit(int signum, siginfo_t *info, void *context)
 {	
 	(void)context;
 	byte |= 1;
@@ -45,7 +45,7 @@ void	rec_zero_bit(int signum, siginfo_t *info, void *context)
 		put_error();
 }
 
-void	rec_one_bit(int signum, siginfo_t *info, void *context)
+void	recd_zero_bit(int signum, siginfo_t *info, void *context)
 {	
 	(void)context;
 	if (count != 7)
@@ -70,9 +70,9 @@ int main(void)
 	struct sigaction one_act;
 
 	zero_act.sa_flags = SA_SIGINFO;
-	zero_act.sa_sigaction = rec_zero_bit;
+	zero_act.sa_sigaction = recd_zero_bit;
 	one_act.sa_flags = SA_SIGINFO;
-	one_act.sa_sigaction = rec_one_bit;
+	one_act.sa_sigaction = recd_one_bit;
 	sigaction(SIGUSR1, &zero_act, 0);
 	sigaction(SIGUSR2, &one_act, 0);
 	ft_putnbr(pid);

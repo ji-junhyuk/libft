@@ -24,7 +24,7 @@ int	ft_atoi(const char *str)
 	return (result);
 }
 
-void	send_padding_bit(int pid, int c)
+void	send_padding_bit(int pid, unsigned char c)
 {
 	int	len;
 
