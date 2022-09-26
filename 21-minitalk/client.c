@@ -2,12 +2,11 @@
 #include <signal.h>
 #include <stdlib.h>
 
-#define sec 150
-
+#define sec 50
 void	put_error(void)
 {
 	write(2, "Error\n", 6);
-	exit(1);
+	exit(1); 
 }
 
 int	ft_atoi(const char *str)
@@ -17,8 +16,7 @@ int	ft_atoi(const char *str)
 	result = 0;
 	while (*str && (*str >= '0' && *str <= '9'))
 	{
-		result *= 10;
-		result += (*str - '0');
+		result *= 10; result += (*str - '0');
 		++str;
 	}
 	return (result);
@@ -78,10 +76,18 @@ int main(int argc, char *argv[])
 	struct sigaction one_act;
 	zero_act.sa_handler = receive;
 	one_act.sa_handler = receive;
+//	sigset_t sigset;
+//	sigemptyset(&sigset);
+//	sigaddset(&zero_act.sa_mask, SIGUSR1);
+//	sigaddset(&zero_act.sa_mask, SIGUSR2);
 	if (argc != 3)
 		put_error();
 	pid = ft_atoi(argv[1]);
 	send_message = argv[2];
+//	sigemptyset(&zero_act.sa_mask);
+//	sigemptyset(&one_act.sa_mask);
+//	sigaddset(&zero_act.sa_mask, SIGUSR1);
+//	sigaddset(&zero_act.sa_mask, SIGUSR2);
 	sigaction(SIGUSR1, &zero_act, 0);
 	sigaction(SIGUSR2, &one_act, 0);
 	while (*send_message)

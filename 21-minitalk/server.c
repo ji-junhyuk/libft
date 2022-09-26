@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <stdlib.h>
-#define sec 250
+#define sec 150
 
 int byte, count; 
 
@@ -39,8 +39,6 @@ void	recd_one_bit(int signum, siginfo_t *info, void *context)
 		write(1, &byte, 1);
 		byte = 0;
 		count = 0;
-	if (kill(info->si_pid, signum) > 0)
-		put_error();
 	}
 	usleep(sec);
 	if (kill(info->si_pid, signum) > 0)
@@ -75,11 +73,21 @@ int main(void)
 	zero_act.sa_sigaction = recd_zero_bit;
 	one_act.sa_flags = SA_SIGINFO;
 	one_act.sa_sigaction = recd_one_bit;
+
+	sigemptyset(&zero_act.sa_mask);
+	sigemptyset(&one_act.sa_mask);
+	sigaddset(&zero_act.sa_mask, SIGUSR1);
+	sigaddset(&zero_act.sa_mask, SIGUSR2);
+	sigaddset(&one_act.sa_mask, SIGUSR1);
+	sigaddset(&one_act.sa_mask, SIGUSR2);
+
+//	sigprocmask(SIG_BLOCK, &zero_act.sa_mask, NULL);
+//	sigprocmask(SIG_BLOCK, &one_act.sa_mask, NULL);
 	sigaction(SIGUSR1, &zero_act, 0);
 	sigaction(SIGUSR2, &one_act, 0);
 	ft_putnbr(pid);
 	while (1)
 	{
-		;
+		pause();
 	}
 }
