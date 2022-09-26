@@ -15,8 +15,7 @@ int	ft_atoi(const char *str)
 
 	result = 0;
 	while (*str && (*str >= '0' && *str <= '9'))
-	{
-		result *= 10; result += (*str - '0');
+	{ result *= 10; result += (*str - '0');
 		++str;
 	}
 	return (result);
@@ -35,9 +34,9 @@ void	send_padding_bit(int pid, unsigned char c)
 	len = 8 - len;
 	while (--len >= 0)
 	{
+		usleep(30);
 		if (kill(pid, SIGUSR1) > 0)
 			put_error();
-		usleep(sec);
 		pause();
 	}
 }
@@ -47,6 +46,7 @@ void	send_bit(int pid, unsigned char c)
 	if (c == 0)
 		return ;
 	send_bit(pid, c / 2);
+	usleep(30);
 	if (c % 2)
 	{
 		if (kill(pid, SIGUSR2) > 0)
@@ -57,7 +57,6 @@ void	send_bit(int pid, unsigned char c)
 		if (kill(pid, SIGUSR1) > 0)
 			put_error();
 	}
-	usleep(sec);
 	pause();
 }
 
@@ -76,18 +75,10 @@ int main(int argc, char *argv[])
 	struct sigaction one_act;
 	zero_act.sa_handler = receive;
 	one_act.sa_handler = receive;
-//	sigset_t sigset;
-//	sigemptyset(&sigset);
-//	sigaddset(&zero_act.sa_mask, SIGUSR1);
-//	sigaddset(&zero_act.sa_mask, SIGUSR2);
 	if (argc != 3)
 		put_error();
 	pid = ft_atoi(argv[1]);
 	send_message = argv[2];
-//	sigemptyset(&zero_act.sa_mask);
-//	sigemptyset(&one_act.sa_mask);
-//	sigaddset(&zero_act.sa_mask, SIGUSR1);
-//	sigaddset(&zero_act.sa_mask, SIGUSR2);
 	sigaction(SIGUSR1, &zero_act, 0);
 	sigaction(SIGUSR2, &one_act, 0);
 	while (*send_message)
