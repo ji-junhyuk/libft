@@ -39,12 +39,11 @@ void	recd_one_bit(int signum, siginfo_t *info, void *context)
 		write(1, &byte, 1);
 		byte = 0;
 		count = 0;
-	if (kill(info->si_pid, signum) > 0)
-		put_error();
 	}
-	usleep(sec);
+	//usleep(sec);
 	if (kill(info->si_pid, signum) > 0)
 		put_error();
+	pause();
 }
 
 void	recd_zero_bit(int signum, siginfo_t *info, void *context)
@@ -59,9 +58,10 @@ void	recd_zero_bit(int signum, siginfo_t *info, void *context)
 		byte = 0;
 		count = 0;
 	}
-	usleep(sec);
+	//usleep(sec);
 	if (kill(info->si_pid, signum) > 0)
 		put_error();
+	pause();
 }
 
 int main(void)

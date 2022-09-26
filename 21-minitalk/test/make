@@ -1,0 +1,2 @@
+gcc test.c -o server
+gcc test2.c -o client
