@@ -1,9 +1,9 @@
 #include <unistd.h>
 #include <signal.h>
 #include <stdlib.h>
-#define sec 150
+#include <stdio.h>
 
-int byte, count; 
+int	g_byte; 
 
 void	put_error(void)
 {
@@ -30,17 +30,7 @@ void	ft_putnbr(int n)
 void	recd_one_bit(int signum, siginfo_t *info, void *context)
 {	
 	(void)context;
-	byte |= 1;
-	if (count != 7)
-		byte = byte << 1;
-	count += 1;
-	if (count == 8)
-	{
-		write(1, &byte, 1);
-		byte = 0;
-		count = 0;
-	}
-	//usleep(sec);
+	g_byte |= 1;
 	usleep(30);
 	if (kill(info->si_pid, signum) > 0)
 		put_error();
@@ -49,47 +39,53 @@ void	recd_one_bit(int signum, siginfo_t *info, void *context)
 void	recd_zero_bit(int signum, siginfo_t *info, void *context)
 {	
 	(void)context;
-	if (count != 7)
-		byte = byte << 1;
-	count += 1;
-	if (count == 8)
-	{
-		write(1, &byte, 1);
-		byte = 0;
-		count = 0;
-	}
-	//usleep(sec);
 	usleep(30);
 	if (kill(info->si_pid, signum) > 0)
 		put_error();
 }
 
+typedef struct s_sig_tool
+{
+	struct sigaction	zero_act;
+	struct sigaction	one_act;
+	int					count;
+	pid_t				pid;
+} t_sig_tool;
+
+void	set_sigact(struct sigaction *zero_act, struct sigaction *one_act)
+{
+	sigemptyset(&(zero_act->sa_mask));
+	sigemptyset(&(one_act->sa_mask));
+	zero_act->sa_flags = SA_SIGINFO;
+	one_act->sa_flags = SA_SIGINFO;
+	zero_act->sa_sigaction = recd_zero_bit;
+	one_act->sa_sigaction = recd_one_bit;
+	sigaction(SIGUSR1, zero_act, 0);
+	sigaction(SIGUSR2, one_act, 0);
+}
+
 int main(void)
 {
-	pid_t pid;
+	struct sigaction	zero_act;
+	struct sigaction	one_act;
+	pid_t				pid;
+	int					count;
+
+	set_sigact(&zero_act, &one_act);
+	count = 0;
 	pid = getpid();
-	struct sigaction zero_act;
-	struct sigaction one_act;
-
-	zero_act.sa_flags = SA_SIGINFO;
-	zero_act.sa_sigaction = recd_zero_bit;
-	one_act.sa_flags = SA_SIGINFO;
-	one_act.sa_sigaction = recd_one_bit;
-
-	sigemptyset(&zero_act.sa_mask);
-	sigemptyset(&one_act.sa_mask);
-	sigaddset(&zero_act.sa_mask, SIGUSR1);
-	sigaddset(&zero_act.sa_mask, SIGUSR2);
-	sigaddset(&one_act.sa_mask, SIGUSR1);
-	sigaddset(&one_act.sa_mask, SIGUSR2);
-
-//	sigprocmask(SIG_BLOCK, &zero_act.sa_mask, NULL);
-//	sigprocmask(SIG_BLOCK, &one_act.sa_mask, NULL);
-	sigaction(SIGUSR1, &zero_act, 0);
-	sigaction(SIGUSR2, &one_act, 0);
 	ft_putnbr(pid);
 	while (1)
 	{
 		pause();
+		++count;
+		g_byte <<= 1;
+		if (count == 8)
+		{
+			g_byte >>= 1;
+			write(1, &g_byte, 1);
+			g_byte = 0;
+			count = 0;
+		}
 	}
 }

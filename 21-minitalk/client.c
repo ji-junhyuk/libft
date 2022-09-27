@@ -2,7 +2,6 @@
 #include <signal.h>
 #include <stdlib.h>
 
-#define sec 50
 void	put_error(void)
 {
 	write(2, "Error\n", 6);
@@ -63,7 +62,19 @@ void	send_bit(int pid, unsigned char c)
 void	receive(int signum)
 {
 	(void)signum;
-	write(1, "client received...\n", 19);
+	write(1, "client 1bit received...\n", 24);
+}
+
+void	set_sigact(struct sigaction *zero_act, struct sigaction *one_act)
+{
+	sigemptyset(&(zero_act->sa_mask));
+	sigemptyset(&(one_act->sa_mask));
+	zero_act->sa_flags = 0;
+	one_act->sa_flags = 0;
+	zero_act->sa_sigaction = receive;
+	one_act->sa_sigaction = receive;
+	sigaction(SIGUSR1, zero_act, 0);
+	sigaction(SIGUSR2, one_act, 0);
 }
 
 int main(int argc, char *argv[])
