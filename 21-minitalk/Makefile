@@ -15,8 +15,8 @@ R_CLIENT			=	client
 
 B_S_SRC 			=	server_bonus.c print_bonus.c
 B_C_SRC				=	client_bonus.c print_bonus.c
-B_SERVER_SRCS		=	$(addprefix ./server_bonus_srcs/, $(B_S_SRC))
-B_CLIENT_SRCS		=	$(addprefix ./client_bonus_srcs/, $(B_C_SRC))
+B_SERVER_SRCS		=	$(addprefix ./server_srcs_bonus/, $(B_S_SRC))
+B_CLIENT_SRCS		=	$(addprefix ./client_srcs_bonus/, $(B_C_SRC))
 
 B_S_OBJS			=	$(B_SERVER_SRCS:c=o)
 B_C_OBJS 			=	$(B_CLIENT_SRCS:c=o) 
@@ -45,16 +45,6 @@ $(B_R_SERVER): $(B_S_OBJS)
 
 $(B_R_CLIENT): $(B_C_OBJS)
 	$(CC) $(CFLAGS) $(B_C_OBJS) -o $(B_R_CLIENT)
-
-#all_check: $(OBJS)
-#	touch $@
-#	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
-#
-#bonus: bonus_check
-#
-#bonus_check: $(B_OBJS)
-#	touch $@
-#	$(CC) $(CFLAGS) $(B_OBJS) -o $(BONUS_NAME)
 
 clean:
 	rm -rf $(S_OBJS) $(C_OBJS) $(B_S_OBJS) $(B_C_OBJS) all_check bonus_check

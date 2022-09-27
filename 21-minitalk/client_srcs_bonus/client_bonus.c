@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 14:35:20 by junji             #+#    #+#             */
-/*   Updated: 2022/09/27 15:22:58 by junji            ###   ########.fr       */
+/*   Updated: 2022/09/27 17:00:03 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 int	ft_atoi(const char *str)
 {
 	int	result;
-
-	result = 0;
+result = 0;
 	while (*str && (*str >= '0' && *str <= '9'))
 	{
 		result *= 10;
