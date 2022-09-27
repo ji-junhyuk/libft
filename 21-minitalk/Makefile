@@ -35,7 +35,7 @@ clean:
 	rm -rf $(S_OBJS) $(C_OBJS)
 
 fclean: clean
-	rm -f $(R_SERVER) $(R_CLINET)
+	rm -f $(R_SERVER) $(R_CLIENT)
 
 re: 
 	make fclean
