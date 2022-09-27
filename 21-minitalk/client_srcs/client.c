@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/27 15:20:37 by junji             #+#    #+#             */
+/*   Updated: 2022/09/27 15:21:08 by junji            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <signal.h>
 #include "print.h"
 
@@ -7,7 +19,9 @@ int	ft_atoi(const char *str)
 
 	result = 0;
 	while (*str && (*str >= '0' && *str <= '9'))
-	{ result *= 10; result += (*str - '0');
+	{
+		result *= 10;
+		result += (*str - '0');
 		++str;
 	}
 	return (result);
@@ -50,7 +64,7 @@ void	send_bit(int pid, unsigned char c)
 	usleep(50);
 }
 
-int main(int argc, char *argv[])
+int	main(int argc, char *argv[])
 {
 	int		pid;
 	char	*send_message;

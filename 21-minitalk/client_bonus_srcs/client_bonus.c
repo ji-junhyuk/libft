@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 14:35:20 by junji             #+#    #+#             */
-/*   Updated: 2022/09/27 14:35:20 by junji            ###   ########.fr       */
+/*   Updated: 2022/09/27 15:22:58 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ int	ft_atoi(const char *str)
 
 	result = 0;
 	while (*str && (*str >= '0' && *str <= '9'))
-	{ result *= 10; result += (*str - '0');
+	{
+		result *= 10;
+		result += (*str - '0');
 		++str;
 	}
 	return (result);
@@ -64,7 +66,6 @@ void	send_bit(int pid, unsigned char c)
 	pause();
 }
 
-
 void	set_sigact(struct sigaction *zero_act, struct sigaction *one_act)
 {
 	sigemptyset(&(zero_act->sa_mask));
@@ -77,13 +78,13 @@ void	set_sigact(struct sigaction *zero_act, struct sigaction *one_act)
 	sigaction(SIGUSR2, one_act, 0);
 }
 
-int main(int argc, char *argv[])
+int	main(int argc, char *argv[])
 {
-	int		pid;
-	char	*send_message;
+	int					pid;
+	char				*send_message;
+	struct sigaction	zero_act;
+	struct sigaction	one_act;
 
-	struct sigaction zero_act;
-	struct sigaction one_act;
 	zero_act.sa_handler = receive;
 	one_act.sa_handler = receive;
 	if (argc != 3)
