@@ -1,38 +1,41 @@
-CC			= cc
+CC				=	cc
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS			=	-Wall -Wextra -Werror
 
-SRC 		= main.c 																	\
+S_SRC 			=	server.c print.c
+C_SRC			=	client.c print.c
+SERVER_SRCS		=	$(addprefix ./server_srcs/, $(S_SRC))
+CLIENT_SRCS		=	$(addprefix ./client_srcs/, $(C_SRC))
 
-CLIENT_SRCS		= $(addprefix ./srcs/, $(SRC))
+S_OBJS			=	$(SERVER_SRCS:c=o)
+C_OBJS 			=	$(CLIENT_SRCS:c=o) 
 
-SERVER_SRCS		= $(addprefix ./bonus_srcs/, $(B_SRC))
+R_SERVER		=	server
+R_CLIENT		=	client
 
-OBJS 		= $(SRCS:c=o) 
-B_OBJS		= $(B_SRCS:c=o)
+all: $(R_SERVER) $(R_CLIENT)
 
-NAME		= push_swap
-BONUS_NAME	= checker
+$(R_SERVER): $(S_OBJS)
+	$(CC) $(CFLAGS) $(S_OBJS) -o $(R_SERVER)
 
-all: $(NAME)
+$(R_CLIENT): $(C_OBJS)
+	$(CC) $(CFLAGS) $(C_OBJS) -o $(R_CLIENT)
 
-$(NAME): all_check
-
-all_check: $(OBJS)
-	touch $@
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
-
-bonus: bonus_check
-
-bonus_check: $(B_OBJS)
-	touch $@
-	$(CC) $(CFLAGS) $(B_OBJS) -o $(BONUS_NAME)
+#all_check: $(OBJS)
+#	touch $@
+#	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+#
+#bonus: bonus_check
+#
+#bonus_check: $(B_OBJS)
+#	touch $@
+#	$(CC) $(CFLAGS) $(B_OBJS) -o $(BONUS_NAME)
 
 clean:
-	rm -rf $(OBJS) $(B_OBJS) bonus_check all_check
+	rm -rf $(S_OBJS) $(C_OBJS)
 
 fclean: clean
-	rm -f $(NAME) $(BONUS_NAME)
+	rm -f $(R_SERVER) $(R_CLINET)
 
 re: 
 	make fclean

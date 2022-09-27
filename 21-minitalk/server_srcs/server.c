@@ -1,56 +1,24 @@
-#include <unistd.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "server.h"
+#include "print.h"
 
 int	g_byte; 
-
-void	put_error(void)
-{
-	write(2, "Error\n", 6);
-	exit(1);
-}
-
-void	ft_putnbr(int n)
-{
-	char	c;
-
-	if (n < 10)
-	{
-		c = n + '0';
-		write(1, &c, 1);
-	}
-	else
-	{
-		ft_putnbr(n / 10);
-		ft_putnbr(n % 10);
-	}
-}
 
 void	recd_one_bit(int signum, siginfo_t *info, void *context)
 {	
 	(void)context;
 	g_byte |= 1;
-	usleep(30);
-	if (kill(info->si_pid, signum) > 0)
+	usleep(50);
+	if (kill(info->si_pid, signum))
 		put_error();
 }
 
 void	recd_zero_bit(int signum, siginfo_t *info, void *context)
 {	
 	(void)context;
-	usleep(30);
-	if (kill(info->si_pid, signum) > 0)
+	usleep(50);
+	if (kill(info->si_pid, signum))
 		put_error();
 }
-
-typedef struct s_sig_tool
-{
-	struct sigaction	zero_act;
-	struct sigaction	one_act;
-	int					count;
-	pid_t				pid;
-} t_sig_tool;
 
 void	set_sigact(struct sigaction *zero_act, struct sigaction *one_act)
 {

@@ -1,12 +1,5 @@
-#include <unistd.h>
 #include <signal.h>
-#include <stdlib.h>
-
-void	put_error(void)
-{
-	write(2, "Error\n", 6);
-	exit(1); 
-}
+#include "print.h"
 
 int	ft_atoi(const char *str)
 {
@@ -34,7 +27,7 @@ void	send_padding_bit(int pid, unsigned char c)
 	while (--len >= 0)
 	{
 		usleep(30);
-		if (kill(pid, SIGUSR1) > 0)
+		if (kill(pid, SIGUSR1))
 			put_error();
 		pause();
 	}
@@ -45,25 +38,20 @@ void	send_bit(int pid, unsigned char c)
 	if (c == 0)
 		return ;
 	send_bit(pid, c / 2);
-	usleep(30);
+	usleep(50);
 	if (c % 2)
 	{
-		if (kill(pid, SIGUSR2) > 0)
+		if (kill(pid, SIGUSR2))
 			put_error();
 	}
 	else
 	{
-		if (kill(pid, SIGUSR1) > 0)
+		if (kill(pid, SIGUSR1))
 			put_error();
 	}
 	pause();
 }
 
-void	receive(int signum)
-{
-	(void)signum;
-	write(1, "client 1bit received...\n", 24);
-}
 
 void	set_sigact(struct sigaction *zero_act, struct sigaction *one_act)
 {
