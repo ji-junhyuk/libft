@@ -71,8 +71,8 @@ void	set_sigact(struct sigaction *zero_act, struct sigaction *one_act)
 	sigemptyset(&(one_act->sa_mask));
 	zero_act->sa_flags = 0;
 	one_act->sa_flags = 0;
-	zero_act->sa_sigaction = receive;
-	one_act->sa_sigaction = receive;
+	zero_act->sa_handler = receive;
+	one_act->sa_handler = receive;
 	sigaction(SIGUSR1, zero_act, 0);
 	sigaction(SIGUSR2, one_act, 0);
 }
