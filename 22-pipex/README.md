@@ -21,7 +21,7 @@ int	pipe(int fildes[2]);
 
 int dup(int oldfd) 
 ```
-[1](https://user-images.githubusercontent.com/67992469/192779576-e4d296e1-3978-4e29-977d-f21f0db1c127.png)
+![1](https://user-images.githubusercontent.com/67992469/192779576-e4d296e1-3978-4e29-977d-f21f0db1c127.png)
 - duplicates an existing object descriptor
 	- The new descriptor returned by the call is the `lowest numbered descriptor` currently not in use by the process.
 	- if the copy successful, original and copy file descriptors may be `used interchangeably`.
@@ -137,3 +137,6 @@ malloc, free, `perror`,
 
 - Should behave like: cmd << LIMITER | cmd1 >> file
 ```
+
+## 참고자료
+- 리다이렉션 2>&1 https://inpa.tistory.com/entry/%EB%A6%AC%EB%88%85%EC%8A%A4-devnull-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98-%EA%B8%B0%ED%98%B8-%EC%A2%85%EB%A5%98
