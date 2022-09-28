@@ -6,7 +6,7 @@
 int main(void) {
   int     fd[2], nbytes, rc = 0;
   pid_t   childpid;
-  char    string[] = "Hello, world!\n";
+  char    string[] = "Hello, world!";
   char    readbuffer[80];
 
   if ((rc = pipe(fd)) < 0) {
