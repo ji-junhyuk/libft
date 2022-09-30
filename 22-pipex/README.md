@@ -1,5 +1,21 @@
 # pipex
 
+### Implementation
+- [ ] parsing
+	- [ ] envp Path
+
+## Writing Shell
+- The shell implementation is divided into three parts: The Parser, The Executor, and Shell Subsystems.  
+	- 1. The Parser
+		- Lex
+		- Yacc:
+	- 2. The Executor
+	- 3. Shell Subsystems
+		- Environment Variable
+		- Wildcards
+		- Subshell
+- Pipex is implementation of the Executor.
+ 
 ### pipe
 ```c
 #include <unistd.h>
@@ -140,3 +156,4 @@ malloc, free, `perror`,
 
 ## 참고자료
 - 리다이렉션 2>&1 https://inpa.tistory.com/entry/%EB%A6%AC%EB%88%85%EC%8A%A4-devnull-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98-%EA%B8%B0%ED%98%B8-%EC%A2%85%EB%A5%98
+- 리다이렉션 vs 파이프 https://twpower.github.io/133-difference-between-redirect-and-pipe

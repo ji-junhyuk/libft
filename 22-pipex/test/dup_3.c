@@ -12,7 +12,8 @@ int main() {
         int fd[2], n = 0;
         pipe(fd); /* fd[0] : for reading, fd[1] : for writing */
         pid_t pid = fork();
-        if(pid == 0) { // for client
+        if (pid == 0) 
+		{ // for client
                 close(STDOUT_FILENO);
                 dup(fd[1]);  // 표준출력을 자식 프로세스의 write file descriptor 로 redirect 시킴.
 							 // dup(fd[1])은 표준입력으로..
