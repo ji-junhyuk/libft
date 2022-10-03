@@ -2,12 +2,13 @@
 
 ### Implementation
 - [ ] parsing
-	- [ ] envp Path
+	- [o] envp Path
+	- [ ] argv(cmd)
 
 ## Writing Shell
 - The shell implementation is divided into three parts: The Parser, The Executor, and Shell Subsystems.  
 	- 1. The Parser
-		- Lex
+		- Lex:
 		- Yacc:
 	- 2. The Executor
 	- 3. Shell Subsystems

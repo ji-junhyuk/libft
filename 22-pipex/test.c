@@ -5,6 +5,19 @@
 #include <memory.h>
 #include <signal.h>
 #include <errno.h>
+
+typedef struct s_node
+{
+	char			**cmd;
+	struct s_node	*next;
+}	t_node;
+
+typedef struct s_list
+{
+	t_node	*tail;
+	int		cnt;
+}	t_list;
+
 size_t	ft_strlen(const char *s)
 {
 	size_t	len;
@@ -14,6 +27,7 @@ size_t	ft_strlen(const char *s)
 		++len;
 	return (len);
 }
+
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	cnt;
