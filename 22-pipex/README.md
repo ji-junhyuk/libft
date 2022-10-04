@@ -17,6 +17,16 @@
 		- Subshell
 - Pipex is implementation of the Executor.
  
+### access
+```c
+int access(const char *path, int mode);
+```
+- checks the accessibility of the file named by the path argument for the access permissions indicated by the mode argument.
+	- R_OK : read permission
+	- W_OK : write permission
+	- X_OK : execute/search permission
+	- F_OK : existence test
+
 ### pipe
 ```c
 #include <unistd.h>
