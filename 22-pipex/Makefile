@@ -2,7 +2,7 @@ CC			=	cc
 
 CFLAGS		=	-Wall -Wextra -Werror -g
 
-SRC 		=	main.c free.c init.c parse_cmd.c parse_path.c split.c string_utils.c
+SRC 		=	main.c error.c free.c init.c parse_cmd.c parse_path.c split.c string_utils.c
 
 SRCS		=	$(addprefix ./srcs/, $(SRC))
 

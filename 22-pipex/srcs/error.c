@@ -1,21 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   string_utils.h                                     :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 12:52:35 by junji             #+#    #+#             */
-/*   Updated: 2022/10/05 17:57:04 by junji            ###   ########.fr       */
+/*   Created: 2022/10/05 17:58:45 by junji             #+#    #+#             */
+/*   Updated: 2022/10/05 17:59:10 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRING_UTILS_H
-# define STRING_UTILS_H
+#include "../includes/error.h"
+#include <stdlib.h>
 
-# include <stdlib.h>
+void	dup2_error(void)
+{
+	perror("dup2");
+	exit(1);
+}
 
-int			ft_strncmp(const char *s1, const char *s2, size_t n);
-char		*ft_strjoin(char const *s1, char const *s2);
+void	close_error(void)
+{
+	perror("dup2");
+	exit(1);
+}
 
-#endif
+void	pipe_error(void)
+{
+	perror("pipe");
+	exit(1);
+}
+
+void	waitpid_error(void)
+{
+	perror("pipe");
+	exit(1);
+}

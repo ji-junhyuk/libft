@@ -1,10 +1,5 @@
 # pipex
 
-### Implementation
-- [ ] parsing
-	- [o] envp Path
-	- [ ] argv(cmd)
-
 ## Writing Shell
 - The shell implementation is divided into three parts: The Parser, The Executor, and Shell Subsystems.  
 	- 1. The Parser

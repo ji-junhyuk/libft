@@ -6,14 +6,13 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:30 by junji             #+#    #+#             */
-/*   Updated: 2022/10/05 13:15:03 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/05 17:55:48 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parse.h"
 #include "../includes/string_utils.h"
-#include <stdlib.h>
-#include <unistd.h>
+#include "../includes/error.h"
 
 void	insert_path_list(t_path_list *list, char *path)
 {
@@ -21,7 +20,10 @@ void	insert_path_list(t_path_list *list, char *path)
 
 	node = malloc(sizeof(t_path_node));
 	if (!node)
-		return ;
+	{
+		perror("insert_path malloc");
+		exit(1);
+	}
 	node->path = ft_strdup(path);
 	++list->cnt;
 	if (list->tail == NULL)

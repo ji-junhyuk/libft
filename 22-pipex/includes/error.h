@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   string_utils.h                                     :+:      :+:    :+:   */
+/*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 12:52:35 by junji             #+#    #+#             */
-/*   Updated: 2022/10/05 17:57:04 by junji            ###   ########.fr       */
+/*   Created: 2022/10/05 17:08:02 by junji             #+#    #+#             */
+/*   Updated: 2022/10/05 17:58:34 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRING_UTILS_H
-# define STRING_UTILS_H
+#ifndef ERROR_H
+# define ERROR_H
+# include <stdio.h>
 
-# include <stdlib.h>
-
-int			ft_strncmp(const char *s1, const char *s2, size_t n);
-char		*ft_strjoin(char const *s1, char const *s2);
+void	dup2_error(void);
+void	close_error(void);
+void	pipe_error(void);
+void	waitpid_error(void);
 
 #endif

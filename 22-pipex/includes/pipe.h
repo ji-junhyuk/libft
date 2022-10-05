@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:40 by junji             #+#    #+#             */
-/*   Updated: 2022/10/05 15:40:03 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/05 17:58:09 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <unistd.h>
 # include <fcntl.h>
-# include <stdlib.h>
 # include "parse.h"
 
 typedef struct s_pipe
@@ -39,8 +38,5 @@ void	parse_cmd(int argc, char *argv[],
 			t_path_list *path_list, t_cmd_list *cmd_list);
 void	delete_path_list(t_path_list *path_list);
 void	delete_cmd_list(t_cmd_list *cmd_list);
-//void	delete_path_list(t_path_list **path_list);
-//void	delete_cmd_list(t_cmd_list **cmd_list);
-//void	delete_list(t_path_list *path_list, t_cmd_list *cmd_list);
 
 #endif

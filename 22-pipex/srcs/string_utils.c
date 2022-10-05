@@ -6,11 +6,12 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:13:22 by junji             #+#    #+#             */
-/*   Updated: 2022/10/05 13:15:15 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/05 17:59:41 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/string_utils.h"
+#include "../includes/error.h"
 
 size_t	ft_strlen(const char *s)
 {
@@ -45,14 +46,17 @@ char	*ft_strdup(const char *src)
 	src_len = ft_strlen(src);
 	copy = malloc(sizeof(char) * (src_len + 1));
 	if (!copy)
-		return (0);
+	{
+		perror("strdup malloc");
+		exit(1);
+	}
 	while (*src)
 		*copy++ = *src++;
 	*copy = '\0';
 	return (copy - src_len);
 }
 
-static void	ft_strcat(char *dest, const char *src)
+void	ft_strcat(char *dest, const char *src)
 {
 	while (*dest)
 		dest++;
@@ -75,7 +79,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size = s1_size + s2_size;
 	copy = malloc(sizeof(char) * (size + 2));
 	if (!copy)
-		return (0);
+	{
+		perror("strjoin malloc");
+		exit(1);
+	}
 	copy[0] = 0;
 	ft_strcat(copy, s1);
 	ft_strcat(copy + s1_size, "/");

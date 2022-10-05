@@ -6,13 +6,14 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:11 by junji             #+#    #+#             */
-/*   Updated: 2022/10/05 13:14:13 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/05 17:49:45 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parse.h"
 #include "../includes/pipe.h"
 #include <stdlib.h>
+#include <fcntl.h>
 
 void	init_path_list(t_path_list *list)
 {

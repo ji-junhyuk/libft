@@ -6,13 +6,13 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:20 by junji             #+#    #+#             */
-/*   Updated: 2022/10/05 13:49:40 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/05 18:11:06 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parse.h"
+#include "../includes/error.h"
 #include "../includes/string_utils.h"
-#include <stdlib.h>
 #include <unistd.h>
 
 void	insert_cmd_list(t_cmd_list *list, char *cmd)
@@ -21,7 +21,10 @@ void	insert_cmd_list(t_cmd_list *list, char *cmd)
 
 	node = malloc(sizeof(t_path_node));
 	if (!node)
-		return ;
+	{
+		perror("insert_cmd malloc");
+		exit(1);
+	}
 	node->cmd = ft_split(cmd, ' ');
 	++list->cnt;
 	if (list->tail == NULL)
@@ -51,7 +54,7 @@ int	check_valid_cmd(t_path_list *path_list, t_cmd_list *cmd_list, int cnt)
 	while (--p_count >= 0)
 	{
 		all_path = ft_strjoin(p_node->path, c_node->cmd[0]);
-		if (access(all_path, F_OK) == 0)
+		if (access(all_path, F_OK | X_OK ) == 0)
 		{
 			free(all_path);
 			return (0);
@@ -68,6 +71,7 @@ char	*get_cmd(t_path_list *path_list, t_cmd_list *cmd_list, int cnt)
 	t_cmd_node	*c_node;
 	char		*all_path;
 	int			p_count;
+	int			access_code;
 
 	p_count = path_list->cnt;
 	p_node = path_list->head;
@@ -77,7 +81,8 @@ char	*get_cmd(t_path_list *path_list, t_cmd_list *cmd_list, int cnt)
 	while (--p_count >= 0)
 	{
 		all_path = ft_strjoin(p_node->path, c_node->cmd[0]);
-		if (access(all_path, F_OK) == 0)
+		access_code = access(all_path, F_OK | X_OK);
+		if (access_code == 0)
 			return (all_path);
 		free(all_path);
 		p_node = p_node->next;
@@ -98,6 +103,9 @@ void	parse_cmd(int argc, char *argv[],
 	while (++i < argc - 1)
 	{
 		if (check_valid_cmd(path_list, cmd_list, i - 2) == 1)
+		{
+			write(2, "Invalid Command\n", 16);
 			exit(1);
+		}
 	}
 }
