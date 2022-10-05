@@ -1,8 +1,8 @@
 CC			=	cc
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -g
 
-SRC 		=	main.c
+SRC 		=	main.c free.c init.c parse_cmd.c parse_path.c split.c string_utils.c
 
 SRCS		=	$(addprefix ./srcs/, $(SRC))
 
@@ -13,8 +13,8 @@ B_SRCS		=	$(addprefix ./bonus_srcs/, $(B_SRC))
 OBJS 		=	$(SRCS:c=o) 
 B_OBJS		=	$(B_SRCS:c=o)
 
-NAME		=	push_swap
-BONUS_NAME	=	push_swap_bonus
+NAME		=	pipex
+BONUS_NAME	=	pipex_bonus
 
 all: $(NAME)
 
