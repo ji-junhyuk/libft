@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:20 by junji             #+#    #+#             */
-/*   Updated: 2022/10/06 16:32:30 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/06 22:39:55 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,15 +91,41 @@ char	*get_cmd(t_path_list *path_list, t_cmd_list *cmd_list, int cnt)
 	return (0);
 }
 
+int	check_argv2_command(t_path_list *path_list, char *argv2)
+{
+	t_path_node	*p_node;
+	char		**cmd;
+	char		*all_path;
+	int			p_count;
+
+	cmd = ft_split(argv2, ' ');
+	p_count = path_list->cnt;
+	p_node = path_list->head;
+	while (--p_count >= 0)
+	{
+		all_path = ft_strjoin(p_node->path, cmd[0]);
+		if (access(all_path, F_OK | X_OK) == 0)
+		{
+			free_arr(cmd);
+			free(all_path);
+			return (1);
+		}
+		free(all_path);
+		p_node = p_node->next;
+	}
+	free_arr(cmd);
+	return (0);
+}
+
 void	parse_cmd(t_pipe *pipe_tool,
 		t_path_list *path_list, t_cmd_list *cmd_list)
 {
 	int	i;
-	int zero;
+	int	zero;
 
 	i = 1;
 	zero = 2;
-	if (pipe_tool->heredoc == 1) // 추가로 argv[2]가 cmd가 아닐 때
+	if (pipe_tool->heredoc == 1)
 	{
 		++zero;
 		i++;
@@ -108,7 +134,7 @@ void	parse_cmd(t_pipe *pipe_tool,
 	while (++i < (pipe_tool->argc - 1))
 		insert_cmd_list(cmd_list, pipe_tool->argv[i]);
 	i = 1;
-	if (pipe_tool->heredoc == 1) // 추가로 argv[2]가 cmd가 아닐 때
+	if (pipe_tool->heredoc == 1)
 		i++;
 	while (++i < (pipe_tool->argc - 1))
 	{

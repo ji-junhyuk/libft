@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:40 by junji             #+#    #+#             */
-/*   Updated: 2022/10/06 16:17:57 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/06 22:38:48 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,13 @@ typedef struct s_pipe
 }	t_pipe;
 
 char	*get_cmd(t_path_list *path_list, t_cmd_list *cmd_list, int cnt);
-void	init_pipe_tool(t_pipe *pipe_tool, int argc, char *argv[]);
+void	init_pipe_tool(t_pipe *pipe_tool,
+			t_path_list *path_list, int argc, char *argv[]);
 void	parse_path(char *envp[], t_path_list *path_list);
 void	parse_cmd(t_pipe *pipe_tool,
 			t_path_list *path_list, t_cmd_list *cmd_list);
 void	delete_path_list(t_path_list *path_list);
 void	delete_cmd_list(t_cmd_list *cmd_list);
+int		check_argv2_command(t_path_list *path_list, char *argv2);
 
 #endif

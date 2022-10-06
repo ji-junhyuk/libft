@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:20 by junji             #+#    #+#             */
-/*   Updated: 2022/10/05 18:11:06 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/06 19:36:35 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	check_valid_cmd(t_path_list *path_list, t_cmd_list *cmd_list, int cnt)
 	while (--p_count >= 0)
 	{
 		all_path = ft_strjoin(p_node->path, c_node->cmd[0]);
-		if (access(all_path, F_OK | X_OK ) == 0)
+		if (access(all_path, F_OK | X_OK) == 0)
 		{
 			free(all_path);
 			return (0);

@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:11 by junji             #+#    #+#             */
-/*   Updated: 2022/10/06 17:29:30 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/06 22:39:32 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,15 @@ void	init_cmd_list(t_cmd_list *list)
 	list->head = NULL;
 }
 
-void	init_pipe_tool(t_pipe *pipe_tool, int argc, char *argv[])
+void	init_pipe_tool(t_pipe *pipe_tool,
+		t_path_list *path_list, int argc, char *argv[])
 {
 	pipe_tool->argc = argc;
 	pipe_tool->argv = argv;
 	pipe_tool->heredoc = 0;
 	pipe_tool->i = 1;
-	if (ft_strncmp(argv[1], "here_doc", 8) == 0) // 추가로 argv[2]가 cmd가 아닐 때
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0
+		&& check_argv2_command(path_list, argv[2]) == 0)
 	{
 		pipe_tool->heredoc = 1;
 		pipe_tool->i = 2;
