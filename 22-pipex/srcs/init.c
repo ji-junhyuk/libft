@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:11 by junji             #+#    #+#             */
-/*   Updated: 2022/10/07 12:56:59 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/07 15:27:41 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	init_pipe_tool(t_pipe *pipe_tool, int argc, char *argv[])
 	pipe_tool->argc = argc;
 	pipe_tool->argv = argv;
 	pipe_tool->i = 1;
-	pipe_tool->fdin = open(argv[1], O_RDONLY, 00666);
+	pipe_tool->fdin = open(argv[1], O_RDONLY);
 	if (pipe_tool->fdin == -1)
 	{
 		perror("open");

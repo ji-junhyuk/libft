@@ -1,6 +1,6 @@
 CC			=	cc
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -g3
 
 SRC 		=	main.c error.c free.c init.c parse_cmd.c parse_path.c split.c string_utils.c
 
