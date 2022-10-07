@@ -1,6 +1,6 @@
 CC			=	cc
 
-CFLAGS		=	-Wall -Wextra -Werror -g
+CFLAGS		=	-Wall -Wextra -Werror
 
 SRC 		=	main.c error.c free.c init.c parse_cmd.c parse_path.c split.c string_utils.c
 
@@ -14,7 +14,7 @@ OBJS 		=	$(SRCS:c=o)
 B_OBJS		=	$(B_SRCS:c=o)
 
 NAME		=	pipex
-BONUS_NAME	=	pipex_bonus
+BONUS_NAME	=	pipex
 
 all: $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:20 by junji             #+#    #+#             */
-/*   Updated: 2022/10/06 22:39:55 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/07 10:07:59 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ void	parse_cmd(t_pipe *pipe_tool,
 	{
 		if (check_valid_cmd(path_list, cmd_list, i - zero) == 1)
 		{
+			unlink(pipe_tool->argv[1]);
 			write(2, "Invalid Command\n", 16);
 			exit(1);
 		}

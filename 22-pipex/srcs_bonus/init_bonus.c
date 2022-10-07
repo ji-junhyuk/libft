@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:11 by junji             #+#    #+#             */
-/*   Updated: 2022/10/06 22:39:32 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/07 13:15:27 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "../includes_bonus/string_utils_bonus.h"
 #include <stdlib.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 void	init_path_list(t_path_list *list)
 {
@@ -43,5 +44,10 @@ void	init_pipe_tool(t_pipe *pipe_tool,
 		pipe_tool->heredoc = 1;
 		pipe_tool->i = 2;
 	}
-	pipe_tool->fdin = open(argv[1], O_CREAT | O_RDWR, 00666);
+	pipe_tool->fdin = open(argv[1], O_RDONLY, 00666);
+	if (pipe_tool->fdin == -1)
+	{
+		perror("open");
+		exit(1);
+	}
 }

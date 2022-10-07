@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 17:58:45 by junji             #+#    #+#             */
-/*   Updated: 2022/10/06 22:36:51 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/07 09:59:05 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,11 @@ void	pipe_error(void)
 void	waitpid_error(void)
 {
 	perror("pipe");
+	exit(1);
+}
+
+void	open_error(void)
+{
+	perror("open");
 	exit(1);
 }

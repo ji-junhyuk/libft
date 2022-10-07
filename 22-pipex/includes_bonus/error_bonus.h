@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 17:08:02 by junji             #+#    #+#             */
-/*   Updated: 2022/10/06 15:24:55 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/07 10:00:46 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,6 @@ void	dup2_error(void);
 void	close_error(void);
 void	pipe_error(void);
 void	waitpid_error(void);
+void	open_error(void);
 
 #endif

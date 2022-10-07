@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/06 15:27:04 by junji             #+#    #+#             */
-/*   Updated: 2022/10/06 22:32:21 by junji            ###   ########.fr       */
+/*   Created: 2022/10/07 10:03:03 by junji             #+#    #+#             */
+/*   Updated: 2022/10/07 10:03:03 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,14 @@ void	pipex(t_pipe *pipe_tool, t_path_list *path_list, t_cmd_list *cmd_list)
 		if (dup2(pipe_tool->fdin, 0) == -1)
 			dup2_error();
 		if (close(pipe_tool->fdin) == -1)
-			return (close_error());
+			close_error();
 		if (pipe_tool->i == (pipe_tool->argc - 2))
 			pipe_tool->fdout = open(pipe_tool->argv[pipe_tool->argc - 1],
 					O_CREAT | O_TRUNC | O_WRONLY, 00666);
 		else
 		{
 			if (pipe(pipe_tool->fdpipe) == -1)
-				return (pipe_error());
+				pipe_error();
 			pipe_tool->fdin = pipe_tool->fdpipe[0];
 			pipe_tool->fdout = pipe_tool->fdpipe[1];
 		}
@@ -89,16 +89,17 @@ void	get_line(t_pipe *pipe_tool)
 		if (ft_strncmp(line, pipe_tool->argv[2],
 				ft_strlen(pipe_tool->argv[2])) == 0
 			&& (ft_strlen(pipe_tool->argv[2]) == ft_strlen(line) - 1))
+		{
+			free(line);
 			break ;
+		}
 		write(pipe_tool->fdin, line, ft_strlen(line));
+		free(line);
 	}
 	if (close(pipe_tool->fdin) == -1)
-		return (close_error());
+		close_error();
 	if (open(pipe_tool->argv[1], O_RDWR, 00666) == -1)
-	{
-		perror("get_line open");
-		exit(1);
-	}
+		open_error();
 }
 
 void	heredoc(t_pipe *pipe_tool, t_path_list *path_list, t_cmd_list *cmd_list)
