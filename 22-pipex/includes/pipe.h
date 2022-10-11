@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:40 by junji             #+#    #+#             */
-/*   Updated: 2022/10/05 17:58:09 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/11 15:52:40 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,20 @@ typedef struct s_pipe
 	int			argc;
 	char		**argv;
 	int			i;
-	int			fdin;
-	int			fdout;
+	int			curr_pipe_in;
+	int			curr_pipe_out;
+	int			prev_pipe_in;
 	int			fdpipe[2];
-	int			idx;
-	pid_t		pid;
 	char		*cmd;
-	t_cmd_node	*c_node;
+	char		**exec_argv;
+	pid_t		pid;
+//	int			idx;
 }	t_pipe;
 
-char	*get_cmd(t_path_list *path_list, t_cmd_list *cmd_list, int cnt);
+char	*get_cmd(t_path_list *path_list, t_pipe *pipe_tool);
 void	init_pipe_tool(t_pipe *pipe_tool, int argc, char *argv[]);
 void	parse_path(char *envp[], t_path_list *path_list);
-void	parse_cmd(int argc, char *argv[],
-			t_path_list *path_list, t_cmd_list *cmd_list);
+void	parse_cmd(int argc, char *argv[], t_path_list *path_list);
 void	delete_path_list(t_path_list *path_list);
 void	delete_cmd_list(t_cmd_list *cmd_list);
 

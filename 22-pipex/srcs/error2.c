@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   error2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 17:08:02 by junji             #+#    #+#             */
-/*   Updated: 2022/10/11 16:04:00 by junji            ###   ########.fr       */
+/*   Created: 2022/10/05 17:58:45 by junji             #+#    #+#             */
+/*   Updated: 2022/10/11 16:13:34 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
-# include <stdio.h>
+#include "../includes/error.h"
+#include <stdlib.h>
+#include <unistd.h>
 
-void	fork_error(void);
-void	dup2_error(void);
-void	open_error(void);
-void	close_error(void);
-void	pipe_error(void);
-void	execve_error(void);
-void	waitpid_error(void);
-void	invalid_argument(void);
+void	execve_error(void)
+{
+	perror("execve");
+	exit(1);
+}
 
-#endif
+void	waitpid_error(void)
+{
+	perror("waitpid");
+	exit(1);
+}
+
+void	invalid_argument(void)
+{
+	write(2, "Invalid input\n", 14);
+	exit(1);
+}
