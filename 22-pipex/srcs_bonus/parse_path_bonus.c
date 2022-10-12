@@ -6,13 +6,13 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:30 by junji             #+#    #+#             */
-/*   Updated: 2022/10/06 20:06:34 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/11 16:13:00 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes_bonus/parse_bonus.h"
-#include "../includes_bonus/string_utils_bonus.h"
-#include "../includes_bonus/error_bonus.h"
+#include "../includes/parse.h"
+#include "../includes/string_utils.h"
+#include "../includes/error.h"
 
 void	insert_path_list(t_path_list *list, char *path)
 {

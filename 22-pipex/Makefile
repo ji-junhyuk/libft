@@ -1,12 +1,12 @@
 CC			=	cc
 
-CFLAGS		=	-Wall -Wextra -Werror -g3
+CFLAGS		=	-Wall -Wextra -Werror
 
 SRC 		=	main.c error.c error2.c free.c init.c parse_path.c split.c string_utils.c
 
 SRCS		=	$(addprefix ./srcs/, $(SRC))
 
-B_SRC		=	main_bonus.c error_bonus.c free_bonus.c init_bonus.c parse_cmd_bonus.c parse_path_bonus.c split_bonus.c string_utils_bonus.c string_utils2_bonus.c get_next_line_bonus.c
+B_SRC		=	main_bonus.c init_bonus.c parse_path_bonus.c heredoc_bonus.c error_bonus.c error2_bonus.c free_bonus.c get_next_line_bonus.c pipex_bonus.c split_bonus.c string_utils_bonus.c string_utils2_bonus.c
 
 B_SRCS		=	$(addprefix ./srcs_bonus/, $(B_SRC))
 

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_bonus.c                                       :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:04 by junji             #+#    #+#             */
-/*   Updated: 2022/10/06 22:01:15 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/11 16:08:45 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes_bonus/parse_bonus.h"
+#include "../includes/parse.h"
 #include <stdlib.h>
 
 void	delete_path_list(t_path_list *path_list)
@@ -24,22 +24,6 @@ void	delete_path_list(t_path_list *path_list)
 		temp = cur;
 		cur = cur->next;
 		free(temp->path);
-		free(temp);
-		temp = 0;
-	}
-}
-
-void	delete_cmd_list(t_cmd_list *cmd_list)
-{
-	t_cmd_node	*cur;
-	t_cmd_node	*temp;
-
-	cur = cmd_list->head;
-	while (--cmd_list->cnt >= 0)
-	{
-		temp = cur;
-		cur = cur->next;
-		free_arr(temp->cmd);
 		free(temp);
 		temp = 0;
 	}

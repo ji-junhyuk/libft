@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:40 by junji             #+#    #+#             */
-/*   Updated: 2022/10/11 15:52:40 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/12 08:11:39 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ typedef struct s_pipe
 	char		*cmd;
 	char		**exec_argv;
 	pid_t		pid;
-//	int			idx;
 }	t_pipe;
 
 char	*get_cmd(t_path_list *path_list, t_pipe *pipe_tool);

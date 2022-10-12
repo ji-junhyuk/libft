@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 12:21:46 by junji             #+#    #+#             */
-/*   Updated: 2022/10/12 20:17:26 by junji            ###   ########.fr       */
+/*   Created: 2022/10/12 19:55:20 by junji             #+#    #+#             */
+/*   Updated: 2022/10/12 20:14:01 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipe.h"
-#include "../includes/error.h"
-#include "../includes/string_utils.h"
+#include "../includes_bonus/pipe_bonus.h"
+#include "../includes_bonus/error_bonus.h"
+#include "../includes_bonus/string_utils_bonus.h"
+#include "../includes_bonus/string_utils2_bonus.h"
 #include <stdlib.h>
 
 char	*get_cmd(t_path_list *path_list, t_pipe *pipe_tool)
@@ -37,19 +38,27 @@ char	*get_cmd(t_path_list *path_list, t_pipe *pipe_tool)
 	return (0);
 }
 
-void	communicate_pipe(t_pipe *pipe_tool, t_path_list *path_list)
+void	open_file(t_pipe *pipe_tool)
 {
-	pipe_tool->pid = fork();
-	if (pipe_tool->pid == -1)
-		fork_error();
+	if (pipe_tool->heredoc == 1 && pipe_tool->i == 3)
+	{
+		pipe_tool->prev_pipe_in = open(pipe_tool->argv[1], O_RDONLY);
+		if (pipe_tool->prev_pipe_in == -1)
+			open_error();
+	}
+	if (pipe_tool->i == 2)
+	{
+		pipe_tool->prev_pipe_in = open(pipe_tool->argv[1], O_RDONLY);
+		if (pipe_tool->prev_pipe_in == -1)
+			open_error();
+	}
+}
+
+void	execute_command(t_pipe *pipe_tool, t_path_list *path_list)
+{
 	if (pipe_tool->pid == 0)
 	{
-		if (pipe_tool->i == 2)
-		{
-			pipe_tool->prev_pipe_in = open("infile", O_RDONLY, 00666);
-			if (pipe_tool->prev_pipe_in == -1)
-				open_error();
-		}
+		open_file(pipe_tool);
 		if (dup2(pipe_tool->prev_pipe_in, 0) == -1)
 			dup2_error();
 		if (close(pipe_tool->prev_pipe_in) == -1)
@@ -58,29 +67,42 @@ void	communicate_pipe(t_pipe *pipe_tool, t_path_list *path_list)
 			dup2_error();
 		if (close(pipe_tool->curr_pipe_out) == -1)
 			close_error();
-		if (pipe_tool->i != 3)
-			close(pipe_tool->curr_pipe_in);
+		if (pipe_tool->i != pipe_tool->argc - 2)
+		{
+			if (close(pipe_tool->curr_pipe_in) == -1)
+				close_error();
+		}
 		pipe_tool->cmd = get_cmd(path_list, pipe_tool);
 		if (execve(pipe_tool->cmd, pipe_tool->exec_argv, 0) == -1)
 			execve_error();
 	}
 }
 
+void	set_pipe(t_pipe *pipe_tool)
+{
+	if (pipe_tool->i == (pipe_tool->argc - 2))
+		pipe_tool->curr_pipe_out = open(pipe_tool->argv[pipe_tool->argc - 1],
+				pipe_tool->flag, 00666);
+	else
+	{
+		if (pipe(pipe_tool->fdpipe) == -1)
+			return (pipe_error());
+		pipe_tool->curr_pipe_in = pipe_tool->fdpipe[0];
+		pipe_tool->curr_pipe_out = pipe_tool->fdpipe[1];
+	}
+}
+
 void	pipex(t_pipe *p_tool, t_path_list *path_list)
 {
+	if (p_tool->heredoc)
+		get_line(p_tool);
 	while (++p_tool->i < (p_tool->argc - 1))
 	{
-		if (p_tool->i == (p_tool->argc - 2))
-			p_tool->curr_pipe_out = open(p_tool->argv[p_tool->argc - 1],
-					O_CREAT | O_TRUNC | O_WRONLY, 00666);
-		else
-		{
-			if (pipe(p_tool->fdpipe) == -1)
-				return (pipe_error());
-			p_tool->curr_pipe_in = p_tool->fdpipe[0];
-			p_tool->curr_pipe_out = p_tool->fdpipe[1];
-		}
-		communicate_pipe(p_tool, path_list);
+		set_pipe(p_tool);
+		p_tool->pid = fork();
+		if (p_tool->pid == -1)
+			fork_error();
+		execute_command(p_tool, path_list);
 		if (p_tool->prev_pipe_in >= 0)
 		{
 			if (close(p_tool->prev_pipe_in) == -1)
@@ -92,18 +114,6 @@ void	pipex(t_pipe *p_tool, t_path_list *path_list)
 	}
 	if (waitpid(p_tool->pid, NULL, 0) == -1)
 		waitpid_error();
-}
-
-int	main(int argc, char *argv[], char *envp[])
-{
-	t_path_list	path_list;
-	t_pipe		pipe_tool;
-
-	if (argc != 5)
-		invalid_argument();
-	parse_path(envp, &path_list);
-	init_pipe_tool(&pipe_tool, argc, argv);
-	pipex(&pipe_tool, &path_list);
-	delete_path_list(&path_list);
-	return (0);
+	if (p_tool->heredoc)
+		unlink(p_tool->argv[1]);
 }

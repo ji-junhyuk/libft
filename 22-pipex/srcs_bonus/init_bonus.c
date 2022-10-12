@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:11 by junji             #+#    #+#             */
-/*   Updated: 2022/10/07 15:37:15 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/12 17:13:08 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,32 +24,17 @@ void	init_path_list(t_path_list *list)
 	list->head = NULL;
 }
 
-void	init_cmd_list(t_cmd_list *list)
-{
-	list->cnt = 0;
-	list->tail = NULL;
-	list->head = NULL;
-}
-
-void	init_pipe_tool(t_pipe *pipe_tool,
-		t_path_list *path_list, int argc, char *argv[])
+void	init_pipe_tool(t_pipe *pipe_tool, int argc, char *argv[])
 {
 	pipe_tool->argc = argc;
 	pipe_tool->argv = argv;
-	pipe_tool->heredoc = 0;
 	pipe_tool->i = 1;
-	if (ft_strncmp(argv[1], "here_doc", 8) == 0
-		&& check_argv2_command(path_list, argv[2]) == 0)
+	pipe_tool->prev_pipe_in = -1;
+	pipe_tool->flag = O_CREAT | O_TRUNC | O_WRONLY;
+	if (ft_strcmp(argv[1], "here_doc") == 0)
 	{
+		pipe_tool->flag = O_CREAT | O_WRONLY | O_APPEND;
 		pipe_tool->heredoc = 1;
-		pipe_tool->i = 2;
-		pipe_tool->fdin = open(argv[1], O_CREAT | O_RDWR, 00666);
-	}
-	else
-		pipe_tool->fdin = open(argv[1], O_RDONLY);
-	if (pipe_tool->fdin == -1)
-	{
-		perror("open");
-		exit(1);
+		++(pipe_tool->i);
 	}
 }

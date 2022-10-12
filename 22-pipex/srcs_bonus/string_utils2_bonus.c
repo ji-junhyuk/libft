@@ -5,13 +5,23 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/06 15:28:25 by junji             #+#    #+#             */
-/*   Updated: 2022/10/06 15:28:26 by junji            ###   ########.fr       */
+/*   Created: 2022/10/12 07:59:00 by junji             #+#    #+#             */
+/*   Updated: 2022/10/12 20:00:33 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes_bonus/string_utils2_bonus.h"
 #include "../includes_bonus/string_utils_bonus.h"
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s1 == *s2)
+	{
+		++s1;
+		++s2;
+	}
+	return (*s1 - *s2);
+}
 
 char	*ft_strchr(const char *s, int c)
 {

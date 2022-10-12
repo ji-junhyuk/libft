@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_bonus.c                                      :+:      :+:    :+:   */
+/*   error2_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 17:58:45 by junji             #+#    #+#             */
-/*   Updated: 2022/10/12 11:33:36 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/12 08:18:33 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,20 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	fork_error(void)
+void	execve_error(void)
 {
-	perror("fork");
+	perror("execve");
 	exit(1);
 }
 
-void	dup2_error(void)
+void	waitpid_error(void)
 {
-	perror("dup2");
+	perror("waitpid");
 	exit(1);
 }
 
-void	open_error(void)
+void	invalid_argument(void)
 {
-	perror("open");
-	exit(1);
-}
-
-void	close_error(void)
-{
-	perror("close");
-	exit(1);
-}
-
-void	pipe_error(void)
-{
-	perror("pipe");
+	write(2, "Invalid input\n", 14);
 	exit(1);
 }
