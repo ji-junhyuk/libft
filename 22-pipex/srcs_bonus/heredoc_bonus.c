@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 19:53:48 by junji             #+#    #+#             */
-/*   Updated: 2022/10/12 19:54:51 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/13 02:52:18 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	get_line(t_pipe *pipe_tool)
 			write(1, "pipe ", 5);
 		write(1, "heredoc> ", 9);
 		line = get_next_line(0);
-		line[ft_strlen(line) - 1] = 0;
-		if (ft_strcmp(line, pipe_tool->argv[2]) == 0)
+		if ((ft_strncmp(line, pipe_tool->argv[2], ft_strlen(pipe_tool->argv[2])) == 0)
+			&& (ft_strlen(line) == ft_strlen(pipe_tool->argv[2]) + 1))
 		{
 			free(line);
 			break ;
