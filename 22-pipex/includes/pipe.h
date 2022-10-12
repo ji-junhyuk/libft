@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:40 by junji             #+#    #+#             */
-/*   Updated: 2022/10/12 08:11:39 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/12 20:29:19 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,5 @@ void	init_pipe_tool(t_pipe *pipe_tool, int argc, char *argv[]);
 void	parse_path(char *envp[], t_path_list *path_list);
 void	parse_cmd(int argc, char *argv[], t_path_list *path_list);
 void	delete_path_list(t_path_list *path_list);
-void	delete_cmd_list(t_cmd_list *cmd_list);
 
 #endif
