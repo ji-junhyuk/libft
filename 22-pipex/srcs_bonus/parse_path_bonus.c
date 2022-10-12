@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:30 by junji             #+#    #+#             */
-/*   Updated: 2022/10/12 20:22:15 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/13 02:36:30 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,14 @@ void	parse_path(char *envp[], t_path_list *path_list)
 	while (envp[++idx])
 	{
 		if (ft_strncmp(envp[idx], "PATH", 4) == 0)
+		{
+			path = ft_split(&envp[idx][5], ':');
+			jdx = -1;
+			while (path[++jdx])
+				insert_path_list(path_list, path[jdx]);
+			free_arr(path);
+		}
+		if (ft_strncmp(envp[idx], "PWD", 3) == 0)
 		{
 			path = ft_split(&envp[idx][5], ':');
 			jdx = -1;
