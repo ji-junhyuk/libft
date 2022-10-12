@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 19:53:48 by junji             #+#    #+#             */
-/*   Updated: 2022/10/13 02:52:18 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/13 02:55:19 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,24 @@
 #include "../includes_bonus/string_utils_bonus.h"
 #include "../includes_bonus/string_utils2_bonus.h"
 
-void	get_line(t_pipe *pipe_tool)
+void	get_line(t_pipe *p_tool)
 {	
 	char	*line;
 	int		pipe_cnt;
 	int		prev_pipe_in;
 
-	prev_pipe_in = open(pipe_tool->argv[1], O_CREAT | O_RDWR, 00666);
+	prev_pipe_in = open(p_tool->argv[1], O_CREAT | O_RDWR, 00666);
 	if (prev_pipe_in == -1)
 		open_error();
 	while (1)
 	{
-		pipe_cnt = pipe_tool->argc - 5;
+		pipe_cnt = p_tool->argc - 5;
 		while (--pipe_cnt >= 0)
 			write(1, "pipe ", 5);
 		write(1, "heredoc> ", 9);
 		line = get_next_line(0);
-		if ((ft_strncmp(line, pipe_tool->argv[2], ft_strlen(pipe_tool->argv[2])) == 0)
-			&& (ft_strlen(line) == ft_strlen(pipe_tool->argv[2]) + 1))
+		if ((ft_strncmp(line, p_tool->argv[2], ft_strlen(p_tool->argv[2])) == 0)
+			&& (ft_strlen(line) == ft_strlen(p_tool->argv[2]) + 1))
 		{
 			free(line);
 			break ;
