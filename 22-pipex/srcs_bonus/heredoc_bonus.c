@@ -6,14 +6,14 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 19:53:48 by junji             #+#    #+#             */
-/*   Updated: 2022/10/13 02:55:19 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/13 17:01:17 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes_bonus/pipe_bonus.h"
-#include "../includes_bonus/error_bonus.h"
-#include "../includes_bonus/string_utils_bonus.h"
-#include "../includes_bonus/string_utils2_bonus.h"
+#include "pipe_bonus.h"
+#include "error_bonus.h"
+#include "string_utils_bonus.h"
+#include "string_utils2_bonus.h"
 
 void	get_line(t_pipe *p_tool)
 {	

@@ -6,13 +6,13 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 12:21:46 by junji             #+#    #+#             */
-/*   Updated: 2022/10/12 20:17:26 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/13 17:00:04 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipe.h"
-#include "../includes/error.h"
-#include "../includes/string_utils.h"
+#include "pipe.h"
+#include "error.h"
+#include "string_utils.h"
 #include <stdlib.h>
 
 char	*get_cmd(t_path_list *path_list, t_pipe *pipe_tool)

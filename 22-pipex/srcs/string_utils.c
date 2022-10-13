@@ -6,12 +6,12 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:13:22 by junji             #+#    #+#             */
-/*   Updated: 2022/10/05 17:59:41 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/13 17:00:27 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/string_utils.h"
-#include "../includes/error.h"
+#include "string_utils.h"
+#include "error.h"
 
 size_t	ft_strlen(const char *s)
 {

@@ -6,12 +6,12 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 07:59:00 by junji             #+#    #+#             */
-/*   Updated: 2022/10/13 02:51:11 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/13 17:02:02 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes_bonus/string_utils2_bonus.h"
-#include "../includes_bonus/string_utils_bonus.h"
+#include "string_utils2_bonus.h"
+#include "string_utils_bonus.h"
 
 char	*ft_strchr(const char *s, int c)
 {

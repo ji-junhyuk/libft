@@ -6,12 +6,12 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 07:58:16 by junji             #+#    #+#             */
-/*   Updated: 2022/10/12 07:58:17 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/13 17:01:07 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes_bonus/string_utils_bonus.h"
-#include "../includes_bonus/string_utils2_bonus.h"
+#include "string_utils_bonus.h"
+#include "string_utils2_bonus.h"
 #include <unistd.h>
 
 char	*read_line(int fd, char *buffer)

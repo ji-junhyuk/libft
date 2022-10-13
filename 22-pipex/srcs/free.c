@@ -6,11 +6,11 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:12:04 by junji             #+#    #+#             */
-/*   Updated: 2022/10/11 16:08:45 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/13 16:59:43 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parse.h"
+#include "parse.h"
 #include <stdlib.h>
 
 void	delete_path_list(t_path_list *path_list)

@@ -6,14 +6,14 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 19:55:20 by junji             #+#    #+#             */
-/*   Updated: 2022/10/12 20:14:01 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/13 17:01:51 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes_bonus/pipe_bonus.h"
-#include "../includes_bonus/error_bonus.h"
-#include "../includes_bonus/string_utils_bonus.h"
-#include "../includes_bonus/string_utils2_bonus.h"
+#include "pipe_bonus.h"
+#include "error_bonus.h"
+#include "string_utils_bonus.h"
+#include "string_utils2_bonus.h"
 #include <stdlib.h>
 
 char	*get_cmd(t_path_list *path_list, t_pipe *pipe_tool)

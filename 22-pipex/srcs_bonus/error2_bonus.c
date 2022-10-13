@@ -6,11 +6,11 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 17:58:45 by junji             #+#    #+#             */
-/*   Updated: 2022/10/12 08:18:33 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/13 17:00:48 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes_bonus/error_bonus.h"
+#include "error_bonus.h"
 #include <stdlib.h>
 #include <unistd.h>
 
