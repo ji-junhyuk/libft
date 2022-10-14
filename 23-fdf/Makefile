@@ -18,10 +18,13 @@ OBJ				=	$(addprefix $(OBJ_DIR),$(OBJS))
 B_OBJS			=	$(B_SRC:c=o)
 B_OBJ			=	$(addprefix $(B_OBJ_DIR),$(B_OBJS))
 
+LIBMLX			=	./MLX42
+LIBS			=	$(LIBMLX)/libmlx42.a -ldl -lglfw -pthread -lm -L "/Users/junji/.brew/opt/glfw/lib/"
+
 NAME			=	fdf
 BONUS_NAME		=	fdf
 
-INCLUDES		=	-I./includes
+INCLUDES		=	-I./includes -I./MLX42/include/MLX42
 
 ifeq ($(DEBUG), 1)
     CFLAGS	+=	-g3 -fsanitize=address
@@ -40,10 +43,12 @@ all: $(NAME)
 debug:
 	make DEBUG=1
 
-$(NAME): all_check
+$(NAME): 
+	$(MAKE) -C $(LIBMLX)
+	make all_check
 
 all_check: $(OBJ)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $^
+	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $(NAME) $^
 	touch $@
 
 bonus: bonus_check
@@ -53,6 +58,7 @@ bonus_check: $(B_OBJ)
 	touch $@
 
 clean:
+	$(MAKE) -C $(LIBMLX) clean
 	rm -rf $(OBJ_DIR) $(B_OBJ_DIR) bonus_check all_check 
 
 fclean: clean
