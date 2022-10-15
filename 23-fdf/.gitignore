@@ -1,2 +1,4 @@
 *.o
 fdf
+all_check
+bonus_check
