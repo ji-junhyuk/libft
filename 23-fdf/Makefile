@@ -21,7 +21,8 @@ B_OBJ			=	$(addprefix $(B_OBJ_DIR),$(B_OBJS))
 LIBMLX			=	./MLX42
 LIBS			=	$(LIBMLX)/libmlx42.a -ldl -lglfw -pthread -lm -L "/opt/homebrew/Cellar/glfw/3.3.8/lib/"
 
-# $(LIBMLX)/libmlx42.a -ldl -lglfw -pthread -lm -L "/Users/junji/.brew/opt/glfw/lib/"
+# Cluster:LIBS	=	$(LIBMLX)/libmlx42.a -ldl -lglfw -pthread -lm -L "/Users/junji/.brew/opt/glfw/lib/"
+# m1:LIBS		=	$(LIBMLX)/libmlx42.a -ldl -lglfw -pthread -lm -L "/opt/homebrew/Cellar/glfw/3.3.8/lib/"
 
 NAME			=	fdf
 BONUS_NAME		=	fdf
@@ -32,6 +33,9 @@ ifeq ($(DEBUG), 1)
     CFLAGS	+=	-g3 -fsanitize=address
 endif
 
+debug:
+	make DEBUG=1
+
 $(OBJ_DIR)%.o : $(SRC_DIR)%.c
 		mkdir -p $(OBJ_DIR)
 		$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
@@ -41,13 +45,15 @@ $(B_OBJ_DIR)%.o : $(B_SRC_DIR)%.c
 		$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 all: $(NAME)
+	make -C (LIBMLX)
 
-debug:
-	make DEBUG=1
+$(NAME): mlx
+	make before_all_check
 
-$(NAME): 
+mlx: 
 	$(MAKE) -C $(LIBMLX)
-	make all_check
+
+before_all_check : all_check
 
 all_check: $(OBJ)
 	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $(NAME) $^
