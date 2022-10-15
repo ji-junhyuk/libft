@@ -19,7 +19,9 @@ B_OBJS			=	$(B_SRC:c=o)
 B_OBJ			=	$(addprefix $(B_OBJ_DIR),$(B_OBJS))
 
 LIBMLX			=	./MLX42
-LIBS			=	$(LIBMLX)/libmlx42.a -ldl -lglfw -pthread -lm -L "/Users/junji/.brew/opt/glfw/lib/"
+LIBS			=	$(LIBMLX)/libmlx42.a -ldl -lglfw -pthread -lm -L "/opt/homebrew/Cellar/glfw/3.3.8/lib/"
+
+# $(LIBMLX)/libmlx42.a -ldl -lglfw -pthread -lm -L "/Users/junji/.brew/opt/glfw/lib/"
 
 NAME			=	fdf
 BONUS_NAME		=	fdf
@@ -54,7 +56,7 @@ all_check: $(OBJ)
 bonus: bonus_check
 
 bonus_check: $(B_OBJ)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(BONUS_NAME) $^
+	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $(BONUS_NAME) $^
 	touch $@
 
 clean:
