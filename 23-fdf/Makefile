@@ -29,12 +29,6 @@ BONUS_NAME		=	fdf
 
 INCLUDES		=	-I./includes -I./MLX42/include/MLX42
 
-ifeq ($(DEBUG), 1)
-    CFLAGS	+=	-g3 -fsanitize=address
-endif
-
-debug:
-	make DEBUG=1
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.c
 		mkdir -p $(OBJ_DIR)
@@ -45,7 +39,13 @@ $(B_OBJ_DIR)%.o : $(B_SRC_DIR)%.c
 		$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 all: $(NAME)
-	make -C (LIBMLX)
+
+debug : 
+	make DEBUG=1
+
+ifeq ($(DEBUG), 1)
+    CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address -save-temps=obj
+endif
 
 $(NAME): mlx
 	make before_all_check
