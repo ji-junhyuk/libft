@@ -18,17 +18,13 @@ OBJ				=	$(addprefix $(OBJ_DIR),$(OBJS))
 B_OBJS			=	$(B_SRC:c=o)
 B_OBJ			=	$(addprefix $(B_OBJ_DIR),$(B_OBJS))
 
-LIBMLX			=	./MLX42
-LIBS			=	$(LIBMLX)/libmlx42.a -ldl -lglfw -pthread -lm -L "/opt/homebrew/Cellar/glfw/3.3.8/lib/"
-
-# Cluster:LIBS	=	$(LIBMLX)/libmlx42.a -ldl -lglfw -pthread -lm -L "/Users/junji/.brew/opt/glfw/lib/"
-# m1:LIBS		=	$(LIBMLX)/libmlx42.a -ldl -lglfw -pthread -lm -L "/opt/homebrew/Cellar/glfw/3.3.8/lib/"
+LIBMLX			=	./MLX
+LIBS			=	-L./MLX -lmlx -framework OpenGL -framework AppKit
 
 NAME			=	fdf
 BONUS_NAME		=	fdf
 
-INCLUDES		=	-I./includes -I./MLX42/include/MLX42
-
+INCLUDES		=	-I./includes -I./MLX/
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.c
 		mkdir -p $(OBJ_DIR)
@@ -56,6 +52,7 @@ mlx:
 before_all_check : all_check
 
 all_check: $(OBJ)
+	cd MLX && cp libmlx.dylib ../ 
 	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $(NAME) $^
 	touch $@
 
@@ -67,7 +64,7 @@ bonus_check: $(B_OBJ)
 
 clean:
 	$(MAKE) -C $(LIBMLX) clean
-	rm -rf $(OBJ_DIR) $(B_OBJ_DIR) bonus_check all_check 
+	rm -rf $(OBJ_DIR) $(B_OBJ_DIR) bonus_check all_check libmlx.dylib
 
 fclean: clean
 	rm -rf fdf
@@ -76,4 +73,4 @@ re:
 	make fclean
 	make all
 
-.PHONY: all bonus fclean clean re
+.PHONY: all bonus fclean clean re mlx
