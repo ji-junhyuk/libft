@@ -1,0 +1,1 @@
+gcc libmlx42.a -ldl -lglfw -pthread -lm -L "/Users/junji/.brew/opt/glfw/lib/" move.c
