@@ -1,1 +1,4 @@
-gcc libmlx42.a -ldl -lglfw -pthread -lm -L "/Users/junji/.brew/opt/glfw/lib/" move.c
+#!/bin/bash 
+
+# gcc -Wall -Wextra -Werror -I./MLX -c main.c
+gcc main.c -L./MLX -I./MLX -lMLX -framework OpenGL -framework AppKit -o fdf

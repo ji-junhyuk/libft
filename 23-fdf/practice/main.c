@@ -1,75 +1,70 @@
+#include <mlx.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include <memory.h>
-#include <signal.h>
-#include <errno.h>
-#include "MLX42.h"
-#include "header.h"
+#include <math.h>
 
-#define BPP sizeof(int32_t)
-#define WIDTH 256
-#define HEIGHT 256
+#include <mlx.h>
+typedef struct	s_data {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	void	*mlx;
+	void	*mlx_win;
+}				t_tool;
 
-// Exit the program as failure.
-static void ft_error(void)
+void	my_mlx_pixel_put(t_tool *tool, int x, int y, int color)
 {
-	fprintf(stderr, "%s", mlx_strerror(mlx_errno));
-	exit(EXIT_FAILURE);
+	char	*dst;
+
+	dst = tool->addr + (y * tool->line_length + x * (tool->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
 }
 
-// Print the window width and height.
-static void ft_hook(void* param)
+void DrawCircle(t_tool *tool, int x, int y, int r, int color)
 {
-	const mlx_t* mlx = param;
+      	static const double PI = 3.1415926535;
+      	double i, angle, x1, y1;
 
-	printf("WIDTH: %d | HEIGHT: %d\n", mlx->width, mlx->height);
+	  	color = 0X00FF0000;
+		for (int idx = 0; idx < 360; ++idx)
+		{
+			angle = idx;
+			x1 = r * cos(angle * PI / 180);
+			y1 = r * sin(angle * PI / 180);
+			my_mlx_pixel_put(tool, x + x1, y + y1, color);
+		}
 }
 
-void my_scrollhook(double xdelta, double ydelta, void* param)
+int	hello(int keycode, t_tool *tool)
 {
-	// Simple up or down detection.
-	(void)param;
-	if (ydelta > 0)
-		puts("Up!");
-	else if (ydelta < 0)
-		puts("Down!");
-	
-	// Can also detect a mousewheel that go along the X (e.g: MX Master 3)
-	if (xdelta < 0)
-		puts("Sliiiide to the left!");
-	else if (xdelta > 0)
-		puts("Sliiiide to the right!");
+	if (keycode == 1)
+	{
+		for (int idx = 0; idx < 500; ++idx)
+			my_mlx_pixel_put(tool, 50, 50 + idx, 0x000000FF);
+	}
+	if (keycode == 2)
+		DrawCircle(tool, 700, 700, 100, 0X00000000);
+	mlx_put_image_to_window(tool->mlx, tool->mlx_win, tool->img, 0, 0);
+	printf("Hello keycode: %d\n", keycode);
+	return (0);
 }
 
-int32_t	main(void)
+int	main(void)
 {
+	t_tool	tool;
 
-	// MLX allows you to define its core behaviour before startup.
-	mlx_set_setting(MLX_MAXIMIZED, true);
-	mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "42Balls", true);
-	if (!mlx)
-		ft_error();
+	tool.mlx = mlx_init();
+	tool.mlx_win = mlx_new_window(tool.mlx, 1920, 1080, "Hello world!");
+	tool.img = mlx_new_image(tool.mlx, 1920, 1080);
+	tool.addr = mlx_get_data_addr(tool.img, &tool.bits_per_pixel, &tool.line_length,
+								&tool.endian);
+	DrawCircle(&tool, 700, 700, 100, 0X00000000);
+	mlx_put_image_to_window(tool.mlx, tool.mlx_win, tool.img, 0, 0);
 
-	/* Do stuff */
-
-	// Create and display the image.
-	mlx_image_t* img = mlx_new_image(mlx, 256, 256);
-
-	memset(img->pixels, 255, img->width * img->height * BPP);
-
-	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
-		ft_error();
-
-	// Even after the image is being displayed, we can still modify the buffer.
-	mlx_put_pixel(img, 0, 0, 0xFF0000FF);
-
-	// Register a hook and pass mlx as an optional param.
-	// NOTE: Do this before calling mlx_loop!
-	mlx_loop_hook(mlx, ft_hook, mlx);
-	mlx_scroll_hook(mlx, &my_scrollhook, NULL);
-	mlx_loop(mlx);
-	mlx_terminate(mlx);
-	return (EXIT_SUCCESS);
+	mlx_key_hook(tool.mlx_win, hello, &tool);
+	mlx_loop(tool.mlx);
 }

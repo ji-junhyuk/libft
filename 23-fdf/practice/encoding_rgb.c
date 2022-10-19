@@ -6,21 +6,18 @@
 #include <signal.h>
 #include <errno.h>
 
-//int	create_trgb(unsigned int t, unsigned int r, unsigned int g, unsigned int b)
-int	create_trgb( int t,  int r,  int g,  int b)
+int create_trgb(int t, int r, int g, int b)
 {
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
 int main(void)
 {
-//	unsigned long long flag;
-
-	unsigned int flag;
+	unsigned long long flag;
 	int byte = 0;
-	flag = create_trgb(255, 255, 255 , 255);
-	printf("flag: %u\n", flag);
-	while (flag != 0)
+	flag = create_trgb(52, 0xff, 0xff, 0xff);
+	printf("flag: %llu\n", flag);
+	while (flag > 0)
 	{
 		if (byte % 8 == 0)
 			printf("|");
