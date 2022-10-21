@@ -1,4 +1,5 @@
 #include "get_next_line.h"
+#include "error.h"
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -39,11 +40,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	size = s1_size + s2_size;
 	copy = malloc(sizeof(char) * (size + 1));
 	if (!copy)
-	{
-		free(s1);
-		s1 = 0;
-		return (0);
-	}
+		put_error("ft_strjoin malloc");
 	while (*s1)
 		*copy++ = *s1++;
 	s1 -= s1_size;
@@ -64,7 +61,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (0);
 	copy = malloc(sizeof(char) * (len + 1));
 	if (!copy)
-		return (0);
+		put_error("ft_substr malloc");
 	idx = -1;
 	while (++idx < len)
 		copy[idx] = s[start++];
@@ -80,7 +77,7 @@ char	*ft_strdup(const char *src)
 	src_len = ft_strlen(src);
 	copy = malloc(sizeof(char) * (src_len + 1));
 	if (!copy)
-		return (0);
+		put_error("ft_strdup");
 	while (*src)
 		*copy++ = *src++;
 	*copy = '\0';

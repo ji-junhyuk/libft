@@ -1,22 +1,25 @@
 #include "mlx.h"
+#include "fdf.h"
+#include "error.h"
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "fdf.h"
 #include "get_next_line.h"
 
+void	*ft_memset(void *b, int c, size_t len)
+{
+	unsigned char	*p;
+	size_t			idx;
 
-/*
- * open, read, write, close
-◦ malloc, free
-◦ perror, strerror
-◦ exit
-◦ All the functions defined in the math library (-lm and man 3 math)
-◦ All the functions defined in the miniLibX library.
- */
+	idx = -1;
+	p = (unsigned char *)b;
+	while (++idx < len)
+		p[idx] = c;
+	return (b);
+}
 
 typedef struct	s_tool
 {
@@ -45,7 +48,10 @@ void	find_vertical_horizental(t_tool *tool)
 	char	*line;
 
 	fd = open(tool->file_name, O_RDONLY);
+	if (fd == -1)
+		put_error("find_vertical_horizental open");
 	line = get_next_line(fd);
+
 	line[ft_strlen(line) - 1] = 0;
 	tool->horizental = count_word(line, ' ');
 	free(line);
@@ -71,21 +77,15 @@ void	malloc_height_color(t_tool *tool)
 
 	tool->height = malloc(sizeof(int *) * (tool->horizental * tool->vertical));
 	if (!tool->height)
-	{
-		perror("malloc_height_color_1");
-		exit(1);
-	}
+		put_error("malloc_height_color malloc1");
 	tool->color = malloc(sizeof(unsigned int *) * (tool->horizental * tool->vertical));
 	if (!tool->color)
-	{
-		perror("malloc_height_color_2");
-		exit(1);
-	}
+		put_error("malloc_height_color malloc2");
 	idx = -1;
 	while (++idx < tool->horizental * tool->vertical)
 	{
-		tool->height = 0;
-		tool->color = 0;
+		tool->height[idx] = 0;
+		tool->color[idx] = 0;
 	}
 	//	for (int idx = 0; idx < (tool->horizental * tool->vertical); ++idx)
 	//		tool->height[idx] = 1;
@@ -117,56 +117,82 @@ int	ft_atoi(const char *str)
 	return (sign * result);
 }
 
+int	is_num(char c)
+{
+	if (c >= '0' && c <= '9')
+		return (c - '0');
+	else if (c >= 'a' && c <= 'f')
+		return (c - 'a' + 10); return (c - 'A' + 10);
+}
+
 unsigned int	convert_hex_to_int(char *str)
 {
 	unsigned int	result;
 	
-//	printf("str:%s\n", str);
-
+	printf("%s\n", str);
+	str += 2;
 	result = 0;
-	str += 3;
+	while (*str)
+	{
+		result *= 16;
+		result += is_num(*str);
+		++str;
+	}
+	printf("result : %d\n", result);
 
 	return (result);
 }
 
-void	find_height_color(t_tool *tool)
+typedef struct s_parse_tool
+{
+	char	*line;
+	char	**height_color_with;
+	char	**height_color;
+	int		idx;
+	int		offset;
+}			p_tool;
+
+void	find_height_color(t_tool *tool, int fd)
+{
+	p_tool ptool;
+
+	memset(&ptool, 0, sizeof(ptool));
+	while (1)
+	{
+		ptool.line = get_next_line(fd);
+		if (!ptool.line)
+			break ;
+		ptool.height_color_with = ft_split(ptool.line, ' ');
+		ptool.idx = -1;
+		++ptool.offset;
+		while (++ptool.idx < tool->horizental)
+		{
+			ptool.height_color = ft_split(ptool.height_color_with[ptool.idx], ',');
+			if (ft_strchr(ptool.height_color_with[ptool.idx], ','))
+				tool->color[ptool.idx + ptool.offset * tool->horizental] = convert_hex_to_int(ptool.height_color[1]);
+			tool->height[ptool.idx + ptool.offset * tool->horizental] = ft_atoi(ptool.height_color[0]);
+			free_arr(ptool.height_color);
+		}
+		free_arr(ptool.height_color_with);
+		free(ptool.line);
+	}
+}
+
+void	get_line(t_tool *tool)
 {
 	int		fd;
-	int		idx;
-	char	*line;
-	char	**number;
-	char	**height_color;
 
-//	idx = -1;
-//	fd = open(tool->file_name, O_RDONLY);
-//	while (1)
-//	{
-//		line = get_next_line(fd);
-//		number = ft_split(line, ' ');
-//		while (++idx < tool->horizental)
-//		{
-//			height_color = ft_split(number[idx], ',');
-//			if (ft_strchr(number[idx], ','))
-//				tool->color[idx] = convert_hex_to_int(height_color[1]);
-//			// ,가 있는 경우 없는 경우.
-//			tool->height[idx] = ft_atoi(height_color[0]);
-//		}
-//		// i < number의 갯수만큼 루프를 돌면서
-//		height_color = ft_split(line, ',');
-//		// atoi를 해서 height_color[0] -> height[i] 에 넣는다.
-//		// 0xFF0000 -> FF0000 -> convert_base 16진수를 10진수로 바꿔서 그 값을 ->color[i]에 넣는다.
-//	}
+	fd = open(tool->file_name, O_RDONLY);
+	if (fd == -1)
+		put_error("find_height_color open");
+	find_height_color(tool, fd);
 }
 
 void	parse_map_info(t_tool *tool)
 {
 	find_vertical_horizental(tool);
 	malloc_height_color(tool);
-	for (int idx = 0; idx < (tool->horizental * tool->vertical); ++idx)
-		tool->height[idx] = 1;
-	for (int idx = 0; idx < (tool->horizental * tool->vertical); ++idx)
-		printf("%d ", tool->height[idx]);
-	find_height_color(tool);
+	get_line(tool);
 }
 
 void	init_tool(t_tool *tool, char *argv[])
@@ -174,6 +200,8 @@ void	init_tool(t_tool *tool, char *argv[])
 	tool->file_name = argv[1];
 	tool->horizental = 0;
 	tool->vertical = 0;
+	tool->height = NULL;
+	tool->color = NULL;
 }
 
 int main(int argc, char *argv[])
@@ -184,7 +212,16 @@ int main(int argc, char *argv[])
 	if (argc != 2)
 		invalid_input();
 	parse_map_info(&tool);
-
+//	for (int idx = 0; idx < tool.horizental * tool.vertical; ++idx)
+//	{
+//		printf("tool.height[%d]: %d\n", idx,tool.height[idx]);
+//	}
+//	for (int idx = 0; idx < tool.horizental * tool.vertical; ++idx)
+//	{
+//		printf("tool.color[%d]: %d\n", idx,tool.color[idx]);
+//}
+	free(tool.height);
+	free(tool.color);
 //	tool.mlx = mlx_init();
 //	tool.mlx_win = mlx_new_window(tool.mlx, 1920, 1080, "fdf");
 //	tool.image = mlx_new_image(tool.mlx, 500, 500);

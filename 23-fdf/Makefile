@@ -7,7 +7,7 @@ B_SRC_DIR		=	./srcs_bonus/
 OBJ_DIR			=	./objs/
 B_OBJ_DIR		=	./objs_bonus/
 
-SRC				=	main.c split.c get_next_line.c get_next_line_utils.c
+SRC				=	main.c split.c get_next_line.c get_next_line_utils.c error.c
 SRCS			=	$(addprefix ./srcs/, $(SRC))
 
 B_SRC			=	main_bonus.c
@@ -40,11 +40,12 @@ debug :
 	make DEBUG=1
 
 ifeq ($(DEBUG), 1)
-    CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address -save-temps=obj
+    CFLAGS	=	-Wall -Wextra -Werror -g3 # -fsanitize=address -save-temps=obj
 endif
 
-$(NAME): mlx
-	make before_all_check
+# $(NAME): mlx
+$(NAME) : all_check
+#	make before_all_check
 
 mlx: 
 	$(MAKE) -C $(LIBMLX)
@@ -52,8 +53,9 @@ mlx:
 before_all_check : all_check
 
 all_check: $(OBJ)
-	cd MLX && cp libmlx.dylib ../ 
-	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $(NAME) $^
+#	cd MLX && cp libmlx.dylib ../ 
+#	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $(NAME) $^
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $^
 	touch $@
 
 bonus: bonus_check

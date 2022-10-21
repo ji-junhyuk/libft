@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "error.h"
 
 int	count_word(const char *str, char c)
 {
@@ -34,7 +35,7 @@ static char	*ft_strlen_dup(const char **str, char c)
 	*str -= word_len;
 	copy = malloc(sizeof(char) * (word_len + 1));
 	if (!copy)
-		exit(1);
+		put_error("ft_strlen_dup malloc");
 	cnt = 0;
 	while (*(*str) && ++cnt <= word_len)
 		*copy++ = *(*str)++;
@@ -43,12 +44,12 @@ static char	*ft_strlen_dup(const char **str, char c)
 	return (copy);
 }
 
-static char	**free_copy(char **str, int size)
+char	**free_arr(char **str)
 {
 	int	index;
 
 	index = -1;
-	while (++index < size)
+	while (str[++index])
 		free(str[index]);
 	free(str);
 	return (0);
@@ -65,15 +66,13 @@ char	**ft_split(char const *str, char c)
 	words = count_word(str, c);
 	copy = malloc(sizeof(char *) * (words + 1));
 	if (!copy)
-		exit(1);
+		put_error("ft_split malloc");
 	index = -1;
 	while (++index < words)
 	{
 		while (*str && *str == c)
 			++str;
 		copy[index] = ft_strlen_dup(&str, c);
-		if (!copy[index])
-			return (free_copy(copy, index));
 	}
 	copy[index] = 0;
 	return (copy);
