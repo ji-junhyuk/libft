@@ -1,27 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   utils2.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/21 14:06:19 by junji             #+#    #+#             */
-/*   Updated: 2022/10/21 14:32:07 by junji            ###   ########.fr       */
+/*   Created: 2022/10/21 14:09:36 by junji             #+#    #+#             */
+/*   Updated: 2022/10/21 14:16:29 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
+#ifndef UTILS2_H
+# define UTILS2_H
 
-void	invalid_input(void)
-{
-	write(2, "INVALID INPUT\n", 14);
-	exit(1);
-}
+# include <stdlib.h>
 
-void	put_error(char *str)
-{
-	perror(str);
-	exit(1);
-}
+void	*ft_memset(void *b, int c, size_t len);
+
+#endif

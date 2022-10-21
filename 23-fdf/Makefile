@@ -7,7 +7,7 @@ B_SRC_DIR		=	./srcs_bonus/
 OBJ_DIR			=	./objs/
 B_OBJ_DIR		=	./objs_bonus/
 
-SRC				=	main.c split.c get_next_line.c get_next_line_utils.c error.c
+SRC				=	main.c error.c get_next_line.c parse.c parse_utils.c split.c utils.c utils2.c
 SRCS			=	$(addprefix ./srcs/, $(SRC))
 
 B_SRC			=	main_bonus.c
@@ -36,11 +36,18 @@ $(B_OBJ_DIR)%.o : $(B_SRC_DIR)%.c
 
 all: $(NAME)
 
-debug : 
+debugs : 
+	make DEBUG=2
+
+debug :
 	make DEBUG=1
 
+
 ifeq ($(DEBUG), 1)
-    CFLAGS	=	-Wall -Wextra -Werror -g3 # -fsanitize=address -save-temps=obj
+    CFLAGS	=	-Wall -Wextra -Werror -g3 -save-temps=obj
+endif
+ifeq ($(DEBUG), 2)
+    CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address -save-temps=obj
 endif
 
 # $(NAME): mlx
