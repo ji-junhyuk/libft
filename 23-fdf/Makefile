@@ -50,9 +50,8 @@ ifeq ($(DEBUG), 2)
     CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address -save-temps=obj
 endif
 
-# $(NAME): mlx
-$(NAME) : all_check
-#	make before_all_check
+$(NAME): mlx
+	make before_all_check
 
 mlx: 
 	$(MAKE) -C $(LIBMLX)
@@ -60,9 +59,8 @@ mlx:
 before_all_check : all_check
 
 all_check: $(OBJ)
-#	cd MLX && cp libmlx.dylib ../ 
-#	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $(NAME) $^
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $^
+	cd MLX && cp libmlx.dylib ../ 
+	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $(NAME) $^
 	touch $@
 
 bonus: bonus_check
