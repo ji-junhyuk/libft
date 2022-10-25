@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 14:18:06 by junji             #+#    #+#             */
-/*   Updated: 2022/10/21 14:49:04 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/25 13:30:01 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@ typedef struct s_parse_tool
 	char	**h_c;
 	int		idx;
 	int		offset;
-}			t_ptool;
+}			t_parse_tool;
 
-void			find_vertical_horizental(t_tool *tool, const char *file_name);
-void			malloc_height_color(t_tool *tool);
-void			get_line(t_tool *tool, const char *file_name);
+
+void			find_vertical_horizental(t_draw_info *dtool, const char *file_name);
+void			malloc_height_color(t_draw_info *dtool);
+void			get_line(t_draw_info *dtool, const char *file_name);
 int				ft_atoi(const char *str);
 unsigned int	convert_hex_to_int(const char *str);
 
+void	find_offset(t_draw_info *dtool);
 #endif

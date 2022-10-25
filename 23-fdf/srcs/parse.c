@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 14:14:26 by junji             #+#    #+#             */
-/*   Updated: 2022/10/21 14:50:30 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/25 13:29:11 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@
 #include "utils.h"
 #include "utils2.h"
 #include "fcntl.h"
+#include "define.h"
 
-void	find_vertical_horizental(t_tool *tool, const char *file_name)
+void	find_vertical_horizental(t_draw_info *dtool, const char *file_name)
 {
 	int		fd;
 	char	*line;
@@ -27,11 +28,11 @@ void	find_vertical_horizental(t_tool *tool, const char *file_name)
 		put_error("find_vertical_horizental open");
 	line = get_next_line(fd);
 	line[ft_strlen(line) - 1] = 0;
-	tool->horizental = count_word(line, ' ');
+	dtool->horizental = count_word(line, ' ');
 	free(line);
 	while (1)
 	{
-		++tool->vertical;
+		++dtool->vertical;
 		line = get_next_line(fd);
 		if (!line)
 		{
@@ -45,22 +46,22 @@ void	find_vertical_horizental(t_tool *tool, const char *file_name)
 //	printf("ve:%d\n", tool->vertical);
 }
 
-void	malloc_height_color(t_tool *tool)
+void	malloc_height_color(t_draw_info *dtool)
 {
 	int	idx;
 
-	tool->height = malloc(sizeof(int *) * (tool->horizental * tool->vertical));
-	if (!tool->height)
+	dtool->height = malloc(sizeof(int *) * (dtool->horizental * dtool->vertical));
+	if (!dtool->height)
 		put_error("malloc_height_color malloc1");
-	tool->color = malloc(sizeof(unsigned int *)
-			* (tool->horizental * tool->vertical));
-	if (!tool->color)
+	dtool->color = malloc(sizeof(unsigned int *)
+			* (dtool->horizental * dtool->vertical));
+	if (!dtool->color)
 		put_error("malloc_height_color malloc2");
 	idx = -1;
-	while (++idx < tool->horizental * tool->vertical)
+	while (++idx < dtool->horizental * dtool->vertical)
 	{
-		tool->height[idx] = 0;
-		tool->color[idx] = 0;
+		dtool->height[idx] = 0;
+		dtool->color[idx] = 0;
 	}
 	//	for (int idx = 0; idx < (tool->horizental * tool->vertical); ++idx)
 	//		tool->height[idx] = 1;
@@ -68,9 +69,9 @@ void	malloc_height_color(t_tool *tool)
 	//		printf("%d ", tool->height[idx]);
 }
 
-void	find_height_color(t_tool *tool, int fd)
+void	find_height_color(t_draw_info *dtool, int fd)
 {
-	t_ptool	ptool;
+	t_parse_tool	ptool;
 
 	ft_memset(&ptool, 0, sizeof(ptool));
 	while (1)
@@ -81,13 +82,13 @@ void	find_height_color(t_tool *tool, int fd)
 		ptool.h_c_with = ft_split(ptool.line, ' ');
 		ptool.idx = -1;
 		++ptool.offset;
-		while (++ptool.idx < tool->horizental)
+		while (++ptool.idx < dtool->horizental)
 		{
 			ptool.h_c = ft_split(ptool.h_c_with[ptool.idx], ',');
 			if (ft_strchr(ptool.h_c_with[ptool.idx], ','))
-				tool->color[ptool.idx + ptool.offset * tool->horizental]
+				dtool->color[ptool.idx + ptool.offset * dtool->horizental]
 					= convert_hex_to_int(ptool.h_c[1]);
-			tool->height[ptool.idx + ptool.offset * tool->horizental]
+			dtool->height[ptool.idx + ptool.offset * dtool->horizental]
 				= ft_atoi(ptool.h_c[0]);
 			free_arr(ptool.h_c);
 		}
@@ -96,12 +97,25 @@ void	find_height_color(t_tool *tool, int fd)
 	}
 }
 
-void	get_line(t_tool *tool, const char *file_name)
+void	get_line(t_draw_info *dtool, const char *file_name)
 {
 	int		fd;
 
 	fd = open(file_name, O_RDONLY);
 	if (fd == -1)
 		put_error("find_height_color open");
-	find_height_color(tool, fd);
+	find_height_color(dtool, fd);
+}
+
+void	find_offset(t_draw_info *dtool)
+{
+	double offset_x;
+	double offset_y;
+
+	offset_x = IMAGE_HORIZENTAL / 2.0 / dtool->horizental;
+	offset_y = IMAGE_VERTICAL / 2.0 / dtool->vertical;
+	dtool->offset = (int)fmin(offset_x, offset_y);
+	dtool->angle_x = 0;
+	dtool->angle_y = 0;
+	dtool->angle_z = 0;
 }

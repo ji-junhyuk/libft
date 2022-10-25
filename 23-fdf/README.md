@@ -13,155 +13,98 @@
 	2. Foundation: Core Service 층에 속하며 Foundation은 원시 데이터 타입(String, Int, Double), 컬렉션 타입(Array, Dictionary, Set) 및 운영체제 서비스를 사용해 애플리케이션의 기본적인 기능을 관리하는 프레임워크입니다.
 - 코코아 아키텍처:https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CocoaFundamentals/WhatIsCocoa/WhatIsCocoa.html
 
-## Basic
-### Installation
-- Do mind that you need the libmlx.dylib in the same directory as your build target as it is a dynamic library! 
-### 1. void *mlx = mlx_init(void)
-- return : connection to the correct graphical system and will return a void * which holds the location of our current MLX instance.
+## Use MLX
+### 왜 MLX라이브러리가 생겼을까? 그냥 opengl로 만들면 안되나?
+- OpenGL 자체가 게임을 비롯한 멀티미디어만을 위한 존재가 아닌만큼 고려해야할 영역이 많은 API.
+- 현시점에서 OpenGL의 가장 큰 문제는 드라이버이다. 25년이 넘는 동안 OpenGL 스펙에 추가된 기능들이 엄청나게 많아 드라이버의 복잡도는 상상을 초월하는 수준이다. (https://namu.moe/w/OpenGL)
+- OpenGL이 그래픽스 API이고, GLFW는 창을 생성, 제어할 수 있게 하고 OpenGL context를 생성 및 관리한다. `MLX는 opengl과 glfw를 좀 더 쉽게 사용할 수 있는 라이브러리`다.
+```
+- OpenGL은 API 규격으로 라이브러리가 아닌 문서이다.
+- OpenGL은 그래픽 처리 장치 제조업체에서 구현 후
+그래픽 카드에 드라이버와 함께 제공한다.
+- 우리는 이 구현된 코드들을 라이브러리처럼 가져다 사용한다.
+- OpenGL은 크게 두 가지 기능으로 분류된다.
+	- GL : 가장 기본적인 그리기 기능을 제공하는 
+	핵심 라이브러리이며 OpenGL의 본체에 해당한다. 
+	기초 도형을 랜더링하는 함수들이 포함되어 있다.
+	
+	- GLU : GL의 도우미 역할을 하는 유틸리티 라이브러리이다.
+	분할, 투영 등의 고급 기능을 제공하며 원구나 원뿔, 원기둥 등
+	테스트 입체 도형을 생성하는 편의 기능도 제공한다.
+```
+https://kyoungwhankim.github.io/ko/blog/opengl_intro/
+https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=tlqor123&logNo=220359144262
 
-### 2. void	*mlx_win = mlx_new_window(mlx, 1920, 1080, "Hello world!");;
-- return : a pointer to the window we have just created.
+### Installation
+- Do mind that you need the `libmlx.dylib in the same directory` as your build target as it is a dynamic library! 
+
+### 1. void *mlx = mlx_init(void)
+- return: 
+	- success: void *window identifier.
+	- fail: void *0.
+- callstack
+	- mlx_init_swift();
+		- MlxMain();
+			- init();
+			- addWinToList(_ win:MlxWin)
+			- addImgToList(_ img:MlxImg)
+			- doCallLoopHook()
+    	    - createOCallback() -> CFRunLoopObserverCallBack
+			- createTCallback() -> CFRunLoopTimerCallBack
+			- addLoopHook(_ f:UnsafeMutableRawPointer?, _ p:UnsafeMutableRawPointer)
+		- _mlx_bridge_retained();
+   			- UnsafeRawPointer(Unmanaged.passRetained(obj).toOpaque())
+
+### 2. void	*mlx_win = mlx_new_window(void *mlx_ptr, int size_x, int size_y, char *title);
+- return
+	- success: a pointer to the window we have just created.
+	- fail: void *0.
+- argument
 	- @Param1 : mlx_init에서 초기화한 instance
 	- @Param2 : width
 	- @Param3 : height
 	- @param4 : title
-```c
-public func mlx_init_swift() -> UnsafeRawPointer
-{
-	let mm = MlxMain()
-	return (_mlx_bridge_retained(obj:mm))
-}
-```
-```swift
-public class MlxMain {
-
-      public var winList = [MlxWin]()
-      public var imgList = [MlxImg]()
-      var myMlxApp:NSApplication?
-      public var device:MTLDevice!
-      var loopHook:UnsafeMutableRawPointer?
-      var loopParam:UnsafeMutableRawPointer
-      var loopHookTimer:CFRunLoopTimer?
-      public var inLoop = false
-
-      public init(_ flag:Int = 0)
-      {
-	/// make app with top menubar
-        myMlxApp = NSApplication.shared
-	if (flag == 1)
-	{
-		NSApp.setActivationPolicy(NSApplication.ActivationPolicy.prohibited)   /// for non clickable win, no top menu
-	}
-	else
-	{
-		NSApp.setActivationPolicy(NSApplication.ActivationPolicy.regular)
-	}
-
-	device = MTLCreateSystemDefaultDevice()!
-	loopParam = UnsafeMutableRawPointer(bitPattern:1)! /// set to 1-1
-	loopParam -= 1
-
-	/// Add observer anyway to flush pixels every loop. If loop_hook exists, call it.
-        var ocontext = CFRunLoopObserverContext(version:0, info:_mlx_bridge(obj:self), retain:nil, release:nil, copyDescription:nil)
-	let observer = CFRunLoopObserverCreate(kCFAllocatorDefault, CFRunLoopActivity.beforeWaiting.rawValue, true, 0, createOCallback(), &ocontext)
-	CFRunLoopAddObserver(CFRunLoopGetMain(), observer, CFRunLoopMode.commonModes)
-
-      }
-
-      public func addWinToList(_ win:MlxWin)
-      { winList.append(win) }
-      public func addImgToList(_ img:MlxImg)
-      { imgList.append(img) }
-
-
-    func doCallLoopHook()
-    {
-///	if (loopHook != nil)
-///	{
-	   _ = (unsafeBitCast(loopHook!,to:(@convention(c)(UnsafeRawPointer)->Void).self))(loopParam)
-///	}
-    }
-
-    func createOCallback() -> CFRunLoopObserverCallBack
-    {
-        return { (cfRunloopObserver, cfrunloopactivity, info) -> Void in
-	    let mlx:MlxMain = _mlx_bridge(ptr:info!)
-	    mlx.winList.forEach { $0.flushImages() }
-///         mlx.doCallLoopHook()
-        }
-    }
-
-    func createTCallback() -> CFRunLoopTimerCallBack
-    {
-        return { (cfRunloopTimer, info) -> Void in
-	    let mlx:MlxMain = _mlx_bridge(ptr:info!)
-            mlx.doCallLoopHook()
-        }
-    }
-
-    public func addLoopHook(_ f:UnsafeMutableRawPointer?, _ p:UnsafeMutableRawPointer)
-      {
-        var tcontext = CFRunLoopTimerContext(version:0, info:_mlx_bridge(obj:self), retain:nil, release:nil, copyDescription:nil)
-	if (loopHook != nil)
-	{
-		CFRunLoopTimerInvalidate(loopHookTimer)
-	}
-
-	loopHook = f
-	loopParam = p
-	if (loopHook != nil)
-	{
-	   loopHookTimer = CFRunLoopTimerCreate(kCFAllocatorDefault, 0.0, 0.0001, 0, 0, createTCallback(), &tcontext)
-	   CFRunLoopAddTimer(CFRunLoopGetMain(), loopHookTimer, CFRunLoopMode.commonModes)
-	}
-      }
-```
-```swift
-func _mlx_bridge_retained<T : AnyObject>(obj : T) -> UnsafeRawPointer {
-    return UnsafeRawPointer(Unmanaged.passRetained(obj).toOpaque())
-}
-```
-
+- callstack
+	- mlx_new_window_swift()
+		- let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
+		- let mw = MlxWin(device: mlx.device, width: Int(w), height: Int(h), title: String(cString: t))
+		- mw.setNotifs()
+		- mw.initMetal()
+		- mlx.addWinToList(mw)
+		- return (_mlx_bridge_retained(obj:mw))
 
 ### 3. mlx_loop(mlx);
-- initiate the window rendering
-```c
-@_cdecl("mlx_loop")
-public func mlx_loop_swift(_ mlxptr:UnsafeRawPointer)
-{
-	let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
-	mlx.inLoop = true
-        NSApp.run()
-}
-```
-```swift
-func _mlx_bridge<T : AnyObject>(ptr : UnsafeRawPointer) -> T {
-    return Unmanaged<T>.fromOpaque(ptr).takeUnretainedValue()
-}
-```
+- description
+	- infinite loop, `waits for an event, and then calls a user-defined function` associated with this event.
+	- A single parameter is needed, the connection identifier
+- return
+	- never returns.
+- callstack
+	- let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
+	- mlx.inLoop = true
+	- NSApp.run() // 코코아 핵심 클래스
 
 ### Writing pixel to image
 - First of all, we should take into account that the `mlx_pixel_put function is very, very slow.`
 - This is because it tries to push the pixel instantly to the window (without waiting for the frame to be entirely rendered)
-- we will have to buffer all of our pixels to a image, which we will then push to the window
+- we will have to `buffer all of our pixels to a image`, which we will then push to the window
 
-### 4. void	*img = mlx_new_image(mlx, 1920, 1080);
-- initialize the image
+### 4. void	*img = mlx_new_image(void *mlx_ptr, int width, int height);
+- description
+	- creates a new image in memory
+- return
+	- success: void *indentifer.
+	- fail: void *0.
+- callstack
+	- let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
+	- let img = MlxImg(d:mlx.device, w:Int(width), h:Int(height))
+	- mlx.addImgToList(img)
+	- ///	print(CFGetRetainCount(img))
+	- return (_mlx_bridge_retained(obj:img))
 - Now, we have an image but how exactly `do we write pixels to this?`
 - need to `get the memory address` on which we will mutate the bytes accordingly.
-```
-@_cdecl("mlx_new_image")
-public func mlx_new_image(_ mlxptr:UnsafeRawPointer, _ width:Int32, _ height:Int32) -> UnsafeRawPointer
-{
-	let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
-	let img = MlxImg(d:mlx.device, w:Int(width), h:Int(height))
-	mlx.addImgToList(img)
-///	print(CFGetRetainCount(img))
-	return (_mlx_bridge_retained(obj:img))
-}
-```
 
-### get the memory address
+### 5. char	*mlx_get_data_addr(void *img_ptr, int *bits_per_pixel, int *size_line, int *endian);
 ```c
 typedef struct	s_data
 {
@@ -184,23 +127,24 @@ int	main(void)
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 }
 ```
-- 바이트 주소를 변환하는 것
-	- 너비가 1920이라는 것은 가로 줄에 픽셀 1920개가 들어간다는 뜻.
-	- 한 픽셀은 일반적으로 1바이트로서 각 비트 단위로 투명도/RED/GREEN/BLUE 정보를 표시
-	- mlx_get_data_addr로 인해 line_length에 1920 * 4 = 7680 가로 줄 총 바이트수가 나오게 된다.
-```c
-@_cdecl("mlx_get_data_addr")
-public func mlx_get_data_addr_swift(_ imgptr:UnsafeRawPointer, _ bpp:UnsafeMutablePointer<Int32>, _ sizeline:UnsafeMutablePointer<Int32>, _ endian:UnsafeMutablePointer<Int32>) -> UnsafeMutablePointer<UInt32>
-{
-	let img:MlxImg = _mlx_bridge(ptr:imgptr)
-	bpp.pointee = 32
-	sizeline.pointee = Int32(img.texture_sizeline)
-	endian.pointee = Int32(0)
-	return img.texture_data
+- returns
+	- success: information about the created image, allowing a user to modify it later
+- param
+	- @img_ptr: specifies the image to use.
+	- @bits_per_pixel: will be filled with the number of bits needed to represent a pixel color.
+		- 한 픽셀은 일반적으로 1바이트, 각 비트 단위로 투명도/R/G/B 정보
+	- @line_length(size_line): is the number of bytes used to store one line of the image in memory. This information is needed to move from one line to another in the image.
+		- ex)너비가 1920이라면 가로 줄에 픽셀 1920(픽셀) * 4 = 7680(바이트	)개가 들어간다. 
+	- @endian: tells you wether the pixel color in the image needs to be stored in little endian or big endian.
+- callstack
+	- let img:MlxImg = _mlx_bridge(ptr:imgptr)
+	- bpp.pointee = 32
+	- sizeline.pointee = Int32(img.texture_sizeline)
+	- endian.pointee = Int32(0)
+	- return img.texture_data
 }
-```
 
-### 5. 이미지에 픽셀 단위로 칠하는 방법 
+### 6. 이미지에 픽셀 단위로 칠하는 방법 
 ```
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -211,7 +155,47 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 }
 ```
 - (y * data->line_length)는 y좌표를 의미한다.
-- 한 픽셀은 4비트로 표현하므로, (x * (data->bits_per_pixel(32) / 8))  한 픽셀만큼 접근하는 식이다.
+- 1픽셀은 4바이트, A/R/G/B를 각각 표현하기 위해선 1바이트가 필요. 즉, 1바이트씩 컬러를 찍으며 1픽셀을 완성함. 
+
+### 7. int	mlx_hook(void *win_ptr, int x_event, int x_mask, int (*funct)(), void *param);
+- description
+	- in the same manner mlx_*_hook functions work. The event and mask values will be taken from the X11 include file "X.h"
+- callstack
+	- let win:MlxWin = _mlx_bridge(ptr:winptr)
+	- win.addHook(index: Int(xevent), fct: fctptr, param: paramptr)
+	- return (Int32(0));
+
+```c
+func addHook(index idx:Int, fct fptr:UnsafeMutableRawPointer?, param pptr:UnsafeMutableRawPointer)
+{
+	eventFuncts[idx] = fptr;
+	eventParams[idx] = pptr;
+	if (idx == 6 || idx == 32)
+	{
+		if (fptr != nil) ///  == nullptr)
+		   { self.acceptsMouseMovedEvents = true }
+		else { self.acceptsMouseMovedEvents = false }
+	}
+}
+```
+- Event functions have a different prototype depending of the hooking event.
+	- Hooking event	code	Prototype
+```c
+Hooking			code	Prototype
+ON_KEYDOWN		2		int (*f)(int keycode, void *param)
+ON_KEYUP*		3		int (*f)(int keycode, void *param)
+ON_MOUSEDOWN*	4		int (*f)(int button, int x, int y, void *param)
+ON_MOUSEUP		5		int (*f)(int button, int x, int y, void *param)
+ON_MOUSEMOVE	6		int (*f)(int x, int y, void *param)
+ON_EXPOSE*		12		int (*f)(void *param)
+ON_DESTROY		17		int (*f)(void *param)
+```
+	- expose_hook, mlx_key_hook, mlx_mouse_hook이 있는데, 실행하는 함수포인터 인덱스만 다르다.
+	- 모르는 이벤트가 나왔을 때 [참고](https://tronche.com/gui/x/xlib/events/)
+
+### 키 코드 사진
+![1](https://user-images.githubusercontent.com/67992469/197664317-88f181aa-9f5f-4e7a-bc14-f95334251e30.png)
+- 참고: https://eastmanreference.com/complete-list-of-applescript-key-codes
 
 ## Color
 ### Encoding and decoding color
@@ -246,42 +230,6 @@ unsigned char	get_t(int trgb)
 }
 ```
 
-## event
-- 모르는 이벤트가 나왔을 때 [참고](https://tronche.com/gui/x/xlib/events/)
-
-### mlx_hook
-```swift
-@_cdecl("mlx_hook")
-public func mlx_hook_swift(_ winptr:UnsafeRawPointer, _ xevent:Int32, _ xmask:Int32, _ fctptr:UnsafeMutableRawPointer, _ paramptr:UnsafeMutableRawPointer) -> Int32
-{
-        let win:MlxWin = _mlx_bridge(ptr:winptr)
-        win.addHook(index: Int(xevent), fct: fctptr, param: paramptr)
-        return (Int32(0));
-}
-```
-```c
-func addHook(index idx:Int, fct fptr:UnsafeMutableRawPointer?, param pptr:UnsafeMutableRawPointer)
-{
-	eventFuncts[idx] = fptr;
-	eventParams[idx] = pptr;
-	if (idx == 6 || idx == 32)
-	{
-		if (fptr != nil) ///  == nullptr)
-		   { self.acceptsMouseMovedEvents = true }
-		else { self.acceptsMouseMovedEvents = false }
-	}
-}
-```
-- Event functions have a different prototype depending of the hooking event.
-	- Hooking event	code	Prototype
-```c
-Hooking			code	Prototype
-ON_KEYDOWN		2		int (*f)(int keycode, void *param)
-ON_KEYUP*		3		int (*f)(int keycode, void *param)
-ON_MOUSEDOWN*	4		int (*f)(int button, int x, int y, void *param)
-ON_MOUSEUP		5		int (*f)(int button, int x, int y, void *param)
-ON_MOUSEMOVE	6		int (*f)(int x, int y, void *param)
-ON_EXPOSE*		12		int (*f)(void *param)
-ON_DESTROY		17		int (*f)(void *param)
-```
-	- expose_hook, mlx_key_hook, mlx_mouse_hook이 있는데, 실행하는 함수포인터 인덱스만 다르다.
+## 참고자료
+- https://bigpel66.oopy.io/library/c/etc/3
+- https://harm-smits.github.io/42docs/

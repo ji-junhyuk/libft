@@ -7,7 +7,7 @@ B_SRC_DIR		=	./srcs_bonus/
 OBJ_DIR			=	./objs/
 B_OBJ_DIR		=	./objs_bonus/
 
-SRC				=	main.c error.c get_next_line.c parse.c parse_utils.c split.c utils.c utils2.c
+SRC				=	main.c error.c get_next_line.c parse.c parse_utils.c split.c utils.c utils2.c init.c
 SRCS			=	$(addprefix ./srcs/, $(SRC))
 
 B_SRC			=	main_bonus.c

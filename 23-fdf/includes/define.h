@@ -1,0 +1,9 @@
+#ifndef DEFINE_H
+# define DEFINE_H
+
+#define WINDOW_HORIZENTAL	1920
+#define WINDOW_VERTICAL		1080
+#define IMAGE_HORIZENTAL	1000
+#define IMAGE_VERTICAL		500
+
+#endif
