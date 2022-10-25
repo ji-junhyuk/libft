@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 14:13:52 by junji             #+#    #+#             */
-/*   Updated: 2022/10/25 21:13:42 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/25 22:36:52 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	rotate_z(int *x, int *y, double angle_z)
 	*y = sin(angle_z) * prev_x + cos(angle_z) * prev_y;
 }
 
-t_point	*get_point(int x, int y, t_draw_info *dtool)
+t_point	*get_point(int x, int y, t_tool *tool)
 {
 	t_point	*point;
 	int		idx;
@@ -67,12 +67,12 @@ t_point	*get_point(int x, int y, t_draw_info *dtool)
 		put_error("get_point malloc");
 	point->x = x;
 	point->y = y;
-	idx = dtool->horizental * y + x;
-	point->z = dtool->height[idx];
-	if (dtool->color[idx] == 0)
+	idx = tool->horizental * y + x;
+	point->z = tool->height[idx];
+	if (tool->color[idx] == 0)
 		point->color = 0xFFFFFF;
 	else
-		point->color = dtool->color[idx];
+		point->color = tool->color[idx];
 	return (point);
 }
 
@@ -87,21 +87,20 @@ static void	convert_isometric(int *x, int *y, int *z)
 	*y = prev_x * sin(M_PI / 60 * 4) + prev_y * sin(M_PI / 60 * 4) - *z;
 }
 
-static t_point	*project_point(t_point *point, t_draw_info *dtool)
+static t_point	*project_point(t_point *point, t_tool *tool)
 {
-	point->x *= dtool->offset;
-	point->y *= dtool->offset;
-	point->z *= dtool->offset;
-	point->x -= (dtool->horizental * dtool->offset) / 2;
-	point->y -= (dtool->vertical * dtool->offset) / 2;
-	rotate_x(&(point->y), &(point->z), dtool->angle_x);
-	rotate_y(&(point->x), &(point->z), dtool->angle_y);
-	rotate_z(&(point->x), &(point->y), dtool->angle_z);
-	// if ()
+	point->x *= tool->offset;
+	point->y *= tool->offset;
+	point->z *= tool->offset;
+	point->x -= (tool->horizental * tool->offset) / 2;
+	point->y -= (tool->vertical * tool->offset) / 2;
+	rotate_x(&(point->y), &(point->z), tool->angle_x);
+	rotate_y(&(point->x), &(point->z), tool->angle_y);
+	rotate_z(&(point->x), &(point->y), tool->angle_z);
 	convert_isometric(&(point->x), &(point->y), &(point->z));
 	point->x += IMAGE_HORIZENTAL / 2;
 	point->y += IMAGE_VERTICAL / 2;
-	point->y += dtool->vertical * dtool->offset / 2;
+	point->y += tool->vertical * tool->offset / 2;
 	return (point);
 }
 
@@ -161,23 +160,29 @@ static void	plot_line(t_point *start, t_point *end, t_tool *tool)
 	free(end);
 }
 
-void	drawing(t_tool *tool, t_draw_info *dtool)
+void	drawing(t_tool *tool)
 {
 	int	x;
 	int	y;
 
+	if (tool->image)
+		mlx_destroy_image(tool->mlx, tool->image);
+	tool->image = mlx_new_image(tool->mlx, WINDOW_HORIZENTAL, WINDOW_VERTICAL);
+	tool->addr = mlx_get_data_addr(tool->image, &tool->bits_per_pixel, &tool->size_line, &tool->endian);
 	y = -1;
-	while (++y < dtool->vertical)
+	while (++y < tool->vertical)
 	{
 		x = -1;
-		while (++x < dtool->horizental)
+		while (++x < tool->horizental)
 		{
-			my_mlx_pixel_put(project_point(get_point(x, y, dtool), dtool), tool);
-			if (x < dtool->horizental - 1)
-				plot_line(project_point(get_point(x, y, dtool), dtool), project_point(get_point(x + 1, y, dtool), dtool), tool);
-			if (y < dtool->vertical - 1)
-				plot_line(project_point(get_point(x, y, dtool), dtool), project_point(get_point(x, y + 1, dtool), dtool), tool);
+			my_mlx_pixel_put(project_point(get_point(x, y, tool), tool), tool);
+			if (x < tool->horizental - 1)
+				plot_line(project_point(get_point(x, y, tool), tool), project_point(get_point(x + 1, y, tool), tool), tool);
+			if (y < tool->vertical - 1)
+				plot_line(project_point(get_point(x, y, tool), tool), project_point(get_point(x, y + 1, tool), tool), tool);
 		}
 	}
 	mlx_put_image_to_window(tool->mlx, tool->mlx_win, tool->image, 0, 0);
+	free(tool->height);
+	free(tool->color);
 }

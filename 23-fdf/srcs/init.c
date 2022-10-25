@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:35:04 by junji             #+#    #+#             */
-/*   Updated: 2022/10/25 21:12:25 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/25 22:25:18 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,9 @@ void	init_mlx(t_tool *tool)
 	if (!tool->image)
 		put_error("init_mlx mlx_new_image");
 	tool->addr = mlx_get_data_addr(tool->image, &tool->bits_per_pixel, &tool->size_line, &tool->endian);
+	tool->offset_x = 0;
+	tool->offset_y = 0;
+	tool->angle_x = 0;
+	tool->angle_y = 0;
+	tool->angle_z = 0;
 }
