@@ -1,13 +1,13 @@
 CC				=	cc
 
-CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			=	# -Wall -Wextra -Werror
 
 SRC_DIR			=	./srcs/
 B_SRC_DIR		=	./srcs_bonus/
 OBJ_DIR			=	./objs/
 B_OBJ_DIR		=	./objs_bonus/
 
-SRC				=	main.c error.c get_next_line.c parse.c parse_utils.c split.c utils.c utils2.c init.c
+SRC				=	main.c error.c get_next_line.c parse.c parse_utils.c split.c utils.c utils2.c init.c draw.c
 SRCS			=	$(addprefix ./srcs/, $(SRC))
 
 B_SRC			=	main_bonus.c
@@ -47,7 +47,8 @@ ifeq ($(DEBUG), 1)
     CFLAGS	=	-Wall -Wextra -Werror -g3 -save-temps=obj
 endif
 ifeq ($(DEBUG), 2)
-    CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address -save-temps=obj
+    CFLAGS	=	-g3 -fsanitize=address -save-temps=obj
+   # CFLAGS	=	#-Wall -Wextra -Werror -g3 -fsanitize=address -save-temps=obj
 endif
 
 $(NAME): mlx

@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:35:04 by junji             #+#    #+#             */
-/*   Updated: 2022/10/25 13:02:34 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/25 21:12:25 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "error.h"
 #include "define.h"
 
+#include <stdio.h>
 void	init_mlx(t_tool *tool)
 {
 	tool->mlx = mlx_init();

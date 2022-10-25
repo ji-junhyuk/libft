@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 14:13:52 by junji             #+#    #+#             */
-/*   Updated: 2022/10/25 15:26:52 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/25 21:13:42 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ t_point	*get_point(int x, int y, t_draw_info *dtool)
 	point->y = y;
 	idx = dtool->horizental * y + x;
 	point->z = dtool->height[idx];
-//	if (map->arr_color[i] == -1)
-	if (point->z == 0)
+	if (dtool->color[idx] == 0)
 		point->color = 0xFFFFFF;
 	else
 		point->color = dtool->color[idx];
@@ -84,7 +83,6 @@ static void	convert_isometric(int *x, int *y, int *z)
 
 	prev_x = *x;
 	prev_y = *y;
-	// printf("%d, %d, %d\n", *x, *y, *z);
 	*x = prev_x * cos(M_PI / 60 * 4) - prev_y * cos(M_PI / 60 * 4);
 	*y = prev_x * sin(M_PI / 60 * 4) + prev_y * sin(M_PI / 60 * 4) - *z;
 }
@@ -121,12 +119,15 @@ static void	init_delta_step(t_point *delta, t_point *start, t_point *end, t_poin
 		step->y = -1;
 }
 
-void			my_mlx_pixel_put(t_tool *tool, int x, int y, int color)
+static void	my_mlx_pixel_put(t_point *point, t_tool *tool)
 {
 	char	*dst;
 
-	dst = tool->addr + (y * tool->size_line + x * (tool->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	if ((point->x >= 0 && point->x < IMAGE_HORIZENTAL) && (point->y >= 0 && point->y < IMAGE_VERTICAL))
+	{
+		dst = tool->addr + (point->y * tool->size_line + point->x * (tool->bits_per_pixel / 8));
+		*((unsigned int *)dst) = point->color;
+	}
 }
 
 static void	plot_line(t_point *start, t_point *end, t_tool *tool)
@@ -141,7 +142,7 @@ static void	plot_line(t_point *start, t_point *end, t_tool *tool)
 	cur = start;
 	while (1)
 	{
-		my_mlx_pixel_put(cur, tool->mlx);
+		my_mlx_pixel_put(cur, tool);
 		if (cur->x == end->x && cur->y == end->y)
 			break ;
 		error[1] = 2 * error[0];
@@ -159,6 +160,7 @@ static void	plot_line(t_point *start, t_point *end, t_tool *tool)
 	free(start);
 	free(end);
 }
+
 void	drawing(t_tool *tool, t_draw_info *dtool)
 {
 	int	x;
@@ -170,12 +172,12 @@ void	drawing(t_tool *tool, t_draw_info *dtool)
 		x = -1;
 		while (++x < dtool->horizental)
 		{
+			my_mlx_pixel_put(project_point(get_point(x, y, dtool), dtool), tool);
 			if (x < dtool->horizental - 1)
 				plot_line(project_point(get_point(x, y, dtool), dtool), project_point(get_point(x + 1, y, dtool), dtool), tool);
-			if (y < dtool->vertical -1)
+			if (y < dtool->vertical - 1)
 				plot_line(project_point(get_point(x, y, dtool), dtool), project_point(get_point(x, y + 1, dtool), dtool), tool);
 		}
-		y++;
 	}
 	mlx_put_image_to_window(tool->mlx, tool->mlx_win, tool->image, 0, 0);
 }

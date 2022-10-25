@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 14:14:26 by junji             #+#    #+#             */
-/*   Updated: 2022/10/25 13:29:11 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/25 20:39:57 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	find_height_color(t_draw_info *dtool, int fd)
 	t_parse_tool	ptool;
 
 	ft_memset(&ptool, 0, sizeof(ptool));
+	ptool.offset = -1;
 	while (1)
 	{
 		ptool.line = get_next_line(fd);
