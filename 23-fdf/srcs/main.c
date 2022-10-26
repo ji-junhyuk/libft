@@ -4,8 +4,9 @@
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */ /*   Created: 2022/10/21 14:03:11 by junji             #+#    #+#             */
-/*   Updated: 2022/10/25 18:46:23 by junji            ###   ########.fr       */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/26 13:27:43 by junji             #+#    #+#             */
+/*   Updated: 2022/10/26 15:05:45 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -13,7 +14,29 @@
 #include "fdf.h"
 #include "parse.h"
 #include "error.h"
+#include "define.h"
 #include <stdlib.h>
+
+void	init_mlx(t_tool *tool)
+{
+	tool->mlx = mlx_init();
+	if (!tool->mlx)
+		put_error("init_mlx mlx_init");
+	tool->mlx_win = mlx_new_window(tool->mlx,
+			WINDOW_HORIZENTAL, WINDOW_VERTICAL, "FDF");
+	if (!tool->mlx_win)
+		put_error("init_mlx mlx_new_window");
+	tool->offset_x = 0;
+	tool->offset_y = 0;
+	tool->angle_x = 0;
+	tool->angle_y = 0;
+	tool->angle_z = 0;
+	tool->image = 0;
+	tool->isometric = 1;
+	tool->x = -1;
+	tool->y = -1;
+//	tool->z_modify = 1;
+}
 
 void	parse_map_info(t_tool *tool, const char *file_name)
 {
@@ -23,76 +46,6 @@ void	parse_map_info(t_tool *tool, const char *file_name)
 	find_offset(tool);
 }
 
-typedef enum e_key
-{
-	P = 35, 
-	X = 7,
-	Z = 6,
-	Y = 16,
-	W = 13,
-	A = 0,
-	S = 1,
-	D = 2,
-	UP = 126,
-	DOWN = 125,
-	LEFT = 124,
-	RIGHT = 123,
-	ESC	= 53
-}	t_key;
-
-void	rotate(int keycode, t_tool *tool)
-{
-	if (keycode == UP)
-		tool->angle_x += M_PI / 180.0;
-	else if (keycode == DOWN)
-		tool->angle_x -= M_PI / 180.0;
-	else if (keycode == LEFT)
-		tool->angle_y += M_PI / 180.0;
-	else if (keycode == RIGHT)
-		tool->angle_y -= M_PI / 180.0;
-	drawing(tool);
-}
-
-void	translate(int keycode, t_tool *tool)
-{
-	if (keycode == W)
-		tool->offset_y += 10;
-	else if (keycode == A)
-		tool->offset_x -= 10;
-	else if (keycode == S)
-		tool->offset_y -= 10;
-	else if (keycode == D)
-		tool->offset_x += 10;
-	drawing(tool);
-}
-
-#include <stdio.h>
-int	key_hook(int keycode, t_tool *tool)
-{
-	if (keycode == ESC)
-	{
-		mlx_destroy_window(tool->mlx, tool->mlx_win);
-		exit(0);
-	}
-	else if (keycode == P)
-	{
-		printf("P\n");
-		// isolation X
-	}
-	else if (keycode == X || keycode == Y || keycode == Z)
-	{
-		printf("X Y Z\n");
-		rotate(keycode, tool);
-	}
-	else if (keycode == UP || keycode == DOWN || keycode == LEFT || keycode == RIGHT)
-	{
-		printf(" UP DOWN LEFT RIGHT\n");
-		translate(keycode, tool);
-	}
-	return (0);
-}
-
-#include <stdio.h>
 int	main(int argc, char *argv[])
 {
 	t_tool			tool;

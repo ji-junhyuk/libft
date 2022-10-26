@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 14:18:06 by junji             #+#    #+#             */
-/*   Updated: 2022/10/25 21:34:32 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/26 13:54:28 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ typedef struct s_parse_tool
 	int		idx;
 	int		offset;
 }			t_parse_tool;
-
 
 void			find_vertical_horizental(t_tool *tool, const char *file_name);
 void			malloc_height_color(t_tool *tool);

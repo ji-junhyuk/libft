@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 14:14:26 by junji             #+#    #+#             */
-/*   Updated: 2022/10/25 21:38:12 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/26 14:05:25 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ void	find_vertical_horizental(t_tool *tool, const char *file_name)
 		free(line);
 	}
 	close(fd);
-//	printf("ho:%d\n", tool->horizental);
-//	printf("ve:%d\n", tool->vertical);
 }
 
 void	malloc_height_color(t_tool *tool)
@@ -63,10 +61,6 @@ void	malloc_height_color(t_tool *tool)
 		tool->height[idx] = 0;
 		tool->color[idx] = 0;
 	}
-	//	for (int idx = 0; idx < (tool->horizental * tool->vertical); ++idx)
-	//		tool->height[idx] = 1;
-	//	for (int idx = 0; idx < (tool->horizental * tool->vertical); ++idx)
-	//		printf("%d ", tool->height[idx]);
 }
 
 void	find_height_color(t_tool *tool, int fd)
@@ -110,12 +104,12 @@ void	get_line(t_tool *tool, const char *file_name)
 
 void	find_offset(t_tool *tool)
 {
-	double offset_x;
-	double offset_y;
+	double	offset_x;
+	double	offset_y;
 
-	offset_x = IMAGE_HORIZENTAL / 2.0 / tool->horizental;
-	offset_y = IMAGE_VERTICAL / 2.0 / tool->vertical;
-	tool->offset = (int)fmin(offset_x, offset_y);
+	offset_x = WINDOW_HORIZENTAL / 2.0 / tool->horizental;
+	offset_y = WINDOW_VERTICAL / 2.0 / tool->vertical;
+	tool->offset = fmin(offset_x, offset_y);
 	tool->angle_x = 0;
 	tool->angle_y = 0;
 	tool->angle_z = 0;

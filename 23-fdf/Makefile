@@ -1,13 +1,13 @@
 CC				=	cc
 
-CFLAGS			=	# -Wall -Wextra -Werror
+CFLAGS			=	# -Wall -Wextra -Werror 
 
 SRC_DIR			=	./srcs/
 B_SRC_DIR		=	./srcs_bonus/
 OBJ_DIR			=	./objs/
 B_OBJ_DIR		=	./objs_bonus/
 
-SRC				=	main.c error.c get_next_line.c parse.c parse_utils.c split.c utils.c utils2.c init.c draw.c
+SRC				=	main.c error.c get_next_line.c parse.c parse_utils.c split.c utils.c utils2.c draw.c rotate.c bresenham.c hook.c
 SRCS			=	$(addprefix ./srcs/, $(SRC))
 
 B_SRC			=	main_bonus.c
@@ -41,7 +41,8 @@ debugs :
 
 debug :
 	make DEBUG=1
-
+# 링커에 넘겨줄 옵션 -l -L
+# cfags -
 
 ifeq ($(DEBUG), 1)
     CFLAGS	=	-Wall -Wextra -Werror -g3 -save-temps=obj
@@ -61,7 +62,7 @@ before_all_check : all_check
 
 all_check: $(OBJ)
 	cd MLX && cp libmlx.dylib ../ 
-	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $(NAME) $^
+	$(CC) $(CFLAGS) $(INCLUDES) $^ $(LIBS) -o $(NAME)
 	touch $@
 
 bonus: bonus_check
