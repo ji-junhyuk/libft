@@ -41,8 +41,6 @@ debugs :
 
 debug :
 	make DEBUG=1
-# 링커에 넘겨줄 옵션 -l -L
-# cfags -
 
 ifeq ($(DEBUG), 1)
     CFLAGS	+=	-g3 -save-temps=obj
@@ -64,9 +62,13 @@ all_check: $(OBJ)
 	$(CC) $(CFLAGS) $(INCLUDES) $^ $(LIBS) -o $(NAME)
 	touch $@
 
-bonus: bonus_check
+bonus: mlx
+	make before_bonus_check
+
+before_bonus_check : bonus_check
 
 bonus_check: $(B_OBJ)
+	cd MLX && cp libmlx.dylib ../ 
 	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $(BONUS_NAME) $^
 	touch $@
 
