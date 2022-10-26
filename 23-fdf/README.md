@@ -13,6 +13,8 @@
 	* [5. char	*mlx_get_data_addr(void *img_ptr, int *bits_per_pixel, int *size_line, int *endian);](#5-charmlx_get_data_addrvoid-img_ptr-int-bits_per_pixel-int-size_line-int-endian)
 	* [6. 이미지에 픽셀 단위로 칠하는 방법](#6-이미지에-픽셀-단위로-칠하는-방법)
 	* [7. int	mlx_hook(void *win_ptr, int x_event, int x_mask, int (*funct)(), void *param);](#7-intmlx_hookvoid-win_ptr-int-x_event-int-x_mask-int-funct-void-param)
+* [FDF 과제 진행](#fdf-과제-진행)
+	* [어려웠던 점](#fdf-과제를-진행하면서-매끈하게-이어지지-않았던-부분)
 	* [평가](#평가)
 
 ## intro	
@@ -250,7 +252,7 @@ unsigned char	get_t(int trgb)
 - https://bigpel66.oopy.io/library/c/etc/3
 - https://harm-smits.github.io/42docs/
 
-### FDF 과제 진행
+## FDF 과제 진행
 1. 선을 그리려면 2개의 점이 필요하다.
 2. 좌표(x, y, z)에 offset을 적용한다.
 	- offset이란 1920이라는 이미지크기에 20개의 점이 있다면그 점 사이의 거리를 의미한다.
