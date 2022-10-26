@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf.h                                              :+:      :+:    :+:   */
+/*   fdf_bonus.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 15:19:01 by junji             #+#    #+#             */
-/*   Updated: 2022/10/26 16:33:57 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/26 16:32:04 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FDF_H
-# define FDF_H
+#ifndef FDF_BONUS_H
+# define FDF_BONUS_H
 
 # include "math.h"
 
@@ -38,6 +38,9 @@ typedef struct s_tool
 	int					vertical;
 	int					*height;
 	unsigned int		*color;
+
+	int					x;
+	int					y;
 }						t_tool;
 
 void	init_mlx(t_tool *tool);

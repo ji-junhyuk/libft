@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:27:43 by junji             #+#    #+#             */
-/*   Updated: 2022/10/26 15:05:45 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/26 16:36:32 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ void	init_mlx(t_tool *tool)
 	tool->angle_z = 0;
 	tool->image = 0;
 	tool->isometric = 1;
-	tool->x = -1;
-	tool->y = -1;
-//	tool->z_modify = 1;
+	tool->modify_z = 1;
 }
 
 void	parse_map_info(t_tool *tool, const char *file_name)

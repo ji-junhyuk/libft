@@ -1,16 +1,16 @@
 CC				=	cc
 
-CFLAGS			=	# -Wall -Wextra -Werror 
+CFLAGS			=	-Wall -Wextra -Werror 
 
 SRC_DIR			=	./srcs/
 B_SRC_DIR		=	./srcs_bonus/
 OBJ_DIR			=	./objs/
 B_OBJ_DIR		=	./objs_bonus/
 
-SRC				=	main.c error.c get_next_line.c parse.c parse_utils.c split.c utils.c utils2.c draw.c rotate.c bresenham.c hook.c
+SRC				=	main.c error.c get_next_line.c parse.c parse_utils.c split.c utils.c utils2.c draw.c rotate.c bresenham.c hook.c hook2.c
 SRCS			=	$(addprefix ./srcs/, $(SRC))
 
-B_SRC			=	main_bonus.c
+B_SRC				=	main_bonus.c error_bonus.c get_next_line_bonus.c parse_bonus.c parse_utils_bonus.c split_bonus.c utils_bonus.c utils2_bonus.c draw_bonus.c rotate_bonus.c bresenham_bonus.c hook_bonus.c hook2_bonus.c
 B_SRCS			=	$(addprefix ./srcs_bonus/, $(B_SRC))
 
 OBJS			=	$(SRC:c=o) 
@@ -45,11 +45,10 @@ debug :
 # cfags -
 
 ifeq ($(DEBUG), 1)
-    CFLAGS	=	-Wall -Wextra -Werror -g3 -save-temps=obj
+    CFLAGS	+=	-g3 -save-temps=obj
 endif
 ifeq ($(DEBUG), 2)
-    CFLAGS	=	-g3 -fsanitize=address -save-temps=obj
-   # CFLAGS	=	#-Wall -Wextra -Werror -g3 -fsanitize=address -save-temps=obj
+    CFLAGS	+=	-g3 -fsanitize=address -save-temps=obj
 endif
 
 $(NAME): mlx

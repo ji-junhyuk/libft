@@ -6,12 +6,12 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 15:07:58 by junji             #+#    #+#             */
-/*   Updated: 2022/10/26 15:57:21 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/26 16:10:35 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
-#include "define.h"
+#include "fdf_bonus.h"
+#include "define_bonus.h"
 #include "mlx.h"
 #include <stdlib.h>
 

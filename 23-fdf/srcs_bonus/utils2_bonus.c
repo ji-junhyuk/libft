@@ -1,40 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   define.h                                           :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/26 13:53:06 by junji             #+#    #+#             */
-/*   Updated: 2022/10/26 15:48:50 by junji            ###   ########.fr       */
+/*   Created: 2022/10/21 14:07:22 by junji             #+#    #+#             */
+/*   Updated: 2022/10/26 16:11:57 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEFINE_H
-# define DEFINE_H
+#include "utils2_bonus.h"
 
-# define WINDOW_HORIZENTAL	1920
-# define WINDOW_VERTICAL		1080
-
-typedef enum e_key
+void	*ft_memset(void *b, int c, size_t len)
 {
-	P = 35,
-	PLUS = 24,
-	MINUS = 27,
-	R = 43,
-	T = 47,
-	I = 34,
-	W = 13,
-	A = 0,
-	S = 1,
-	D = 2,
-	H = 4,
-	L = 37,
-	J = 38,
-	K = 40,
-	N = 45,
-	M = 46,
-	ESC	= 53,
-}	t_key;
+	unsigned char	*p;
+	size_t			idx;
 
-#endif
+	idx = -1;
+	p = (unsigned char *)b;
+	while (++idx < len)
+		p[idx] = c;
+	return (b);
+}

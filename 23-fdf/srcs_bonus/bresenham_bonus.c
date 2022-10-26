@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bresenham.c                                        :+:      :+:    :+:   */
+/*   bresenham_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/26 16:47:13 by junji             #+#    #+#             */
-/*   Updated: 2022/10/26 16:48:22 by junji            ###   ########.fr       */
+/*   Created: 2022/10/26 13:15:47 by junji             #+#    #+#             */
+/*   Updated: 2022/10/26 16:22:47 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "draw.h"
-#include "error.h"
-#include "define.h"
+#include "draw_bonus.h"
+#include "error_bonus.h"
+#include "define_bonus.h"
 #include <stdlib.h>
 
 t_point	*get_point(int x, int y, t_tool *tool)

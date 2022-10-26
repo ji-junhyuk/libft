@@ -6,16 +6,16 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 14:13:52 by junji             #+#    #+#             */
-/*   Updated: 2022/10/26 16:48:50 by junji            ###   ########.fr       */
+/*   Updated: 2022/10/26 16:10:15 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
-#include "error.h"
-#include "define.h"
-#include <stdlib.h>
+#include "fdf_bonus.h"
+#include "error_bonus.h"
+#include "define_bonus.h"
+#include "draw_bonus.h"
 #include "mlx.h"
-#include "draw.h"
+#include <stdlib.h>
 
 void	my_mlx_pixel_put(t_point *point, t_tool *tool)
 {
@@ -55,27 +55,24 @@ void	set_mlx_image(t_tool *tool)
 
 void	drawing(t_tool *tool)
 {
-	int	x;
-	int	y;
-
 	set_mlx_image(tool);
-	y = -1;
-	while (++y < tool->vertical)
+	tool->y = -1;
+	while (++tool->y < tool->vertical)
 	{
-		x = -1;
-		while (++x < tool->horizental)
+		tool->x = -1;
+		while (++tool->x < tool->horizental)
 		{
 			my_mlx_pixel_put(projection(
-					get_point(x, y, tool), tool), tool);
-			if (x < tool->horizental - 1)
+					get_point(tool->x, tool->y, tool), tool), tool);
+			if (tool->x < tool->horizental - 1)
 				plot_line(projection(
-						get_point(x, y, tool), tool),
+						get_point(tool->x, tool->y, tool), tool),
 					projection(
-						get_point(x + 1, y, tool), tool), tool);
-			if (y < tool->vertical - 1)
-				plot_line(projection(get_point(x, y, tool), tool),
+						get_point(tool->x + 1, tool->y, tool), tool), tool);
+			if (tool->y < tool->vertical - 1)
+				plot_line(projection(get_point(tool->x, tool->y, tool), tool),
 					projection(
-						get_point(x, y + 1, tool), tool), tool);
+						get_point(tool->x, tool->y + 1, tool), tool), tool);
 		}
 	}
 	mlx_put_image_to_window(tool->mlx, tool->mlx_win, tool->image, 0, 0);
