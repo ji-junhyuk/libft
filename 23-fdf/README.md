@@ -1,3 +1,20 @@
+* [intro](#intro)
+	* [MiniLibx](#minilibx)
+	* [X-Window](#x-window)
+	* [Cocoa](#cocoa)
+* [Use MLX](#use-mlx)
+	* [왜 MLX라이브러리가 생겼을까? 그냥 opengl로 만들면 안되나?](#왜-mlx라이브러리가-생겼을까-그냥-opengl로-만들면-안되나)
+	* [Installation](#installation)
+	* [1. void *mlx = mlx_init(void)](#1-void-mlx--mlx_initvoid)
+	* [2. void	*mlx_win = mlx_new_window(void *mlx_ptr, int size_x, int size_y, char *title);](#2-voidmlx_win--mlx_new_windowvoid-mlx_ptr-int-size_x-int-size_y-char-title)
+	* [3. mlx_loop(mlx);](#3-mlx_loopmlx)
+	* [Writing pixel to image](#writing-pixel-to-image)
+	* [4. void	*img = mlx_new_image(void *mlx_ptr, int width, int height);](#4-voidimg--mlx_new_imagevoid-mlx_ptr-int-width-int-height)
+	* [5. char	*mlx_get_data_addr(void *img_ptr, int *bits_per_pixel, int *size_line, int *endian);](#5-charmlx_get_data_addrvoid-img_ptr-int-bits_per_pixel-int-size_line-int-endian)
+	* [6. 이미지에 픽셀 단위로 칠하는 방법](#6-이미지에-픽셀-단위로-칠하는-방법)
+	* [7. int	mlx_hook(void *win_ptr, int x_event, int x_mask, int (*funct)(), void *param);](#7-intmlx_hookvoid-win_ptr-int-x_event-int-x_mask-int-funct-void-param)
+	* [평가](#평가)
+
 ## intro	
 ### MiniLibx
 - tiny graphics library.
@@ -176,8 +193,7 @@ func addHook(index idx:Int, fct fptr:UnsafeMutableRawPointer?, param pptr:Unsafe
 		   { self.acceptsMouseMovedEvents = true }
 		else { self.acceptsMouseMovedEvents = false }
 	}
-}
-```
+} ```
 - Event functions have a different prototype depending of the hooking event.
 	- Hooking event	code	Prototype
 ```c
@@ -233,3 +249,66 @@ unsigned char	get_t(int trgb)
 ## 참고자료
 - https://bigpel66.oopy.io/library/c/etc/3
 - https://harm-smits.github.io/42docs/
+
+### FDF 과제 진행
+1. 선을 그리려면 2개의 점이 필요하다.
+2. 좌표(x, y, z)에 offset을 적용한다.
+	- offset이란 1920이라는 이미지크기에 20개의 점이 있다면그 점 사이의 거리를 의미한다.
+3. 3차원 도형을 평면에 나타내기 위해선 `등축투영법`을 쓴다.
+	- 등축투영법이란 아랫각이 30의 배수각이라고 한다.
+	- 변환 공식을 사용한다.
+4. 0,0에 있는 (offset)을 적용한 점에서부터 마지막 점까지 `직선의 방정식 `이 아닌 `브레젠험`알고리즘으로 연결한다.
+	- 직선의 방정식은 실수값까지 표현하므로 연산량이 많고, 부드럽게 보인다. 반면 브레젠험은 임의의 점을 직선의 기울기에 맞춰서 대략적으로 표현하므로 점들이 매끈하게 이어지지는 않지만, 빠르다는 장점이 있다.
+
+### FDF 과제를 진행하면서 매끈하게 이어지지 않았던 부분
+1. 수학 공식
+	1. 등축투영법으로 표현
+```c
+*x = prev_x * cos(M_PI / 60 * 4) - prev_y * cos(M_PI / 60 * 4);
+*y = prev_x * sin(M_PI / 60 * 4) + prev_y * sin(M_PI / 60 * 4) - *z;
+```
+		- 공식이 무엇을 의미하는지는 알겠지만, 이 식의 유도 과정은 모르겠다..
+		- x축, y축, z축을 등각투영(30도의 배수)각도로 회전변환 한 것이다.
+	2. 브레젠험 알고리즘 중 임의의 점을 선택해 직선의 기울기로 대략적으로 맞추는 과정
+```c
+void	plot_line(t_point *start, t_point *end, t_tool *tool)
+{
+	t_point	delta;
+	t_point	*cur;
+	t_point	step;
+	int		error[2];
+
+	init_delta_step(&delta, start, end, &step);
+	error[0] = delta.x + delta.y; // x의 변화량과 y의 변화량을 왜 더하는가?
+	cur = start;
+	while (!(cur->x == end->x && cur->y == end->y))
+	{
+		my_mlx_pixel_put(cur, tool);
+		error[1] = 2 * error[0]; 
+		if (error[1] >= delta.y) 
+		{
+			error[0] += delta.y;
+			cur->x += step.x;
+		}
+		if (error[1] <= delta.x)
+		{
+			error[0] += delta.x;
+			cur->y += step.y;
+		}
+	}
+	free(start);
+	free(end);
+}
+``` 
+	- 다음에 찍어야 할 점의 좌표를 구할 때,
+		- `x의 변화량과 y의 변화량을 합한 값을 2배한 값`이 `y의 변화량`보다 크다면 error[0]에 delta.y를 더해주는 작업이 잘 이해가 가지 않음.
+```c
+약 2주 안되게 걸린거 같은데, 혼자 했으면 
+아마 한 달 이상은 잡지 않았을까
+점을 찍고, offset을 적용해서 길게 늘이고,
+식을 적용하고, 이해하는 데 있어 팀원들의 도움이 굉장히 컸음.
+```
+
+### 평가
+- open을 열고, close를 하지 않았다. 꼭 세트로 적어두기.
+- 인자가 2개이고 이름이 잘못 되었을 때는 perror()에 의해 errno(no such file...)가 설정된다. 그런데, 인자가 2개이고 이름에 디렉토리만 적어둔다면(ex: ./test_maps/ `segmentation fault`가 나온다.
