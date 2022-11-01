@@ -62,10 +62,7 @@ ft_putstr("minishell: command not found: ");
 1. 입력의 끝이 있으면 현재 판단 중인 문자열을 토큰으로 본다.
 2. 이전 문자가  operator의 일부이면서 현재 문자가 따옴표가 아니고 이전 문자와 연결해서 opertor취급이 되면 operator의 일부임
 3. 이전문자가 opertor 
-4. 
-5.
-6.
-7.i 
+
 ###
 1. 입력의 끝이 인식되면 현재 토큰(있는 경우)이 구분됩니다.
 2. 이전 문자가 연산자의 일부로 사용되었고 현재 문자가 인용되지 않고 이전 문자와 함께 사용하여 연산자를 형성할 수 있는 경우 해당 (연산자) 토큰의 일부로 사용됩니다
@@ -73,4 +70,21 @@ ft_putstr("minishell: command not found: ");
 4. 현재 문자가 <백슬래시>, 작은따옴표 또는 큰따옴표이고 인용되지 않은 경우 인용된 텍스트의 끝까지 후속 문자에 대한 인용에 영향을 미칩니다. 인용에 대한 규칙은 인용에 설명된 대로입니다.
 5. 현재 문자가 따옴표 없는 '$' 또는 '`'인 경우 쉘은 매개변수 확장(매개변수 확장), 명령 대체(명령 대체)
 
-### 
+### readline
+- -lreadline 
+
+### ctrl d
+- 치다가 ctrl d 는 아무것도 안해야 하고, 아무것도 없는 상태에서 ctrl d는 종
+
+### rl_replace_line
+- terminal에서 eof를 날리면 
+  	- 문자열이 buffer에 있으면 아무 응답 없고,
+	- 문자열이 없다면 :D종료
+		- :D없애주기 위해서 rl_replace_line이 필요. 
+- -lreadline의 상세경로를 적어주면, exit가 개행이 포함되어 출력된다. 
+	- $ gcc main.c -lreadline -L/opt/homebrew/opt/readline/lib/ -I /opt/homebrew/opt/readline/include
+	- 이 경로를 추가하면 개행 추가. 
+```c 
+printf("\033[1A"); // 한줄 커서 위로(맨왼쪽끝)
+printf("\033[7C"); // cursor move right
+```
