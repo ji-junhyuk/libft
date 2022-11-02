@@ -1,3 +1,19 @@
+### 트리를 어떻게 만드는가?
+1. root 우선순위 >= now 우선순위
+	- now left에 root 달기
+	- root update
+2. root 우선순위 < now 우선순위
+	- 1) now가 연산자인 경우
+		- now left에 root right 달기
+		- root right에 now 달기
+	- 2) now가 연산자가 아닌 경우
+		- now를 root의 오른쪽 끝 달기
+
+### 트리 우선순위 (<< heredoc은 별도 로직으로 처리)
+1. ||, &&
+2. <, >, >>, |,
+3. (괄호안 커맨드), CMD
+
 ### 처리해야 할 것
 - token_type
 	- string, pipe(|), command, '
@@ -29,6 +45,8 @@
 11. echo '$fortytwo "axs"' "ahah"
 	- $fortytwo "axs" ahah
 	- ' '를 토큰에 담을 필요가 있나?
+12.  grep "hello" && grep "h" << mks
+13. (ls | ls && (ls && ls | ls)) || ls  >> filepath
 
 ```c
 if (is_builtin < 0)
@@ -88,3 +106,6 @@ ft_putstr("minishell: command not found: ");
 printf("\033[1A"); // 한줄 커서 위로(맨왼쪽끝)
 printf("\033[7C"); // cursor move right
 ```
+
+
+1.  
