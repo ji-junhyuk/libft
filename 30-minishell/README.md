@@ -47,6 +47,12 @@
 	- ' '를 토큰에 담을 필요가 있나?
 12.  grep "hello" && grep "h" << mks
 13. (ls | ls && (ls && ls | ls)) || ls  >> filepath
+14. (ls | echo "ls)"
+15. echo "hel"lo""
+16. "$h'$j'"'$h'$h
+	-> hello''$hhello
+17. echo "$h'$h'"'$h'$h
+	-> hello'hello'$hhell
 
 ```c
 if (is_builtin < 0)
@@ -79,7 +85,8 @@ ft_putstr("minishell: command not found: ");
 ### tokenize
 1. 입력의 끝이 있으면 현재 판단 중인 문자열을 토큰으로 본다.
 2. 이전 문자가  operator의 일부이면서 현재 문자가 따옴표가 아니고 이전 문자와 연결해서 opertor취급이 되면 operator의 일부임
-3. 이전문자가 opertor 
+3. 이전문자가 opertor
+
 
 ###
 1. 입력의 끝이 인식되면 현재 토큰(있는 경우)이 구분됩니다.
@@ -87,6 +94,12 @@ ft_putstr("minishell: command not found: ");
 3. 이전 문자가 연산자의 일부로 사용되었고 현재 문자를 이전 문자와 함께 사용하여 연산자를 구성할 수 없는 경우 이전 문자를 포함하는 연산자가 구분됩니다
 4. 현재 문자가 <백슬래시>, 작은따옴표 또는 큰따옴표이고 인용되지 않은 경우 인용된 텍스트의 끝까지 후속 문자에 대한 인용에 영향을 미칩니다. 인용에 대한 규칙은 인용에 설명된 대로입니다.
 5. 현재 문자가 따옴표 없는 '$' 또는 '`'인 경우 쉘은 매개변수 확장(매개변수 확장), 명령 대체(명령 대체)
+6. 현재 문자가 " 안에 없고, operator의 시작이 될 수 있으면 토큰화한다. 그리고 현재 문자는 새로운 문자의 시작이 된다.
+7. 공백을 만나면 지금까지 넣은 것을 토큰화 한다. 공백은 무시한다.
+8. 전 문자가 단어의 일부라면 현 문자도 단어의 일부다.
+9. 새로운 문자 시작.
+
+ 
 
 ### readline
 - -lreadline 
@@ -107,5 +120,27 @@ printf("\033[1A"); // 한줄 커서 위로(맨왼쪽끝)
 printf("\033[7C"); // cursor move right
 ```
 
+### tree
+- tree 구현 
+	- init_tree
+	- make_tree_node
+	- push_lieft
+	- push_right
+	- inorder traverse
 
-1.  
+- tokenize
+	- 의미단위로 토큰 나누기 (list에 넣는다)
+	- expand하기 (list에 담겨진 거 확장)
+	- tree에 매달기	
+export h=hello
+- $(h):  bash: h: command not found;
+- $h: command not found;
+
+
+```c
+(ls | "ls && (ls && ls | ls))" -> 괄호 짝 체크 예외
+(ls | "ls && (ls && ls | ls)") -> 괄호 짝 체크 예외 
+echo "hel"ol"" -> sigle quote : close 만나기 전까지 읽음 -> 
+double quote : 만나면확장하는데공백, " 전까지 읽어서 판단 
+확장한 값을 반환해서 이전 문자와 join 공백 or $ or " 까지 포인터 넘김
+```
