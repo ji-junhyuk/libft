@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 14:14:26 by junji             #+#    #+#             */
-/*   Updated: 2022/10/26 14:05:25 by junji            ###   ########.fr       */
+/*   Updated: 2022/11/11 22:14:55 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	find_vertical_horizental(t_tool *tool, const char *file_name)
 	line[ft_strlen(line) - 1] = 0;
 	tool->horizental = count_word(line, ' ');
 	free(line);
+	tool->vertical = 0;
 	while (1)
 	{
 		++tool->vertical;
