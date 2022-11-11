@@ -46,7 +46,7 @@ bonus_check: $(B_OBJ)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(BONUS_NAME) $^
 
 clean:
-	rm -rf $(OBJ) $(B_OBJS) bonus_check all_check
+	rm -rf $(OBJ_DIR) $(B_OBJ_DIR) bonus_check all_check
 
 fclean: clean
 	rm -f $(NAME) $(BONUS_NAME)
