@@ -135,7 +135,7 @@ bool	is_valid_number(const int argc, const char *argv[],
 		return (false);
 	if (argc == 6)
 	{
-		p_char->must_eat = ft_atoi(argv[5]);
+		p_char->must_eat = ft_atoi(argv[6]);
 		if (p_char->must_eat < 0)
 			return (false);
 	}
