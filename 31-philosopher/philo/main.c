@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/09 16:53:02 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/10 15:38:54 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@
  *
  * return value = zero, otherwise error;
  */
-
 /*
  *int
      pthread_mutex_unlock(pthread_mutex_t *mutex);
@@ -87,7 +86,7 @@
 // 2. 철학자가 한 명 일때
 // 3. time_to_die가 0이라면?
 
-typedef struct s_philosophy
+typedef struct s_philo_character
 {
 	int	number_of_philosophers;
 	int	time_to_die;
@@ -95,7 +94,14 @@ typedef struct s_philosophy
 	int	time_to_sleep;
 	int	must_eat;
 
-}	t_philosophy;
+}	t_philo_character;
+
+typedef struct s_philosophy
+{
+	t_philo_character	philo_char;
+	pthread_mutex_t		philo_fork;
+
+} t_philosophy;
 
 int	ft_atoi(const char *str)
 {
@@ -122,21 +128,21 @@ int	ft_atoi(const char *str)
 }
 
 bool	is_valid_number(const int argc, const char *argv[],
-		t_philosophy *p_char)
+		t_philo_character *philo_char)
 {
-	p_char->number_of_philosophers = ft_atoi(argv[1]);
-	p_char->time_to_die = ft_atoi(argv[2]);
-	p_char->time_to_eat = ft_atoi(argv[3]);
-	p_char->time_to_sleep = ft_atoi(argv[4]);
-	if (p_char->number_of_philosophers <= 1)
+	philo_char->number_of_philosophers = ft_atoi(argv[1]);
+	philo_char->time_to_die = ft_atoi(argv[2]);
+	philo_char->time_to_eat = ft_atoi(argv[3]);
+	philo_char->time_to_sleep = ft_atoi(argv[4]);
+	if (philo_char->number_of_philosophers <= 1)
 		return (false);
-	if (p_char->time_to_die < 0 || p_char->time_to_eat < 0
-		|| p_char->time_to_sleep < 0)
+	if (philo_char->time_to_die < 0 || philo_char->time_to_eat < 0
+		|| philo_char->time_to_sleep < 0)
 		return (false);
 	if (argc == 6)
 	{
-		p_char->must_eat = ft_atoi(argv[6]);
-		if (p_char->must_eat < 0)
+		philo_char->must_eat = ft_atoi(argv[6]);
+		if (philo_char->must_eat < 0)
 			return (false);
 	}
 	return (true);
@@ -162,7 +168,7 @@ void	ft_putstr_fd(const char *s, int fd)
 }
 
 bool	is_valid_input(const int argc, const char *argv[],
-		t_philosophy *p_char)
+		t_philo_character *philo_char)
 {
 	const char	*input_argc_error_msg = "usage: \n\
 1. number_of_philosophers\n\
@@ -179,7 +185,7 @@ bool	is_valid_input(const int argc, const char *argv[],
 		ft_putstr_fd(input_argc_error_msg, 2);
 		return (false);
 	}
-	if (!is_valid_number(argc, argv, p_char))
+	if (!is_valid_number(argc, argv, philo_char))
 	{
 		ft_putstr_fd(input_number_error_msg, 2);
 		return (false);
@@ -187,12 +193,46 @@ bool	is_valid_input(const int argc, const char *argv[],
 	return (true);
 }
 
+void	*hello(void *arg)
+{
+	int m = (long long)arg;
+
+	printf("hello, arg: %lld\n", (long long)arg);
+
+	return (void *)(arg + 2);
+}
+
+// 1개의 스레드
+// 500개의 스레드
+// 철학자들은 
+int _pthread_create()
+{
+	pthread_t		thread2;
+	int				m = 0;
+
+	int ret = pthread_create(&thread2, NULL, hello, (void *)1000);
+	if (ret)
+	{
+		ft_putstr_fd("pthread_create() error", 2);
+		return (1);
+	}
+//	pthread_join(thread2, (void **) &m);
+//	printf("m:%d\n", m);
+	return (0);
+}
+
+
 int	main(int argc, char *argv[])
 {
-	t_philosophy	p_characteristic;
+	t_philo_character	philo_char;
 
-	memset(&p_characteristic, 0, sizeof(p_characteristic));
-	if (!is_valid_input(argc, (const char **)argv, &p_characteristic))
+	memset(&philo_char, 0, sizeof(philo_char));
+	if (!is_valid_input(argc, (const char **)argv, &philo_char))
 		return (1);
+	if (_pthread_create() != 0)
+	{
+	}
+	while (1)
+		;
 	return (0);
 }
