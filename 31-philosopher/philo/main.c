@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/10 15:38:54 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/11 17:06:02 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,15 +93,21 @@ typedef struct s_philo_character
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	must_eat;
-
 }	t_philo_character;
 
 typedef struct s_philosophy
 {
-	t_philo_character	philo_char;
-	pthread_mutex_t		philo_fork;
+	int					identity;
+	t_philo_character	*philo_char;
+	pthread_t			*thread;
+	pthread_mutex_t		*m_fork;
 
-} t_philosophy;
+	pthread_mutex_t		m_cur_eat;
+	int					cur_eat;
+
+	pthread_mutex_t		m_is_philo_dead;
+	bool				is_philo_dead;
+}	t_philosophy;
 
 int	ft_atoi(const char *str)
 {
@@ -141,7 +147,7 @@ bool	is_valid_number(const int argc, const char *argv[],
 		return (false);
 	if (argc == 6)
 	{
-		philo_char->must_eat = ft_atoi(argv[6]);
+		philo_char->must_eat = ft_atoi(argv[5]);
 		if (philo_char->must_eat < 0)
 			return (false);
 	}
@@ -150,9 +156,8 @@ bool	is_valid_number(const int argc, const char *argv[],
 
 int	ft_strlen(const char *str)
 {
-	char	*init_pos;
+	const char	*init_pos = str;
 
-	init_pos = (char *)str;
 	while (*str)
 		++str;
 	return (str - init_pos);
@@ -180,6 +185,7 @@ bool	is_valid_input(const int argc, const char *argv[],
 1. philosopher more than 1\n\
 2. negative argument is not allowed";
 
+	memset(philo_char, 0, sizeof(*philo_char));
 	if (!(argc == 5 || argc == 6))
 	{
 		ft_putstr_fd(input_argc_error_msg, 2);
@@ -193,46 +199,141 @@ bool	is_valid_input(const int argc, const char *argv[],
 	return (true);
 }
 
-void	*hello(void *arg)
+
+int	_pthread_mutex_init(t_philosophy *philosophy, int identity)
 {
-	int m = (long long)arg;
+	const int fork_result = pthread_mutex_init(&(philosophy->m_fork[identity]), NULL);
+	const int cur_eat_result = pthread_mutex_init(&philosophy->m_cur_eat, NULL);
+	const int philo_dead_result = pthread_mutex_init(&philosophy->m_is_philo_dead, NULL);
 
-	printf("hello, arg: %lld\n", (long long)arg);
-
-	return (void *)(arg + 2);
+	if (fork_result || cur_eat_result || philo_dead_result)
+	{
+		ft_putstr_fd("pthread_mutex_init() error", 2);
+		return (1);
+	}
+	return (0);
 }
 
-// 1개의 스레드
-// 500개의 스레드
-// 철학자들은 
-int _pthread_create()
+int	malloc_struct(t_philo_character *philo_char, t_philosophy **philosophy, void **thread_addr, void **m_fork_addr)
 {
-	pthread_t		thread2;
-	int				m = 0;
+	pthread_t	*thread;
+	pthread_t	*m_fork;
 
-	int ret = pthread_create(&thread2, NULL, hello, (void *)1000);
-	if (ret)
+	*philosophy = malloc(sizeof(t_philosophy) * philo_char->number_of_philosophers + 1);
+	if (!*philosophy)
+	{
+		ft_putstr_fd("malloc() error", 2);
+		return (1);
+	}
+	thread = malloc(sizeof(pthread_t) * philo_char->number_of_philosophers);
+	if (!thread)
+	{
+		ft_putstr_fd("malloc() error", 2);
+		return (1);
+	}
+	m_fork = malloc(sizeof(pthread_mutex_t) * philo_char->number_of_philosophers + 1);
+	if (!m_fork)
+	{
+		ft_putstr_fd("malloc() error", 2);
+		return (1);
+	}
+	*thread_addr = thread;
+	*m_fork_addr = m_fork;
+	return (0);
+}
+
+int	init_struct(t_philo_character *philo_char, t_philosophy **philosophy)
+{
+	int	i;
+	void *thread_addr;
+	void *m_fork_addr;
+
+	thread_addr = NULL;
+	m_fork_addr = NULL;
+	if (malloc_struct(philo_char, philosophy, &thread_addr, &m_fork_addr) == 1)
+		return (1);
+	i = -1;
+	while (++i < philo_char->number_of_philosophers)
+	{
+		(*philosophy)[i].identity = i;
+		(*philosophy)[i].cur_eat = 0;
+		(*philosophy)[i].is_philo_dead = false;
+		(*philosophy)[i].thread = thread_addr;
+		(*philosophy)[i].m_fork = m_fork_addr;
+		if (_pthread_mutex_init(&(*philosophy)[i], i) != 0)
+			return (1);
+		(*philosophy)[i].philo_char = philo_char;
+	}
+	return (0);
+}
+
+void	*dining_philosopher(void *philosophy)
+{
+	printf("hello %d\n", ((t_philosophy *)(philosophy))->identity);
+//	while (1)
+//	{
+//		//
+//	}
+	return (NULL);
+}
+
+int _pthread_create(t_philosophy *philosophy)
+{
+	const int result = pthread_create(philosophy->thread, NULL, dining_philosopher, philosophy);
+
+	if (result)
 	{
 		ft_putstr_fd("pthread_create() error", 2);
 		return (1);
 	}
-//	pthread_join(thread2, (void **) &m);
-//	printf("m:%d\n", m);
 	return (0);
 }
 
+int	create_philosophers(t_philosophy *philosophy)
+{
+	int	i;
+
+	i = -1;
+	while (++i < philosophy->philo_char->number_of_philosophers)
+	{
+		if (_pthread_create(&philosophy[i]) == 1)
+			return (1);
+	}
+	return (0);
+}
+
+int	monitor_philosophers()
+{
+	while (1)
+	{
+		// 부모 스레드는 여기서 매번 
+		// 1. 죽은 철학자가 있는지
+		// 2. 모든 철학자가 먹어야 하는 횟수만큼 먹었는지 검사한다. // 난 초기에 0으로 초기화했는데. 조건으로 바로 탈출하거나 data race가 발생할 수 있나?
+		// 3. 철학자들이 식사하면서 락을 걸고, 락을 풀고 하는 시스템 콜을 할텐데, 그 시스템 콜값이 실패한 게 있는지 체크해서 종료하는 것까지 추가.
+	}
+}
 
 int	main(int argc, char *argv[])
 {
 	t_philo_character	philo_char;
+	t_philosophy		*philosophy;
 
-	memset(&philo_char, 0, sizeof(philo_char));
 	if (!is_valid_input(argc, (const char **)argv, &philo_char))
 		return (1);
-	if (_pthread_create() != 0)
-	{
-	}
-	while (1)
-		;
+	philosophy = NULL;
+	if (init_struct(&philo_char, &philosophy) == 1)
+		return (1);
+//	int i = -1;
+//	while (++i < philo_char.number_of_philosophers)
+//	{
+//		printf("identity: %d\n", philosophy[i].identity);
+//		printf("cur_eat: %d\n", philosophy[i].cur_eat);
+//		printf("is_philo_dead: %d\n", philosophy[i].is_philo_dead);
+//		printf("%d %d %d %d %d\n", philosophy[i].philo_char->number_of_philosophers, philosophy[i].philo_char->must_eat, philosophy[i].philo_char->time_to_die, philosophy[i].philo_char->time_to_eat, philosophy[i].philo_char->time_to_sleep);
+//	}
+	if (create_philosophers(philosophy) == 1)
+		return (1);
+//	if (monitor_philosophers(philosophy) == 1)
+//		return (1);
 	return (0);
 }
