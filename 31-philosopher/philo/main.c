@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/11 17:06:02 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/12 13:06:53 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ typedef struct s_philo_character
 typedef struct s_philosophy
 {
 	int					identity;
+	bool				is_created;
 	t_philo_character	*philo_char;
 	pthread_t			*thread;
 	pthread_mutex_t		*m_fork;
@@ -107,6 +108,9 @@ typedef struct s_philosophy
 
 	pthread_mutex_t		m_is_philo_dead;
 	bool				is_philo_dead;
+
+	pthread_mutex_t		m_is_syscall_failed;
+	bool				is_syscall_failed;
 }	t_philosophy;
 
 int	ft_atoi(const char *str)
@@ -124,7 +128,7 @@ int	ft_atoi(const char *str)
 			sign *= -1;
 		++str;
 	}
-	while (*str && ('1' <= *str && *str <= '9'))
+	while (*str && ('0' <= *str && *str <= '9'))
 	{
 		result *= 10;
 		result += (*str - '0');
@@ -205,8 +209,10 @@ int	_pthread_mutex_init(t_philosophy *philosophy, int identity)
 	const int fork_result = pthread_mutex_init(&(philosophy->m_fork[identity]), NULL);
 	const int cur_eat_result = pthread_mutex_init(&philosophy->m_cur_eat, NULL);
 	const int philo_dead_result = pthread_mutex_init(&philosophy->m_is_philo_dead, NULL);
+	const int syscall_fail_result = pthread_mutex_init(&philosophy->m_is_syscall_failed, NULL);
 
-	if (fork_result || cur_eat_result || philo_dead_result)
+	if (fork_result || cur_eat_result || philo_dead_result
+		|| syscall_fail_result)
 	{
 		ft_putstr_fd("pthread_mutex_init() error", 2);
 		return (1);
@@ -258,6 +264,7 @@ int	init_struct(t_philo_character *philo_char, t_philosophy **philosophy)
 		(*philosophy)[i].identity = i;
 		(*philosophy)[i].cur_eat = 0;
 		(*philosophy)[i].is_philo_dead = false;
+		(*philosophy)[i].is_syscall_failed = false;
 		(*philosophy)[i].thread = thread_addr;
 		(*philosophy)[i].m_fork = m_fork_addr;
 		if (_pthread_mutex_init(&(*philosophy)[i], i) != 0)
@@ -267,13 +274,80 @@ int	init_struct(t_philo_character *philo_char, t_philosophy **philosophy)
 	return (0);
 }
 
-void	*dining_philosopher(void *philosophy)
+void print_elapse_time(int identity, struct timeval *start_time, const char *status)
 {
-	printf("hello %d\n", ((t_philosophy *)(philosophy))->identity);
-//	while (1)
-//	{
-//		//
-//	}
+	struct timeval cur_time;
+
+	gettimeofday(&cur_time, NULL);
+	int elapsed_time = (cur_time.tv_sec - start_time->tv_sec) * 1000 + (cur_time.tv_usec - start_time->tv_usec) / 1000;
+	printf("%d %d %s\n", elapsed_time, identity, status);
+}
+
+void	is_sleeping(t_philosophy *philosophy, struct timeval *start_time)
+{
+	print_elapse_time(philosophy->identity, start_time, "is sleeping");
+	usleep(philosophy->philo_char->time_to_sleep);
+}
+
+void	eat_spaghetti(t_philosophy *philosophy, struct timeval *start_time)
+{
+	const int number = philosophy->philo_char->number_of_philosophers;
+	const int identity = philosophy->identity;
+
+	print_elapse_time(philosophy->identity, start_time, "is eating");
+	usleep(philosophy->philo_char->time_to_eat * 1000);
+	if (philosophy->identity % 2 == 0)
+	{
+		pthread_mutex_unlock(&philosophy->m_fork[identity]);
+		pthread_mutex_unlock(&philosophy->m_fork[(identity + 1) % number]);
+	}
+	else
+	{
+		pthread_mutex_unlock(&philosophy->m_fork[identity - 1]);
+		pthread_mutex_unlock(&philosophy->m_fork[philosophy->identity]);
+	}
+}
+
+void	get_fork(pthread_mutex_t *m_fork, int identity, int number_of_philosophers, struct timeval *start_time)
+{
+	if (identity % 2 == 0)
+	{
+		pthread_mutex_lock(&m_fork[identity]);
+		pthread_mutex_lock(&m_fork[(identity + 1) % number_of_philosophers]);
+		print_elapse_time(identity, start_time, "has taken a fork");
+	}
+	else
+	{
+		pthread_mutex_lock(&m_fork[identity - 1]);
+		pthread_mutex_lock(&m_fork[identity]);
+		print_elapse_time(identity, start_time, "has taken a fork");
+	}
+}
+
+static __inline t_philosophy *get_philosophy(void *philo)
+{
+	return ((t_philosophy *)(philo));
+}
+
+void	is_thinking(t_philosophy *philosophy, struct timeval *start_time)
+{
+	print_elapse_time(philosophy->identity, start_time, "is_thinking");
+}
+
+void	*dining_philosopher(void *philo)
+{
+	t_philosophy	*philosophy;
+	struct timeval	start_time;
+
+	philosophy = get_philosophy(philo);
+	gettimeofday(&start_time, NULL);
+	while (1)
+	{
+		get_fork(philosophy->m_fork, philosophy->identity, philosophy->philo_char->number_of_philosophers, &start_time);
+		eat_spaghetti(philosophy, &start_time);
+		is_sleeping(philosophy, &start_time);
+		is_thinking(philosophy, &start_time);
+	}
 	return (NULL);
 }
 
@@ -286,9 +360,30 @@ int _pthread_create(t_philosophy *philosophy)
 		ft_putstr_fd("pthread_create() error", 2);
 		return (1);
 	}
+	philosophy->is_created = true;
 	return (0);
 }
 
+bool	is_every_philo_created(t_philosophy *philosophy)
+{
+	int		i;
+
+	i = -1;
+	while (++i < philosophy->philo_char->number_of_philosophers)
+	{
+		if (philosophy[i].is_created == false)
+			return (false);
+	}
+	return (true);
+}
+
+// 모든 스레드가 만들어질 때까지 기다려줘야 할까?
+// -> 모든 스레드가 만들어지고 나서 철학자를 밥먹이는 것...
+// 만들어지자마자 철학자 로직을 실행한다고 했을 때,
+// 아직 만들어지지 않은 스레드의 뮤택스를 얻어오는 것이 가능할까?
+// 어떻게 테스트하지?
+// 스레드가 만들어진거 여부에 상관없이 뮤택스로 잠금이 되는 거 같다? 
+// 생각해보면 스레드가 만들어지는 것과 뮤택스를 만들고 초기화하는 작업은 독립적이다.
 int	create_philosophers(t_philosophy *philosophy)
 {
 	int	i;
@@ -302,11 +397,20 @@ int	create_philosophers(t_philosophy *philosophy)
 	return (0);
 }
 
-int	monitor_philosophers()
+int	monitor_philosophers(t_philosophy *philosophy)
 {
+	const int number = philosophy->philo_char->number_of_philosophers;
+
 	while (1)
 	{
-		// 부모 스레드는 여기서 매번 
+		int i = -1;
+		while (++i < number)
+		{
+			if (philosophy[i].is_philo_dead == true)
+				break ;
+
+		}
+		// 부모는 여기서 매번 
 		// 1. 죽은 철학자가 있는지
 		// 2. 모든 철학자가 먹어야 하는 횟수만큼 먹었는지 검사한다. // 난 초기에 0으로 초기화했는데. 조건으로 바로 탈출하거나 data race가 발생할 수 있나?
 		// 3. 철학자들이 식사하면서 락을 걸고, 락을 풀고 하는 시스템 콜을 할텐데, 그 시스템 콜값이 실패한 게 있는지 체크해서 종료하는 것까지 추가.
@@ -324,7 +428,7 @@ int	main(int argc, char *argv[])
 	if (init_struct(&philo_char, &philosophy) == 1)
 		return (1);
 //	int i = -1;
-//	while (++i < philo_char.number_of_philosophers)
+//	while (++i < philosophy[0].philo_char->number_of_philosophers)//philo_char.number_of_philosophers)
 //	{
 //		printf("identity: %d\n", philosophy[i].identity);
 //		printf("cur_eat: %d\n", philosophy[i].cur_eat);
@@ -333,7 +437,7 @@ int	main(int argc, char *argv[])
 //	}
 	if (create_philosophers(philosophy) == 1)
 		return (1);
-//	if (monitor_philosophers(philosophy) == 1)
-//		return (1);
+	if (monitor_philosophers(philosophy) == 1)
+		return (1);
 	return (0);
 }
