@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/12 19:51:11 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/13 17:04:40 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,13 @@ typedef struct s_philosophy
 	t_philo_character	*philo_char;
 
 	pthread_mutex_t		*m_fork;
+
 	pthread_mutex_t		m_all_created;
+
+	pthread_mutex_t		m_last_eat_time;
 
 	pthread_mutex_t		m_is_all_eat;
 	bool				is_all_eat;
-
-	pthread_mutex_t		m_is_philo_dead;
-	bool				is_philo_dead;
 
 	pthread_mutex_t		m_is_syscall_failed;
 	bool				is_syscall_failed;
@@ -155,7 +155,7 @@ bool	is_valid_number(const int argc, const char *argv[],
 	philo_char->time_to_sleep = ft_atoi(argv[4]);
 	philo_char->must_eat = 0x7fffffff;
 
-	if (philo_char->number_of_philosophers <= 1)
+	if (philo_char->number_of_philosophers <= 0)
 		return (false);
 	if (philo_char->time_to_die < 0 || philo_char->time_to_eat < 0
 		|| philo_char->time_to_sleep < 0)
@@ -219,11 +219,11 @@ int	_pthread_mutex_init(t_philosophy *philosophy, int identity)
 {
 	const int fork_result = pthread_mutex_init(&(philosophy->m_fork[identity]), NULL);
 	const int cur_eat_result = pthread_mutex_init(&philosophy->m_is_all_eat, NULL);
-	const int philo_dead_result = pthread_mutex_init(&philosophy->m_is_philo_dead, NULL);
+	const int last_eat_time_result = pthread_mutex_init(&philosophy->m_last_eat_time, NULL);
 	const int syscall_fail_result = pthread_mutex_init(&philosophy->m_is_syscall_failed, NULL);
 	const int m_all_created = pthread_mutex_init(&philosophy->m_all_created, NULL);
 
-	if (fork_result || cur_eat_result || philo_dead_result
+	if (fork_result || cur_eat_result || last_eat_time_result
 		|| syscall_fail_result || m_all_created)
 	{
 		ft_putstr_fd("pthread_mutex_init() error", 2);
@@ -237,7 +237,7 @@ int	malloc_struct(t_philo_character *philo_char, t_philosophy **philosophy, void
 	pthread_t	*thread;
 	pthread_t	*m_fork;
 
-	*philosophy = malloc(sizeof(t_philosophy) * philo_char->number_of_philosophers + 1);
+	*philosophy = malloc(sizeof(t_philosophy) * philo_char->number_of_philosophers);
 	if (!*philosophy)
 	{
 		ft_putstr_fd("malloc() error", 2);
@@ -249,7 +249,7 @@ int	malloc_struct(t_philo_character *philo_char, t_philosophy **philosophy, void
 		ft_putstr_fd("malloc() error", 2);
 		return (1);
 	}
-	m_fork = malloc(sizeof(pthread_mutex_t) * philo_char->number_of_philosophers + 1);
+	m_fork = malloc(sizeof(pthread_mutex_t) * philo_char->number_of_philosophers);
 	if (!m_fork)
 	{
 		ft_putstr_fd("malloc() error", 2);
@@ -275,11 +275,9 @@ int	init_struct(t_philo_character *philo_char, t_philosophy **philosophy)
 	{
 		(*philosophy)[i].identity = i;
 		(*philosophy)[i].is_all_eat = false;
-		(*philosophy)[i].is_philo_dead = false;
 		(*philosophy)[i].is_syscall_failed = false;
 		(*philosophy)[i].thread = thread_addr;
 		(*philosophy)[i].m_fork = m_fork_addr;
-
 		if (_pthread_mutex_init(&(*philosophy)[i], i) != 0)
 			return (1);
 		(*philosophy)[i].philo_char = philo_char;
@@ -287,28 +285,32 @@ int	init_struct(t_philo_character *philo_char, t_philosophy **philosophy)
 	return (0);
 }
 
-int	get_mile_second(struct timeval *start_time)
+int	get_mile_second(struct timeval *base_time)
 {
 	struct timeval cur_time;
-	int elapsed_time;
+	long elapsed_time;
 
 	gettimeofday(&cur_time, NULL);
-	elapsed_time = (cur_time.tv_sec - start_time->tv_sec) * 1000 + (cur_time.tv_usec - start_time->tv_usec) / 1000;
+	long sec = (cur_time.tv_sec - base_time->tv_sec ) * 1000;
+	int usec = (cur_time.tv_usec - base_time->tv_usec) / 1000;
+	elapsed_time = sec + usec;
 	return (elapsed_time);
 }
 
 void print_elapse_time(int identity, struct timeval *start_time, const char *status)
 {
-	const int elapsed_time = get_mile_second(start_time);
-	printf("%d %d %s\n", elapsed_time, identity, status);
+	const long elapsed_time = get_mile_second(start_time);
+	printf("%ld %d %s\n", elapsed_time, identity, status);
 }
 
 void	is_sleeping(t_philosophy *philosophy, struct timeval *start_time)
 {
 	const int sleep_time = philosophy->philo_char->time_to_sleep;
+	struct	timeval		base_time;
 
 	print_elapse_time(philosophy->identity, start_time, "is sleeping");
-	while (get_mile_second(&philosophy->last_eat_time) <= sleep_time)
+	gettimeofday(&base_time, NULL);
+	while (get_mile_second(&base_time) <= sleep_time)
 		;
 //	usleep(philosophy->philo_char->time_to_sleep);
 }
@@ -316,38 +318,49 @@ void	is_sleeping(t_philosophy *philosophy, struct timeval *start_time)
 void	eat_spaghetti(t_philosophy *philosophy, struct timeval *start_time)
 {
 	const int number = philosophy->philo_char->number_of_philosophers;
-	const int eat_time = philosophy->philo_char->time_to_eat;
+	const int time_to_eat = philosophy->philo_char->time_to_eat;
 	const int identity = philosophy->identity;
+	int	left_fork	= philosophy->identity;
+	int	right_fork	= philosophy->identity - 1;
 
+	pthread_mutex_lock(&philosophy->m_last_eat_time);
 	gettimeofday(&philosophy->last_eat_time, NULL);
+	pthread_mutex_unlock(&philosophy->m_last_eat_time);
+
 	print_elapse_time(philosophy->identity, start_time, "is eating");
-	//usleep(philosophy->philo_char->time_to_eat * 1000);
-	while (get_mile_second(&philosophy->last_eat_time) <= eat_time)
+	while (get_mile_second(&philosophy->last_eat_time) <= time_to_eat) // last_eat_time
 		;
 	if (philosophy->identity % 2 == 0)
 	{
-		pthread_mutex_unlock(&philosophy->m_fork[identity]);
-		pthread_mutex_unlock(&philosophy->m_fork[(identity + 1) % number]);
+		if (identity == 0)
+			right_fork = number - 1;
+		pthread_mutex_unlock(&philosophy->m_fork[right_fork]);
+		pthread_mutex_unlock(&philosophy->m_fork[left_fork]);
 	}
 	else
 	{
-		pthread_mutex_unlock(&philosophy->m_fork[identity - 1]);
-		pthread_mutex_unlock(&philosophy->m_fork[philosophy->identity]);
+		pthread_mutex_unlock(&philosophy->m_fork[left_fork]);
+		pthread_mutex_unlock(&philosophy->m_fork[right_fork]);
 	}
 }
 
 void	get_fork(pthread_mutex_t *m_fork, int identity, int number_of_philosophers, struct timeval *start_time)
 {
+	int	left_fork	= identity;
+	int	right_fork	= identity - 1;
 	if (identity % 2 == 0)
 	{
-		pthread_mutex_lock(&m_fork[identity]);
-		pthread_mutex_lock(&m_fork[(identity + 1) % number_of_philosophers]);
+		if (identity == 0)
+			right_fork = number_of_philosophers - 1;
+		pthread_mutex_lock(&m_fork[left_fork]);
+		pthread_mutex_lock(&m_fork[right_fork]);
 		print_elapse_time(identity, start_time, "has taken a fork");
 	}
 	else
 	{
-		pthread_mutex_lock(&m_fork[identity - 1]);
-		pthread_mutex_lock(&m_fork[identity]);
+
+		pthread_mutex_lock(&m_fork[right_fork]);
+		pthread_mutex_lock(&m_fork[left_fork]);
 		print_elapse_time(identity, start_time, "has taken a fork");
 	}
 }
@@ -366,18 +379,17 @@ void	*dining_philosopher(void *philo)
 {
 	t_philosophy	*philosophy;
 	int				eat_count;
-	struct timeval	start_time;
 
 	philosophy = get_philosophy(philo);
+	gettimeofday(&philosophy->start_time, NULL);
+	gettimeofday(&philosophy->last_eat_time, NULL);
 	eat_count = philosophy->philo_char->must_eat;
-	printf("eat_count:%d\n", eat_count);
-	gettimeofday(&start_time, NULL);
 	while (--eat_count >= 0)
 	{
-		is_thinking(philosophy, &start_time);
-		get_fork(philosophy->m_fork, philosophy->identity, philosophy->philo_char->number_of_philosophers, &start_time);
-		eat_spaghetti(philosophy, &start_time);
-		is_sleeping(philosophy, &start_time);
+		is_thinking(philosophy, &philosophy->start_time);
+		get_fork(philosophy->m_fork, philosophy->identity, philosophy->philo_char->number_of_philosophers, &philosophy->start_time);
+		eat_spaghetti(philosophy, &philosophy->start_time);
+		is_sleeping(philosophy, &philosophy->start_time);
 	}
 	pthread_mutex_lock(&philosophy->m_is_all_eat);
 	philosophy->is_all_eat = true;
@@ -410,44 +422,81 @@ int	create_philosophers(t_philosophy *philosophy)
 	return (0);
 }
 
-//  철학자가 죽었다는 거
-//  1. 밥 먹을 시간에 제대로 못먹었다는 것
-//  2. 
+bool	is_philo_dead(t_philosophy *philosophy)
+{
+	int	i;
+	int	fasting_time;
+	const	int	number = philosophy->philo_char->number_of_philosophers;
+	const	int time_to_die = philosophy->philo_char->time_to_die;
+	struct	timeval last_eat_time;
 
-//int	monitor_philosophers(t_philosophy *philosophy)
-//{
-//	const int number = philosophy->philo_char->number_of_philosophers;
-//
-//	while (1)
-//	{
-//		if (is_philo_dead(philosophy) || is_all_finished_dining(philosophy))// is_syscall_failed(philosophy)
-//			break ;
-//	}
-//}
+	i = -1;
+	while (++i < number)
+	{
+		pthread_mutex_lock(&philosophy->m_last_eat_time);
+		last_eat_time = philosophy[i].last_eat_time;
+		fasting_time = get_mile_second(&last_eat_time);
+		pthread_mutex_unlock(&philosophy->m_last_eat_time);
+		if (fasting_time >= time_to_die)
+		{
+			print_elapse_time(i, &philosophy[i].start_time, "died");
+			return (true);
+		}
+	}
+	return (false);
+}
+
+bool	is_all_finished_dining(t_philosophy *philosophy)
+{
+	int	i;
+	const	int	number = philosophy->philo_char->number_of_philosophers;
+
+	i = -1;
+	while (++i < number)
+	{
+		pthread_mutex_lock(&(philosophy[i].m_is_all_eat));
+		if (philosophy[i].is_all_eat == false)
+		{
+			pthread_mutex_unlock(&(philosophy[i].m_is_all_eat));
+			return (false);
+		}
+		pthread_mutex_unlock(&(philosophy[i].m_is_all_eat));
+	}
+	return (true);
+}
+
+int monitor_philosophers(t_philosophy *philosophy)
+{
+	while (1)
+	{
+		if (is_philo_dead(philosophy)) 
+			return (0);
+		if (is_all_finished_dining(philosophy))
+			return (0);
+//		if (is_systemcall_failed)
+//			return (1);
+	}
+}
 //
 int	main(int argc, char *argv[])
 {
-	t_philo_character	philo_char;
+	t_philo_character	philo_character;
 	t_philosophy		*philosophy;
 
-	if (!is_valid_input(argc, (const char **)argv, &philo_char))
+	if (!is_valid_input(argc, (const char **)argv, &philo_character))
 		return (1);
 	philosophy = NULL;
-	if (init_struct(&philo_char, &philosophy) == 1)
+	if (init_struct(&philo_character, &philosophy) == 1)
 		return (1);
 //	int i = -1;
 //	while (++i < philosophy[0].philo_char->number_of_philosophers)//philo_char.number_of_philosophers)
 //	{
 //		printf("identity: %d\n", philosophy[i].identity);
-//		printf("cur_eat: %d\n", philosophy[i].cur_eat);
-//		printf("is_philo_dead: %d\n", philosophy[i].is_philo_dead);
 //		printf("%d %d %d %d %d\n", philosophy[i].philo_char->number_of_philosophers, philosophy[i].philo_char->must_eat, philosophy[i].philo_char->time_to_die, philosophy[i].philo_char->time_to_eat, philosophy[i].philo_char->time_to_sleep);
 //	}
 	if (create_philosophers(philosophy) == 1)
 		return (1);
-	while (1)
-		;
-//	if (monitor_philosophers(philosophy) == 1)
-//		return (1);
+	if (monitor_philosophers(philosophy) == 1)
+		return (1);
 	return (0);
 }

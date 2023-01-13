@@ -4,7 +4,7 @@ OBJS = $(SRCS:.o=.c)
 
 SRCS = main.c
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -pthread -g3 -fsanitize=thread
 
 all	: .all_check
 
