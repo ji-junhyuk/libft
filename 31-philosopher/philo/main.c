@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/16 11:16:38 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/16 17:01:17 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,11 @@ typedef struct s_philosophy
 {
 	int					identity;
 	struct timeval		start_time;
-	pthread_t			*thread;
+	pthread_t			thread;
 	t_philo_character	*philo_char;
+
+	pthread_mutex_t		m_is_anyone_die;
+	bool				is_anyone_die;
 
 	pthread_mutex_t		*m_fork;
 
@@ -191,7 +194,7 @@ bool	is_valid_input(const int argc, const char *argv[],
 4. time_to_sleep(in milliseconds\n\
 5. number_of_times_each_philosopher_must_eat(optional argument";
 	const char	*input_number_error_msg = "usage: \n\
-1. philosopher more than 1\n\
+1. philosopher more than 0\n\
 2. negative argument is not allowed";
 
 	memset(philo_char, 0, sizeof(*philo_char));
@@ -216,9 +219,10 @@ int	_pthread_mutex_init(t_philosophy *philosophy, int identity)
 	const int last_eat_time_result = pthread_mutex_init(&philosophy->m_last_eat_time, NULL);
 	const int syscall_fail_result = pthread_mutex_init(&philosophy->m_is_syscall_failed, NULL);
 	const int m_all_created = pthread_mutex_init(&philosophy->m_all_created, NULL);
+	const int m_is_anyone_die = pthread_mutex_init(&philosophy->m_is_anyone_die, NULL);
 
 	if (fork_result || cur_eat_result || last_eat_time_result
-		|| syscall_fail_result || m_all_created)
+		|| syscall_fail_result || m_all_created || m_is_anyone_die)
 	{
 		ft_putstr_fd("pthread_mutex_init() error", 2);
 		return (1);
@@ -237,19 +241,19 @@ int	malloc_struct(t_philo_character *philo_char, t_philosophy **philosophy, void
 		ft_putstr_fd("malloc() error", 2);
 		return (1);
 	}
-	thread = malloc(sizeof(pthread_t) * philo_char->number_of_philosophers);
-	if (!thread)
-	{
-		ft_putstr_fd("malloc() error", 2);
-		return (1);
-	}
+//	thread = malloc(sizeof(pthread_t) * philo_char->number_of_philosophers);
+//	if (!thread)
+//	{
+//		ft_putstr_fd("malloc() error", 2);
+//		return (1);
+//	}
 	m_fork = malloc(sizeof(pthread_mutex_t) * philo_char->number_of_philosophers);
 	if (!m_fork)
 	{
 		ft_putstr_fd("malloc() error", 2);
 		return (1);
 	}
-	*thread_addr = thread;
+//	*thread_addr = thread;
 	*m_fork_addr = m_fork;
 	return (0);
 }
@@ -272,7 +276,8 @@ int	init_struct(t_philo_character *philo_char, t_philosophy **philosophy)
 		(*philosophy)[i].identity = i;
 		(*philosophy)[i].is_all_eat = false;
 		(*philosophy)[i].is_syscall_failed = false;
-		(*philosophy)[i].thread = thread_addr;
+		(*philosophy)[i].is_anyone_die = false;
+//		(*philosophy)[i].thread = thread_addr;
 		(*philosophy)[i].m_fork = m_fork_addr;
 		(*philosophy)[i].last_eat_time = 0;
 		if (_pthread_mutex_init(&(*philosophy)[i], i) != 0)
@@ -330,76 +335,99 @@ void	_msleep(int time)
 	}
 }
 
-void	is_sleeping(t_philosophy *philosophy)
+int	is_sleeping(t_philosophy *philosophy)
 {
 	const int sleep_time = philosophy->philo_char->time_to_sleep;
 
+	pthread_mutex_lock(&philosophy->m_is_anyone_die);
+	if (philosophy->is_anyone_die == true)
+	{
+		pthread_mutex_unlock(&philosophy->m_is_anyone_die);
+		return (1);
+	}
+	pthread_mutex_unlock(&philosophy->m_is_anyone_die);
 	print_elapse_time(philosophy, "is sleeping", false);
 	_msleep(sleep_time);
+	return (0);
 }
 
-void	putdown_fork(t_philosophy *philosophy)
+int	putdown_fork(t_philosophy *philosophy)
 {
 	const int identity = philosophy->identity;
 	const int numbers = philosophy->philo_char->number_of_philosophers;
-	int	left_fork	= identity; 
-	int	right_fork	= (identity + numbers - 1) % numbers;
+	const int	left_fork	= identity; 
+	const int	right_fork	= (identity + numbers - 1) % numbers;
 
+	printf("putdown_fork %d, before mutex\n", identity);
+	pthread_mutex_lock(&philosophy->m_is_anyone_die);
+	printf("putdown_fork %d, after mutex\n", identity);
+	if (philosophy->is_anyone_die == true)
+	{
+		pthread_mutex_unlock(&philosophy->m_is_anyone_die);
+		return (1);
+	}
+	pthread_mutex_unlock(&philosophy->m_is_anyone_die);
 	pthread_mutex_unlock(&philosophy->m_fork[right_fork]);
 	pthread_mutex_unlock(&philosophy->m_fork[left_fork]);
-//	if (philosophy->identity % 2 == 0)
-//	{
-//		if (identity == 0)
-//			right_fork = number - 1;
-//		pthread_mutex_unlock(&philosophy->m_fork[right_fork]);
-//		pthread_mutex_unlock(&philosophy->m_fork[left_fork]);
-//	}
-//	else
-//	{
-//		pthread_mutex_unlock(&philosophy->m_fork[left_fork]);
-//		pthread_mutex_unlock(&philosophy->m_fork[right_fork]);
-//	}
+	return (0);
 }
 
-void	eat_spaghetti(t_philosophy *philosophy)
+int	eat_spaghetti(t_philosophy *philosophy)
 {
 	const int eat_time = philosophy->philo_char->time_to_eat;
 
+	pthread_mutex_lock(&philosophy->m_is_anyone_die);
+	if (philosophy->is_anyone_die == true)
+	{
+		pthread_mutex_unlock(&philosophy->m_is_anyone_die);
+		return (1);
+	}
+	pthread_mutex_unlock(&philosophy->m_is_anyone_die);
 	print_elapse_time(philosophy, "is eating", true);
 	_msleep(eat_time);
+	return (0);
 }
 
-//198
-void	get_fork(t_philosophy *philosophy)
+int	get_fork(t_philosophy *philosophy)
 {
 	const int identity = philosophy->identity;
 	const int numbers = philosophy->philo_char->number_of_philosophers;
-	int	left_fork	= identity; 
-	int	right_fork	= (identity + numbers - 1) % numbers;
+	const int	left_fork	= identity; 
+	const int	right_fork	= (identity + numbers - 1) % numbers;
 
-//	if (identity % 2 == 0)
-//	{
-//		if (identity == 0)
-//			right_fork = numbers - 1;
-		// 0 -> 4
-		// 1 -> 0
-		// 2 -> 1
-		// 3 -> 2
-		// 4 -> 3
-		
-		pthread_mutex_lock(&philosophy->m_fork[left_fork]);
-		pthread_mutex_lock(&philosophy->m_fork[right_fork]);
-		print_elapse_time(philosophy, "has taken a fork", true);
-//		return ;
-//	}
-//	pthread_mutex_lock(&philosophy->m_fork[right_fork]);
-//	pthread_mutex_lock(&philosophy->m_fork[left_fork]);
-//	print_elapse_time(philosophy,  "has taken a fork", true);
+	if (left_fork == right_fork)
+	{
+		_msleep(philosophy->philo_char->time_to_die);
+		return (1);	
+	}
+	pthread_mutex_lock(&philosophy->m_is_anyone_die);
+	if (philosophy->is_anyone_die == true)
+	{
+		pthread_mutex_unlock(&philosophy->m_is_anyone_die);
+		return (1);
+	}
+	pthread_mutex_unlock(&philosophy->m_is_anyone_die);
+	pthread_mutex_lock(&philosophy->m_fork[left_fork]);
+	pthread_mutex_lock(&philosophy->m_fork[right_fork]);
+	print_elapse_time(philosophy, "has taken a fork", true);
+	return (0);
 }
 
-void	is_thinking(t_philosophy *philosophy)
+int	is_thinking(t_philosophy *philosophy)
 {
+	const int identity = philosophy->identity;
+
+	printf("is_thinking %d, before mutex\n", identity);
+	pthread_mutex_lock(&philosophy->m_is_anyone_die);
+	printf("is_thinking %d, after mutex\n", identity);
+	if (philosophy->is_anyone_die == true)
+	{
+		pthread_mutex_unlock(&philosophy->m_is_anyone_die);
+		return (1);
+	}
+	pthread_mutex_unlock(&philosophy->m_is_anyone_die);
 	print_elapse_time(philosophy, "is thinking", false);
+	return (0);
 }
 
 void	*dining_philosopher(void *philo)
@@ -408,19 +436,46 @@ void	*dining_philosopher(void *philo)
 	int				eat_count;
 
 	philosophy = (t_philosophy *)(philo);
+	const int numbers = philosophy->philo_char->number_of_philosophers;
 	const int identity = philosophy->identity;
 	const int sleep_time = philosophy->philo_char->time_to_sleep;
+	const int	left_fork	= identity; 
+	const int	right_fork	= (identity + numbers - 1) % numbers;
 	gettimeofday(&philosophy->start_time, NULL);
 	eat_count = philosophy->philo_char->must_eat;
 	if (identity % 2 == 0)
 		_msleep(sleep_time);
 	while (--eat_count >= 0)
 	{
-		is_thinking(philosophy);
-		get_fork(philosophy);
-		eat_spaghetti(philosophy);
-		putdown_fork(philosophy);
-		is_sleeping(philosophy);
+		if (is_thinking(philosophy) == 1)
+		{
+			printf("%d, is_thinking\n", identity);
+			return (NULL);
+		}
+		if (get_fork(philosophy) == 1)
+		{
+			printf("get_fork\n");
+			return (NULL);
+		}
+		if (eat_spaghetti(philosophy) == 1)
+		{
+			printf("%d, eat_spaghetti\n", identity);
+			pthread_mutex_unlock(&philosophy->m_fork[right_fork]);
+			pthread_mutex_unlock(&philosophy->m_fork[left_fork]);
+			return (NULL);
+		}
+		if (putdown_fork(philosophy) == 1)
+		{
+			printf("%d, putdown_fork\n", identity);
+			pthread_mutex_unlock(&philosophy->m_fork[right_fork]);
+			pthread_mutex_unlock(&philosophy->m_fork[left_fork]);
+			return (NULL);
+		}
+		if (is_sleeping(philosophy) == 1)
+		{
+			printf("is_sleeping\n");
+			return (NULL);
+		}
 	}
 	pthread_mutex_lock(&philosophy->m_is_all_eat);
 	philosophy->is_all_eat = true;
@@ -430,7 +485,7 @@ void	*dining_philosopher(void *philo)
 
 int _pthread_create(t_philosophy *philosophy)
 {
-	const int result = pthread_create(philosophy->thread, NULL, dining_philosopher, philosophy);
+	const int result = pthread_create(&philosophy->thread, NULL, dining_philosopher, philosophy);
 	if (result)
 	{
 		ft_putstr_fd("pthread_create() error", 2);
@@ -449,12 +504,12 @@ int	create_philosophers(t_philosophy *philosophy)
 		if (_pthread_create(&philosophy[i]) == 1)
 			return (1);
 		int ret;
-		ret = pthread_detach(*philosophy[i].thread);
-		if (ret != 0)
-		{
-			printf("detach dㅔ러\n");
-			exit(5);
-		}
+//		ret = pthread_detach(*philosophy[i].thread);
+//		if (ret != 0)
+//		{
+//			printf("detach dㅔ러\n");
+//			exit(5);
+//		}
 	}
 	return (0);
 }
@@ -475,6 +530,9 @@ bool	is_philo_dead(t_philosophy *philosophy)
 		fasting_time = passed_time_to_start - philosophy[i].last_eat_time;
 		if (fasting_time >= time_to_die)
 		{
+			pthread_mutex_lock(&philosophy[i].m_is_anyone_die);
+			philosophy[i].is_anyone_die = true;
+			pthread_mutex_unlock(&philosophy[i].m_is_anyone_die);
 			print_elapse_time(&philosophy[i], "died", false);
 			return (true);
 		}
@@ -486,10 +544,10 @@ bool	is_philo_dead(t_philosophy *philosophy)
 bool	is_all_finished_dining(t_philosophy *philosophy)
 {
 	int	i;
-	const	int	number = philosophy->philo_char->number_of_philosophers;
+	const	int	numbers = philosophy->philo_char->number_of_philosophers;
 
 	i = -1;
-	while (++i < number)
+	while (++i < numbers)
 	{
 		pthread_mutex_lock(&(philosophy[i].m_is_all_eat));
 		if (philosophy[i].is_all_eat == false)
@@ -507,7 +565,15 @@ int monitor_philosophers(t_philosophy *philosophy)
 	while (1)
 	{
 		if (is_philo_dead(philosophy)) 
+		{
+			
+			for (int i = 0; i < philosophy->philo_char->number_of_philosophers; i++) {
+				pthread_mutex_lock(&philosophy[i].m_is_anyone_die);
+				philosophy[i].is_anyone_die = true;
+				pthread_mutex_unlock(&philosophy[i].m_is_anyone_die);
+			}
 			return (0);
+		}
 		if (is_all_finished_dining(philosophy))
 			return (0);
 //		if (is_systemcall_failed)
@@ -515,6 +581,34 @@ int monitor_philosophers(t_philosophy *philosophy)
 	}
 }
 //
+
+//void	_destroy_mutex(t_philosophy *philosophy)
+//{
+//	const int numbers = philosophy->philo_char->number_of_philosophers;
+//	int i;
+//
+//	i = -1;
+//	while (++i < numbers)
+//	{
+//		pthread_mutex_destroy(&philosophy->m_is_all_eat);
+//		pthread_mutex_destroy(&philosophy->m_last_eat_time);
+//		pthread_mutex_destroy(&philosophy->m_is_all_eat);
+//		pthread_mutex_destroy(&philosophy->m_fork[i]);
+//	}
+//}
+
+int	_pthread_join(t_philosophy *philosophy)
+{
+	const int numbers = philosophy->philo_char->number_of_philosophers;
+	int i;
+
+	i = -1;
+	while (++i < numbers)
+	{
+		pthread_join(philosophy[i].thread, NULL);
+	}
+	return (0);
+}
 int	main(int argc, char *argv[])
 {
 	t_philo_character	philo_character;
@@ -535,5 +629,9 @@ int	main(int argc, char *argv[])
 		return (1);
 	if (monitor_philosophers(philosophy) == 1)
 		return (1);
+	if (_pthread_join(philosophy))
+		return (1);
+	sleep(5);
+//	_destroy_mutex(philosophy);
 	return (0);
 }
