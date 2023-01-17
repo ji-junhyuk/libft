@@ -1,27 +1,32 @@
-NAME = philosopher
+NAME = philo
 
-OBJS = $(SRCS:.o=.c) 
+SRC = main check_input create_thread routine monitor_thread return_resource syscall_thread1 syscall_thread2 utils
 
-SRCS = main.c
+SRCS = $(addsuffix .c, $(SRC))
 
-CFLAGS = -g3 -Wall -Wextra -Werror -pthread #-fsanitize=thread -g3
+OBJS = $(SRCS:.c=.o) 
+
+CFLAGS = -g3 -Wall -Wextra -Werror -pthread
+
+%.o : %.c
+	@printf "\033[Kcompile 🦑 $<🔥\r"
+	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 all	: .all_check
 
-%.o : %.c
-	@printf "\033[Kcompile 🦑 $(notdir $<)🔥\r"
-	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+philosophy :
+	@echo '🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥'
+	@echo '  ||||       ||||'
+	@echo '  \__/       \__/'
+	@echo '   ||         ||'
+	@echo '   ||         ||'
+	@echo '   ||         ||'
+	@echo '🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥'
 
-philo :
-	@echo '★┏┓'
-	@echo '┏┻┫'
-	@echo '┃━┫'
-	@echo '┃━┫'
-	@echo '┗━┛'
-
-.all_check :
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $^
-	@make philo
+.all_check : $(OBJS)
+	@$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) -o $(NAME)
+	@touch $@
+	@make philosophy
 
 debugs	:
 	make DEBUG=2
@@ -30,7 +35,7 @@ debug	:
 	make DEBUG=1
 
 ifeq ($(DEBUG), 1)
-    CFLAGS	+=	-g3
+    CFLAGS	+=	-g3 -fsanitize=thread
 endif
 
 ifeq ($(DEBUG), 2)
@@ -42,5 +47,7 @@ clean	:
 	@rm -f .all_check
 
 fclean	:
-	@rm -f .all_check
+	@make clean
 	@rm -f $(NAME)
+
+.PHONY : all bonus clean fclean re
