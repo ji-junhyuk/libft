@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/17 10:27:01 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/17 14:06:15 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,74 +17,6 @@
 #include <sys/time.h>
 #include <pthread.h>
 #include <stdbool.h>
-
-/*
- *  int pthread_create(pthread_t *thread, const pthread_attr_t *attr, 
- *  void *(*start_routine)(void *), void *arg);
- *
- * return value = zero, otherwise error;
- *
- */
-
-/*
- * int
-     pthread_join(pthread_t thread, void **value_ptr);
- *
- * return value = zero, otherwise error
- */
-
-/*
- * int
-     pthread_mutex_init(pthread_mutex_t *mutex,
-         const pthread_mutexattr_t *attr);
- *
- * return value = zero, otherwise error
- */
-
-/*
- * int
-     pthread_mutex_destroy(pthread_mutex_t *mutex);
- *
- * return value = zero, otherwise error;
- */
-
-/*
- *      int
-     pthread_mutex_lock(pthread_mutex_t *mutex);
- *
- * return value = zero, otherwise error;
- */
-/*
- *int
-     pthread_mutex_unlock(pthread_mutex_t *mutex);
- *
- * return value = zero, otherwise error;
- */
-
-/*
- * 시간 측정
- * 1. 철학자가 포크를 들었을 때
- * 2. 철학자가 먹기 시작할 때
- * 3. 철학자가 자기 시작할 때
- * 4. 철학자가 생각할 때(포크를 들지도 않았고, 먹지도 않았고, 잠자지도 않았으면)
- * 5. 철학자가 죽었을 때 
- *struct timeval start_time, end_time;
- * gettimeofday(&start_time, NULL);
- * 어떤 동작
- * gettimeofday(&end_time, NULL);
- * print_elapse_time(1. 철학자)
- * {
- * }
- * int elapsed_time = (end_time.tv_usec - start_time.tv_usec) * 1000; 
- * 
- * 1. sleep에서 차이가 심한 이유
- * - sleep에서 깨어나는 시간이 현재 스케줄러 상황에 따라 다르기 때문.
- */
-// =========Syscall==========
-// ==========================
-// 1. 시간 음수 체크
-// 2. 철학자가 한 명 일때
-// 3. time_to_die가 0이라면?
 
 typedef struct s_philo_character
 {
@@ -104,7 +36,7 @@ typedef struct s_shared_data
 	long				last_eat_time;
 	pthread_mutex_t		m_is_anyone_die;
 	bool				is_anyone_die;
-} t_shared_data;
+}	t_shared_data;
 
 typedef struct s_philosophy
 {
@@ -147,7 +79,6 @@ bool	is_valid_number(const int argc, const char *argv[],
 	philo_char->time_to_eat = ft_atoi(argv[3]);
 	philo_char->time_to_sleep = ft_atoi(argv[4]);
 	philo_char->must_eat = 0x7fffffff;
-
 	if (philo_char->number_of_philosophers <= 0)
 		return (false);
 	if (philo_char->time_to_die < 0 || philo_char->time_to_eat < 0
@@ -165,6 +96,7 @@ bool	is_valid_number(const int argc, const char *argv[],
 int	ft_strlen(const char *str)
 {
 	const char	*init_pos = str;
+
 	while (*str)
 		++str;
 	return (str - init_pos);
@@ -206,40 +138,31 @@ bool	is_valid_input(const int argc, const char *argv[],
 	return (true);
 }
 
-
 int	_pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr)
 {
-	if (pthread_mutex_init(mutex, NULL) != 0)
+	if (pthread_mutex_init(mutex, attr) != 0)
+	{
+		ft_putstr_fd("pthread_mutex_init() error", 2);
 		return (1);
+	}
 	return (0);
 }
 
 int	init_mutex(t_shared_data *shared_data, int identity)
 {
 	if (_pthread_mutex_init(&shared_data->m_is_all_eat, NULL) == 1)
-	{
-		ft_putstr_fd("pthread_mutex_init() error", 2);
 		return (1);
-	}
 	if (_pthread_mutex_init(&shared_data->m_is_anyone_die, NULL) == 1)
-	{
-		ft_putstr_fd("pthread_mutex_init() error", 2);
 		return (1);
-	}
 	if (_pthread_mutex_init(&shared_data->m_last_eat_time, NULL) == 1)
-	{
-		ft_putstr_fd("pthread_mutex_init() error", 2);
 		return (1);
-	}
 	if (_pthread_mutex_init(&shared_data->m_fork[identity], NULL) == 1)
-	{
-		ft_putstr_fd("pthread_mutex_init() error", 2);
 		return (1);
-	}
 	return (0);
 }
 
-int	malloc_struct(t_philosophy **philosophy, t_shared_data **shared_data_addr, pthread_mutex_t **m_fork_addr, int numbers)
+int	malloc_struct(t_philosophy **philosophy, t_shared_data **shared_data_addr,
+	pthread_mutex_t **m_fork_addr, int numbers)
 {
 	t_shared_data		*shared_data;
 	pthread_mutex_t		*m_fork;
@@ -267,73 +190,96 @@ int	malloc_struct(t_philosophy **philosophy, t_shared_data **shared_data_addr, p
 	return (0);
 }
 
-int	init_struct(t_philosophy **philosophy, t_philo_character *philo_character)
+int	init_struct(t_philosophy **philosophy,
+	t_philo_character *philo_character, int i)
 {
-	const	int numbers = philo_character->number_of_philosophers;
-	int		i;
-	t_shared_data	*shared_data_addr;
-	pthread_mutex_t	*m_fork_addr;
+	const int		n = philo_character->number_of_philosophers;
+	struct timeval	start_time;
+	t_shared_data	*shared_data;
+	pthread_mutex_t	*m_fork;
 
-	shared_data_addr = NULL;
-	if (malloc_struct(philosophy, &shared_data_addr, &m_fork_addr, philo_character->number_of_philosophers) == 1)
+	shared_data = NULL;
+	m_fork = NULL;
+	if (malloc_struct(philosophy, &shared_data, &m_fork, n) == 1)
 		return (1);
 	i = -1;
-	while (++i < numbers)
+	gettimeofday(&start_time, NULL);
+	while (++i < n)
 	{
-		shared_data_addr[i].m_fork = m_fork_addr;
-		shared_data_addr[i].is_all_eat = false;
-		shared_data_addr[i].is_anyone_die = false;
-		shared_data_addr[i].last_eat_time = 0;
-		if (init_mutex(&shared_data_addr[i], i) == 1)
+		shared_data[i].m_fork = m_fork;
+		shared_data[i].is_all_eat = false;
+		shared_data[i].is_anyone_die = false;
+		shared_data[i].last_eat_time = 0;
+		if (init_mutex(&shared_data[i], i) == 1)
 			return (1);
-	}
-	i = -1;
-	while (++i < numbers)
-	{
 		(*philosophy)[i].identity = i;
 		(*philosophy)[i].philo_character = philo_character;
-		(*philosophy)[i].shared_data = &shared_data_addr[i];
+		(*philosophy)[i].shared_data = &shared_data[i];
+		(*philosophy)[i].start_time = start_time;
 	}
-//	(*philosophy)[0].shared_data->last_eat_time = 6;
-//	(*philosophy)[1].shared_data->last_eat_time = 3;
+	return (0);
+}
+
+int	_pthread_mutex_lock(pthread_mutex_t *mutex)
+{
+	if (pthread_mutex_lock(mutex) != 0)
+	{
+		ft_putstr_fd("pthread_mutex_lock(), error", 2);
+		return (1);
+	}
+	return (0);
+}
+
+int	_pthread_mutex_unlock(pthread_mutex_t *mutex)
+{
+	if (pthread_mutex_unlock(mutex) != 0)
+	{
+		ft_putstr_fd("pthread_mutex_unlock(), error", 2);
+		return (1);
+	}
 	return (0);
 }
 
 long	get_elapsed_milesecond(t_philosophy *philosophy, bool is_eat_status)
 {
-	struct		timeval cur_time;
-	long		elapsed_time;
-	long		sec;
-	int			usec;
+	struct timeval	cur_time;
+	long			elapsed_time;
+	long			sec;
+	int				usec;
+	t_shared_data	*cur_shared_data;
 
 	gettimeofday(&cur_time, NULL);
-	sec = (cur_time.tv_sec - philosophy->start_time.tv_sec ) * 1000;
+	cur_shared_data = philosophy->shared_data;
+	sec = (cur_time.tv_sec - philosophy->start_time.tv_sec) * 1000;
 	usec = (cur_time.tv_usec - philosophy->start_time.tv_usec) / 1000;
 	elapsed_time = sec + usec;
 	if (is_eat_status)
 	{
-		pthread_mutex_lock(&philosophy->shared_data->m_last_eat_time);
-		philosophy->shared_data->last_eat_time = elapsed_time;
-		//printf("get_elapsed_milesecond, i:%d, last_eat_time:%ld\n", philosophy->identity, philosophy->shared_data->last_eat_time);
-		pthread_mutex_unlock(&philosophy->shared_data->m_last_eat_time);
+		if (_pthread_mutex_lock(&cur_shared_data->m_last_eat_time) == 1)
+			return (-1);
+		cur_shared_data->last_eat_time = elapsed_time;
+		if (_pthread_mutex_unlock(&cur_shared_data->m_last_eat_time) == 1)
+			return (-1);
 	}
 	return (elapsed_time);
 }
 
-void print_elapse_time(t_philosophy *philosophy, const char *status, bool is_eat_status)
+int	print_elapse_time(t_philosophy *philosophy,
+	const char *status, bool is_eat_status)
 {
-	const int identity = philosophy->identity;
-	const long elapsed_time = get_elapsed_milesecond(philosophy, is_eat_status);
+	const int	identity = philosophy->identity;
+	const long	elapsed = get_elapsed_milesecond(philosophy, is_eat_status);
 
-	printf("%ld %d %s\n", elapsed_time, identity + 1, status);
+	printf("%ld %d %s\n", elapsed, identity + 1, status);
+	return (0);
 }
 
-void	_msleep(int time)
+int	msleep(int time)
 {
-	struct		timeval cur_time;
-	long		start_sec;
-	int			start_usec;
-	int			waiting_time;
+	struct timeval	cur_time;
+	long			start_sec;
+	int				start_usec;
+	int				waiting_time;
 
 	gettimeofday(&cur_time, NULL);
 	start_sec = cur_time.tv_sec;
@@ -342,127 +288,151 @@ void	_msleep(int time)
 	while (waiting_time < time)
 	{
 		gettimeofday(&cur_time, NULL);
-		waiting_time = (cur_time.tv_sec - start_sec) * 1000 + (cur_time.tv_usec - start_usec) / 1000;
+		waiting_time = (cur_time.tv_sec - start_sec) * 1000
+			+ (cur_time.tv_usec - start_usec) / 1000;
 		usleep(100);
 	}
+	return (0);
 }
 
 int	is_sleeping(t_philosophy *philosophy)
 {
-	const int sleep_time = philosophy->philo_character->time_to_sleep;
+	const int		sleep_time = philosophy->philo_character->time_to_sleep;
+	t_shared_data	*cur_shared_data;
 
-	pthread_mutex_lock(&philosophy->shared_data->m_is_anyone_die);
-	if (philosophy->shared_data->is_anyone_die == true)
+	cur_shared_data = philosophy->shared_data;
+	if (_pthread_mutex_lock(&cur_shared_data->m_is_anyone_die) == 1)
+		return (-1);
+	if (cur_shared_data->is_anyone_die == true)
 	{
-		pthread_mutex_unlock(&philosophy->shared_data->m_is_anyone_die);
+		if (pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die) == -1)
+			return (-1);
 		return (1);
 	}
-	pthread_mutex_unlock(&philosophy->shared_data->m_is_anyone_die);
+	if (_pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die) == 1)
+		return (-1);
 	print_elapse_time(philosophy, "is sleeping", false);
-	_msleep(sleep_time);
+	msleep(sleep_time);
 	return (0);
 }
 
 int	putdown_fork(t_philosophy *philosophy)
 {
-	const int identity = philosophy->identity;
-	const int numbers = philosophy->philo_character->number_of_philosophers;
-	const int	left_fork	= identity; 
-	const int	right_fork	= (identity + numbers - 1) % numbers;
+	const int		identity = philosophy->identity;
+	const int		n = philosophy->philo_character->number_of_philosophers;
+	const int		left_fork = identity;
+	const int		right_fork = (identity + n - 1) % n;
+	t_shared_data	*cur_shared_data;
 
-	pthread_mutex_lock(&philosophy->shared_data->m_is_anyone_die);
-	if (philosophy->shared_data->is_anyone_die == true)
+	cur_shared_data = philosophy->shared_data;
+	if (_pthread_mutex_lock(&cur_shared_data->m_is_anyone_die) == 1)
+		return (-1);
+	if (cur_shared_data->is_anyone_die == true)
 	{
-		pthread_mutex_unlock(&philosophy->shared_data->m_is_anyone_die);
+		if (_pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die) == 1)
+			return (-1);
 		return (1);
 	}
-	pthread_mutex_unlock(&philosophy->shared_data->m_is_anyone_die);
-	pthread_mutex_unlock(&philosophy->shared_data->m_fork[right_fork]);
-	pthread_mutex_unlock(&philosophy->shared_data->m_fork[left_fork]);
+	if (_pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die) == 1)
+		return (-1);
+	if (_pthread_mutex_unlock(&cur_shared_data->m_fork[right_fork]) == 1)
+		return (-1);
+	if (_pthread_mutex_unlock(&cur_shared_data->m_fork[left_fork]))
+		return (-1);
 	return (0);
 }
 
 int	eat_spaghetti(t_philosophy *philosophy)
 {
-	const int eat_time = philosophy->philo_character->time_to_eat;
+	const int		eat_time = philosophy->philo_character->time_to_eat;
+	t_shared_data	*cur_shared_data;
 
-	pthread_mutex_lock(&philosophy->shared_data->m_is_anyone_die);
-	if (philosophy->shared_data->is_anyone_die == true)
+	cur_shared_data = philosophy->shared_data;
+	if (_pthread_mutex_lock(&cur_shared_data->m_is_anyone_die) == 1)
+		return (-1);
+	if (cur_shared_data->is_anyone_die == true)
 	{
-		pthread_mutex_unlock(&philosophy->shared_data->m_is_anyone_die);
+		if (_pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die) == 1)
+			return (-1);
 		return (1);
 	}
-	pthread_mutex_unlock(&philosophy->shared_data->m_is_anyone_die);
+	if (_pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die) == 1)
+		return (-1);
 	print_elapse_time(philosophy, "is eating", true);
-	_msleep(eat_time);
+	msleep(eat_time);
 	return (0);
 }
 
 int	get_fork(t_philosophy *philosophy)
 {
-	const int identity = philosophy->identity;
-	const int numbers = philosophy->philo_character->number_of_philosophers;
-	const int	left_fork	= identity; 
-	const int	right_fork	= (identity + numbers - 1) % numbers;
+	const int		identity = philosophy->identity;
+	const int		n = philosophy->philo_character->number_of_philosophers;
+	const int		left_fork = identity;
+	const int		right_fork = (identity + n - 1) % n;
+	t_shared_data	*cur_shared_data;
 
+	cur_shared_data = philosophy->shared_data;
 	if (left_fork == right_fork)
+		return (msleep(philosophy->philo_character->time_to_die));
+	if (_pthread_mutex_lock(&cur_shared_data->m_is_anyone_die) == 1)
+		return (-1);
+	if (cur_shared_data->is_anyone_die == true)
 	{
-		_msleep(philosophy->philo_character->time_to_die);
-		return (1);	
-	}
-	pthread_mutex_lock(&philosophy->shared_data->m_is_anyone_die);
-	if (philosophy->shared_data->is_anyone_die == true)
-	{
-		pthread_mutex_unlock(&philosophy->shared_data->m_is_anyone_die);
+		_pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die);
 		return (1);
 	}
-	pthread_mutex_unlock(&philosophy->shared_data->m_is_anyone_die);
-	pthread_mutex_lock(&philosophy->shared_data->m_fork[left_fork]);
-	pthread_mutex_lock(&philosophy->shared_data->m_fork[right_fork]);
-	print_elapse_time(philosophy, "has taken a fork", true);
-	return (0);
+	if (_pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die) == 1)
+		return (-1);
+	if (_pthread_mutex_lock(&cur_shared_data->m_fork[left_fork]) == 1)
+		return (-1);
+	if (_pthread_mutex_lock(&cur_shared_data->m_fork[right_fork]) == 1)
+		return (-1);
+	return (print_elapse_time(philosophy, "has taken a fork", true));
 }
 
 int	is_thinking(t_philosophy *philosophy)
 {
-	const int identity = philosophy->identity;
+	t_shared_data	*cur_shared_data;
 
-	pthread_mutex_lock(&philosophy->shared_data->m_is_anyone_die);
-	if (philosophy->shared_data->is_anyone_die == true)
+	cur_shared_data = philosophy->shared_data;
+	if (_pthread_mutex_lock(&cur_shared_data->m_is_anyone_die) == 1)
+		return (-1);
+	if (cur_shared_data->is_anyone_die == true)
 	{
-		pthread_mutex_unlock(&philosophy->shared_data->m_is_anyone_die);
+		if (_pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die) == 1)
+			return (-1);
 		return (1);
 	}
-	pthread_mutex_unlock(&philosophy->shared_data->m_is_anyone_die);
+	if (_pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die) == 1)
+		return (-1);
 	print_elapse_time(philosophy, "is thinking", false);
 	return (0);
 }
 
-int routine(t_philosophy *philosophy, int identity, int eat_count, int numbers)
+int	routine(t_philosophy *philosophy, int identity, int eat_count, int numbers)
 {
-	const int	left_fork	= identity; 
-	const int	right_fork	= (identity + numbers - 1) % numbers;
+	const int	left_fork = identity;
+	const int	right_fork = (identity + numbers - 1) % numbers;
 
 	while (--eat_count >= 0)
 	{
-		if (is_thinking(philosophy) == 1)
+		if (is_thinking(philosophy))
 			return (1);
-		//printf("i:%d, last_eat_time:%ld\n", philosophy->identity, philosophy->shared_data->last_eat_time);
-		if (get_fork(philosophy) == 1)
+		if (get_fork(philosophy))
 			return (1);
-		if (eat_spaghetti(philosophy) == 1)
+		if (eat_spaghetti(philosophy))
 		{
 			pthread_mutex_unlock(&philosophy->shared_data->m_fork[right_fork]);
 			pthread_mutex_unlock(&philosophy->shared_data->m_fork[left_fork]);
 			return (1);
 		}
-		if (putdown_fork(philosophy) == 1)
+		if (putdown_fork(philosophy))
 		{
 			pthread_mutex_unlock(&philosophy->shared_data->m_fork[right_fork]);
 			pthread_mutex_unlock(&philosophy->shared_data->m_fork[left_fork]);
 			return (1);
 		}
-		if (is_sleeping(philosophy) == 1)
+		if (is_sleeping(philosophy))
 			return (1);
 	}
 	return (0);
@@ -476,15 +446,13 @@ void	*dining_philosopher(void *philo)
 	int				numbers;
 	int				sleep_time;
 
-
 	philosophy = (t_philosophy *)philo;
-	gettimeofday(&((t_philosophy *)(philosophy))->start_time, NULL);
 	identity = philosophy->identity;
 	eat_count = philosophy->philo_character->must_eat;
 	sleep_time = philosophy->philo_character->time_to_sleep;
 	numbers = philosophy->philo_character->number_of_philosophers;
 	if (identity % 2 == 0)
-		_msleep(sleep_time);
+		msleep(sleep_time);
 	if (routine(philosophy, identity, eat_count, numbers) == 1)
 		return (NULL);
 	pthread_mutex_lock(&philosophy->shared_data->m_is_all_eat);
@@ -493,131 +461,154 @@ void	*dining_philosopher(void *philo)
 	return (NULL);
 }
 
-int _pthread_create(t_philosophy *philosophy, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg)
+int	_pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+	void *(*start_routine)(void *), void *arg)
 {
-	const int result = pthread_create(&philosophy->thread, NULL, dining_philosopher, philosophy);
-
-	if (result)
+	if (pthread_create(thread, attr, start_routine, arg) != 0)
 	{
 		ft_putstr_fd("pthread_create() error", 2);
-			return (1);
+		return (1);
 	}
 	return (0);
 }
 
-int	create_philosophers(t_philosophy **philosophy, t_philo_character *philo_character)
+int	create_philosophers(t_philosophy **philosophy,
+	t_philo_character *philo_character)
 {
 	int	i;
 
-	init_struct(philosophy, philo_character);
 	i = -1;
+	init_struct(philosophy, philo_character, i);
 	while (++i < philo_character->number_of_philosophers)
 	{
-		//printf("cre, last_eat_time:%ld\n", (*philosophy)[i].shared_data->last_eat_time);
-		if (_pthread_create(&(*philosophy)[i], NULL, dining_philosopher, philosophy) == 1)
+		if (_pthread_create(&((*philosophy)[i].thread), NULL,
+			dining_philosopher, &(*philosophy)[i]) == 1)
 			return (1);
 	}
 	return (0);
 }
 
-bool	is_philo_dead(t_philosophy *philosophy)
+bool	is_philo_dead(t_philosophy *philo)
 {
-	int		i;
-	int		fasting_time;
-	const	int	numbers = philosophy->philo_character->number_of_philosophers;
-	const	int time_to_die = philosophy->philo_character->time_to_die;
-	long	passed_time_to_start;
+	int			i;
+	int			fasting_time;
+	long		passed_time_start;
+	const int	numbers = philo->philo_character->number_of_philosophers;
+	const int	time_to_die = philo->philo_character->time_to_die;
 
 	i = -1;
 	while (++i < numbers)
 	{
-		passed_time_to_start = get_elapsed_milesecond(&philosophy[i], false);
-		pthread_mutex_lock(&(philosophy[i].shared_data->m_last_eat_time));
-		fasting_time = passed_time_to_start - philosophy[i].shared_data->last_eat_time;
-//		printf("identity:%d, fasting_time:%d\n", i, fasting_time);
+		passed_time_start = get_elapsed_milesecond(&philo[i], false);
+		_pthread_mutex_lock(&(philo[i].shared_data->m_last_eat_time));
+		fasting_time = passed_time_start - philo[i].shared_data->last_eat_time;
 		if (fasting_time >= time_to_die)
 		{
-			pthread_mutex_lock(&philosophy[i].shared_data->m_is_anyone_die);
-			philosophy[i].shared_data->is_anyone_die = true;
-			pthread_mutex_unlock(&philosophy[i].shared_data->m_is_anyone_die);
-			pthread_mutex_unlock(&(philosophy[i].shared_data->m_last_eat_time));
-			print_elapse_time(&philosophy[i], "died", false);
+			_pthread_mutex_lock(&philo[i].shared_data->m_is_anyone_die);
+			philo[i].shared_data->is_anyone_die = true;
+			_pthread_mutex_unlock(&philo[i].shared_data->m_is_anyone_die);
+			_pthread_mutex_unlock(&(philo[i].shared_data->m_last_eat_time));
+			print_elapse_time(&philo[i], "died", false);
 			return (true);
 		}
-		pthread_mutex_unlock(&(philosophy[i].shared_data->m_last_eat_time));
+		_pthread_mutex_unlock(&(philo[i].shared_data->m_last_eat_time));
 	}
 	return (false);
 }
 
 bool	is_all_finished_dining(t_philosophy *philosophy)
 {
-	int	i;
-	const	int	numbers = philosophy->philo_character->number_of_philosophers;
+	const int	n = philosophy->philo_character->number_of_philosophers;
+	int			i;
 
 	i = -1;
-	while (++i < numbers)
+	while (++i < n)
 	{
-		pthread_mutex_lock(&(philosophy[i].shared_data->m_is_all_eat));
+		_pthread_mutex_lock(&(philosophy[i].shared_data->m_is_all_eat));
 		if (philosophy[i].shared_data->is_all_eat == false)
 		{
-			pthread_mutex_unlock(&(philosophy[i].shared_data->m_is_all_eat));
+			_pthread_mutex_unlock(&(philosophy[i].shared_data->m_is_all_eat));
 			return (false);
 		}
-		pthread_mutex_unlock(&(philosophy[i].shared_data->m_is_all_eat));
+		_pthread_mutex_unlock(&(philosophy[i].shared_data->m_is_all_eat));
 	}
 	return (true);
 }
 
-int monitor_philosophers(t_philosophy *philosophy)
+int	monitor_philosophers(t_philosophy *philosophy)
 {
+	const int		n = philosophy->philo_character->number_of_philosophers;
+	int				i;
+	t_shared_data	*cur_shared_data;
+
 	while (1)
 	{
-		if (is_philo_dead(philosophy)) 
+		if (is_philo_dead(philosophy))
 		{
-			
-			for (int i = 0; i < philosophy->philo_character->number_of_philosophers; i++) {
-				pthread_mutex_lock(&philosophy[i].shared_data->m_is_anyone_die);
+			i = -1;
+			while (++i < n)
+			{
+				cur_shared_data = philosophy[i].shared_data;
+				_pthread_mutex_lock(&cur_shared_data->m_is_anyone_die);
 				philosophy[i].shared_data->is_anyone_die = true;
-				pthread_mutex_unlock(&philosophy[i].shared_data->m_is_anyone_die);
+				_pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die);
 			}
 			return (0);
 		}
 		if (is_all_finished_dining(philosophy))
 			return (0);
-//		if (is_systemcall_failed)
-//			return (1);
 	}
 }
-//
 
-//void	_destroy_mutex(t_philosophy *philosophy)
-//{
-//	const int numbers = philosophy->philo_char->number_of_philosophers;
-//	int i;
-//
-//	i = -1;
-//	while (++i < numbers)
-//	{
-//		pthread_mutex_destroy(&philosophy->m_is_all_eat);
-//		pthread_mutex_destroy(&philosophy->m_last_eat_time);
-//		pthread_mutex_destroy(&philosophy->m_is_all_eat);
-//		pthread_mutex_destroy(&philosophy->m_fork[i]);
-//	}
-//}
-
-int	_pthread_join(t_philosophy *philosophy)
+int	_pthread_mutex_destroy(pthread_mutex_t *mutex)
 {
-	const int numbers = philosophy->philo_character->number_of_philosophers;
-	int i;
-
-	i = -1;
-	while (++i < numbers)
+	if (pthread_mutex_destroy(mutex) == 1)
 	{
-		pthread_join(philosophy[i].thread, NULL);
+		ft_putstr_fd("pthread_mutex_destroy() error", 2);
+		return (1);
 	}
-	printf("main, end join\n");
 	return (0);
 }
+
+int	_pthread_join(pthread_t thread, void **value_ptr)
+{
+	if (pthread_join(thread, value_ptr) != 0)
+	{
+		ft_putstr_fd("pthread_join() error", 2);
+		return (1);
+	}
+	return (0);
+}
+
+int	return_resource(t_philosophy *philosophy)
+{
+	const int		n = philosophy->philo_character->number_of_philosophers;
+	int				i;
+	t_shared_data	*cur_shared_data;
+
+	i = -1;
+	while (++i < n)
+		if (_pthread_join(philosophy[i].thread, NULL) == 1)
+			return (1);
+	i = -1;
+	while (++i < n)
+	{
+		cur_shared_data = philosophy[i].shared_data;
+		if (_pthread_mutex_destroy(&cur_shared_data->m_last_eat_time) == 1)
+			return (1);
+		if (_pthread_mutex_destroy(&cur_shared_data->m_is_anyone_die) == 1)
+			return (1);
+		if (_pthread_mutex_destroy(&cur_shared_data->m_is_all_eat) == 1)
+			return (1);
+		if (_pthread_mutex_destroy(&cur_shared_data->m_fork[i]) == 1)
+			return (1);
+	}
+	free(philosophy[0].shared_data->m_fork);
+	free(philosophy[0].shared_data);
+	free(philosophy);
+	return (0);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_philo_character	philo_character;
@@ -630,8 +621,5 @@ int	main(int argc, char *argv[])
 		return (1);
 	if (monitor_philosophers(philosophy) == 1)
 		return (1);
-	if (_pthread_join(philosophy))
-		return (1);
-//	_destroy_mutex(philosophy);
-	return (0);
+	return (return_resource(philosophy));
 }
