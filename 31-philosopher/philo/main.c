@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/17 15:28:40 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/17 18:15:10 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ int	routine(t_philosophy *philosophy, int identity, int eat_count, int numbers)
 			return (1);
 		if (eat_spaghetti(philosophy))
 		{
-			pthread_mutex_unlock(&philosophy->shared_data->m_fork[right_fork]);
-			pthread_mutex_unlock(&philosophy->shared_data->m_fork[left_fork]);
+			_pthread_mutex_unlock(&philosophy->shared_data->m_fork[right_fork]);
+			_pthread_mutex_unlock(&philosophy->shared_data->m_fork[left_fork]);
 			return (1);
 		}
 		if (putdown_fork(philosophy))
 		{
-			pthread_mutex_unlock(&philosophy->shared_data->m_fork[right_fork]);
-			pthread_mutex_unlock(&philosophy->shared_data->m_fork[left_fork]);
+			_pthread_mutex_unlock(&philosophy->shared_data->m_fork[right_fork]);
+			_pthread_mutex_unlock(&philosophy->shared_data->m_fork[left_fork]);
 			return (1);
 		}
 		if (is_sleeping(philosophy))
@@ -58,9 +58,9 @@ void	*dining_philosopher(void *philo)
 		msleep(sleep_time);
 	if (routine(philosophy, identity, eat_count, numbers) == 1)
 		return (NULL);
-	pthread_mutex_lock(&philosophy->shared_data->m_is_all_eat);
+	_pthread_mutex_lock(&philosophy->shared_data->m_is_all_eat);
 	philosophy->shared_data->is_all_eat = true;
-	pthread_mutex_unlock(&philosophy->shared_data->m_is_all_eat);
+	_pthread_mutex_unlock(&philosophy->shared_data->m_is_all_eat);
 	return (NULL);
 }
 
