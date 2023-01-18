@@ -6,11 +6,24 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:31:43 by junji             #+#    #+#             */
-/*   Updated: 2023/01/17 15:29:25 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/18 16:16:35 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	wait_thread(t_philosophy *philosophy, int n)
+{
+	int	i;
+
+	i = -1;
+	while (++i < n)
+	{
+		if (_pthread_join(philosophy[i].thread, NULL) == 1)
+			return (1);
+	}
+	return (0);
+}
 
 int	return_resource(t_philosophy *philosophy)
 {
@@ -18,10 +31,8 @@ int	return_resource(t_philosophy *philosophy)
 	int				i;
 	t_shared_data	*cur_shared_data;
 
-	i = -1;
-	while (++i < n)
-		if (_pthread_join(philosophy[i].thread, NULL) == 1)
-			return (1);
+	if (wait_thread(philosophy, n) == 1)
+		return (1);
 	i = -1;
 	while (++i < n)
 	{
@@ -33,6 +44,8 @@ int	return_resource(t_philosophy *philosophy)
 		if (_pthread_mutex_destroy(&cur_shared_data->m_is_all_eat) == 1)
 			return (1);
 		if (_pthread_mutex_destroy(&cur_shared_data->m_fork[i]) == 1)
+			return (1);
+		if (_pthread_mutex_destroy(&cur_shared_data->m_print[i]) == 1)
 			return (1);
 	}
 	free(philosophy[0].shared_data->m_fork);

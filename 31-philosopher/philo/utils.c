@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:20:23 by junji             #+#    #+#             */
-/*   Updated: 2023/01/17 14:47:43 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/18 15:46:09 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,17 @@ long	get_elapsed_milesecond(t_philosophy *philosophy, bool is_eat_status)
 int	print_elapse_time(t_philosophy *philosophy,
 	const char *status, bool is_eat_status)
 {
-	const int	identity = philosophy->identity;
-	const long	elapsed = get_elapsed_milesecond(philosophy, is_eat_status);
+	const int		identity = philosophy->identity;
+	const long		elapsed = get_elapsed_milesecond(philosophy, is_eat_status);
+	t_shared_data	*cur_shared_data;
 
-	printf("%ld %d %s\n", elapsed, identity + 1, status);
+	cur_shared_data = philosophy->shared_data;
+	if (_pthread_mutex_lock(&cur_shared_data->m_print[identity]) == 1)
+		return (-1);
+	if (cur_shared_data->is_print_possible)
+		printf("%ld %d %s\n", elapsed, identity + 1, status);
+	if (_pthread_mutex_unlock(&cur_shared_data->m_print[identity]) == 1)
+		return (-1);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:18:37 by junji             #+#    #+#             */
-/*   Updated: 2023/01/17 14:32:20 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/18 15:21:26 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,17 @@ int	_pthread_mutex_destroy(pthread_mutex_t *mutex)
 		return (1);
 	}
 	return (0);
+}
+
+void	*_malloc(size_t size)
+{
+	void	*ptr;
+
+	ptr = malloc(size);
+	if (!ptr)
+	{
+		ft_putstr_fd("malloc() error", 2);
+		return (NULL);
+	}
+	return (ptr);
 }

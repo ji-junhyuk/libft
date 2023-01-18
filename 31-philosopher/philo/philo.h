@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:16:13 by junji             #+#    #+#             */
-/*   Updated: 2023/01/17 18:55:39 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/18 15:25:25 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ typedef struct s_philo_character
 typedef struct s_shared_data
 {
 	pthread_mutex_t		*m_fork;
+	pthread_mutex_t		*m_print;
+	bool				is_print_possible;
 	pthread_mutex_t		m_is_all_eat;
 	bool				is_all_eat;
 	pthread_mutex_t		m_last_eat_time;
@@ -76,8 +78,8 @@ int		_pthread_mutex_unlock(pthread_mutex_t *mutex);
 
 int		_pthread_join(pthread_t thread, void **value_ptr);
 int		_pthread_mutex_destroy(pthread_mutex_t *mutex);
-
 void	*dining_philosopher(void *philo);
+void	*_malloc(size_t size);
 
 int		is_thinking(t_philosophy *philosophy);
 int		get_fork(t_philosophy *philosophy);
