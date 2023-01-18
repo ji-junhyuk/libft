@@ -6,7 +6,7 @@ SRCS = $(addsuffix .c, $(SRC))
 
 OBJS = $(SRCS:.c=.o) 
 
-CFLAGS = -g3 -Wall -Wextra -Werror -pthread #-fsanitize=thread
+CFLAGS = -g3 -Wall -Wextra -Werror -pthread
 
 %.o : %.c
 	@printf "\033[Kcompile 🦑 $<🔥\r"
@@ -15,13 +15,13 @@ CFLAGS = -g3 -Wall -Wextra -Werror -pthread #-fsanitize=thread
 all	: .all_check
 
 philosophy :
-	@echo '🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥'
+	@echo '🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥'
 	@echo '  ||||       ||||'
 	@echo '  \__/       \__/'
 	@echo '   ||         ||'
 	@echo '   ||         ||'
 	@echo '   ||         ||'
-	@echo '🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥'
+	@echo '🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥'
 
 .all_check : $(OBJS)
 	@$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) -o $(NAME)

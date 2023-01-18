@@ -6,11 +6,19 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:31:43 by junji             #+#    #+#             */
-/*   Updated: 2023/01/18 16:16:35 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/18 17:35:38 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	free_rest(t_philosophy *philosophy)
+{
+	free(philosophy[0].shared_data->m_fork);
+	free(philosophy[0].shared_data->m_print);
+	free(philosophy[0].shared_data);
+	free(philosophy);
+}
 
 int	wait_thread(t_philosophy *philosophy, int n)
 {
@@ -48,8 +56,6 @@ int	return_resource(t_philosophy *philosophy)
 		if (_pthread_mutex_destroy(&cur_shared_data->m_print[i]) == 1)
 			return (1);
 	}
-	free(philosophy[0].shared_data->m_fork);
-	free(philosophy[0].shared_data);
-	free(philosophy);
+	free_rest(philosophy);
 	return (0);
 }

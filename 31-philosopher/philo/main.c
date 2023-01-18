@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/18 17:10:05 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/18 17:33:48 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	*dining_philosopher(void *philo)
 	sleep_time = philosophy->philo_character->time_to_eat;
 	numbers = philosophy->philo_character->number_of_philosophers;
 	if (identity % 2 == 0)
-		msleep(1);
+		msleep(sleep_time / 100);
 	if (routine(philosophy, identity, eat_count, numbers) == 1)
 		return (NULL);
 	_pthread_mutex_lock(&philosophy->shared_data->m_is_all_eat);
