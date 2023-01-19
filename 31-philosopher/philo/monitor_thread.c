@@ -31,7 +31,7 @@ int	is_anyone_die(t_philosophy *philo, int identity)
 {
 	const int		time_to_die = philo->philo_character->time_to_die;
 	long			passed_time_start;
-	int				fasting_time;
+	long			fasting_time;
 	t_shared_data	*shared_data;
 
 	shared_data = philo[identity].shared_data;

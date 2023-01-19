@@ -6,18 +6,18 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:20:23 by junji             #+#    #+#             */
-/*   Updated: 2023/01/18 15:46:09 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/19 16:06:56 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	msleep(int time)
+int	msleep(long time)
 {
 	struct timeval	cur_time;
 	long			start_sec;
 	int				start_usec;
-	int				waiting_time;
+	long			waiting_time;
 
 	gettimeofday(&cur_time, NULL);
 	start_sec = cur_time.tv_sec;
@@ -39,19 +39,19 @@ long	get_elapsed_milesecond(t_philosophy *philosophy, bool is_eat_status)
 	long			elapsed_time;
 	long			sec;
 	int				usec;
-	t_shared_data	*cur_shared_data;
+	t_shared_data	*shared_data;
 
 	gettimeofday(&cur_time, NULL);
-	cur_shared_data = philosophy->shared_data;
+	shared_data = philosophy->shared_data;
 	sec = (cur_time.tv_sec - philosophy->start_time.tv_sec) * 1000;
 	usec = (cur_time.tv_usec - philosophy->start_time.tv_usec) / 1000;
 	elapsed_time = sec + usec;
 	if (is_eat_status)
 	{
-		if (_pthread_mutex_lock(&cur_shared_data->m_last_eat_time) == 1)
+		if (_pthread_mutex_lock(&shared_data->m_last_eat_time) == 1)
 			return (-1);
-		cur_shared_data->last_eat_time = elapsed_time;
-		if (_pthread_mutex_unlock(&cur_shared_data->m_last_eat_time) == 1)
+		shared_data->last_eat_time = elapsed_time;
+		if (_pthread_mutex_unlock(&shared_data->m_last_eat_time) == 1)
 			return (-1);
 	}
 	return (elapsed_time);
@@ -62,14 +62,14 @@ int	print_elapse_time(t_philosophy *philosophy,
 {
 	const int		identity = philosophy->identity;
 	const long		elapsed = get_elapsed_milesecond(philosophy, is_eat_status);
-	t_shared_data	*cur_shared_data;
+	t_shared_data	*shared_data;
 
-	cur_shared_data = philosophy->shared_data;
-	if (_pthread_mutex_lock(&cur_shared_data->m_print[identity]) == 1)
+	shared_data = philosophy->shared_data;
+	if (_pthread_mutex_lock(&shared_data->m_print[identity]) == 1)
 		return (-1);
-	if (cur_shared_data->is_print_possible)
+	if (shared_data->is_print_possible)
 		printf("%ld %d %s\n", elapsed, identity + 1, status);
-	if (_pthread_mutex_unlock(&cur_shared_data->m_print[identity]) == 1)
+	if (_pthread_mutex_unlock(&shared_data->m_print[identity]) == 1)
 		return (-1);
 	return (0);
 }
