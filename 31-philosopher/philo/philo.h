@@ -33,12 +33,13 @@ typedef struct s_philo_character
 typedef struct s_shared_data
 {
 	pthread_mutex_t		*m_fork;
+	bool				*fork_state;
 	pthread_mutex_t		*m_print;
-	bool				is_print_possible;
+	bool				*is_print_possible;
 	pthread_mutex_t		m_is_all_eat;
 	bool				is_all_eat;
-	pthread_mutex_t		m_last_eat_time;
-	long				last_eat_time;
+	pthread_mutex_t		*m_last_eat_time;
+	long				*last_eat_time;
 	pthread_mutex_t		m_is_anyone_die;
 	bool				is_anyone_die;
 }	t_shared_data;
@@ -49,7 +50,7 @@ typedef struct s_philosophy
 	pthread_t			thread;
 	struct timeval		start_time;
 	t_philo_character	*philo_character;
-	t_shared_data		*shared_data;
+	t_shared_data		shared_data;
 }	t_philosophy;
 
 int		ft_atoi(const char *str);
@@ -57,7 +58,7 @@ void	ft_putstr_fd(const char *s, int fd);;
 long	get_elapsed_milesecond(t_philosophy *philosophy, bool is_eat_status);
 int		print_elapse_time(t_philosophy *philosophy,
 			const char *status, bool is_eat_status);
-int		msleep(int time);
+int		msleep(long time);
 
 bool	is_valid_input(const int argc, const char *argv[],
 			t_philo_character *philo_char);
