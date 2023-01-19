@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:36:09 by junji             #+#    #+#             */
-/*   Updated: 2023/01/19 11:48:45 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/19 11:55:44 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	is_thinking(t_philosophy *philosophy)
 {
 	t_shared_data	*cur_shared_data;
 
+	usleep(100);
 	cur_shared_data = philosophy->shared_data;
 	if (is_anyone_die_true(cur_shared_data))
 		return (1);
