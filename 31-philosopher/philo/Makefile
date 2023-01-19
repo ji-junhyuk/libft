@@ -50,4 +50,8 @@ fclean	:
 	@make clean
 	@rm -f $(NAME)
 
-.PHONY : all bonus clean fclean re
+re	:
+	@make fclean
+	@make all
+
+.PHONY : all bonus clean fclean re debug debugs
