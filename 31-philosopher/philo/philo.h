@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:16:13 by junji             #+#    #+#             */
-/*   Updated: 2023/01/19 11:31:37 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/19 16:48:22 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ typedef struct s_shared_data
 	bool				*fork_state;
 	pthread_mutex_t		*m_print;
 	bool				*is_print_possible;
-	pthread_mutex_t		m_is_all_eat;
-	bool				is_all_eat;
+	pthread_mutex_t		*m_is_all_eat;
+	bool				*is_all_eat;
 	pthread_mutex_t		*m_last_eat_time;
 	long				*last_eat_time;
 	pthread_mutex_t		m_is_anyone_die;
@@ -50,7 +50,7 @@ typedef struct s_philosophy
 	pthread_t			thread;
 	struct timeval		start_time;
 	t_philo_character	*philo_character;
-	t_shared_data		shared_data;
+	t_shared_data		*shared_data;
 }	t_philosophy;
 
 int		ft_atoi(const char *str);

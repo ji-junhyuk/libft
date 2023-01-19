@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:33:21 by junji             #+#    #+#             */
-/*   Updated: 2023/01/19 11:37:36 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/19 17:09:59 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ int	is_anyone_die(t_philosophy *philo, int identity)
 
 	shared_data = philo[identity].shared_data;
 	passed_time_start = get_elapsed_milesecond(&philo[identity], false);
-	_pthread_mutex_lock(&shared_data->m_last_eat_time);
-	fasting_time = passed_time_start - shared_data->last_eat_time;
-	_pthread_mutex_unlock(&shared_data->m_last_eat_time);
+	_pthread_mutex_lock(&shared_data->m_last_eat_time[identity]);
+	fasting_time = passed_time_start - shared_data->last_eat_time[identity];
+	_pthread_mutex_unlock(&shared_data->m_last_eat_time[identity]);
 	if (fasting_time >= time_to_die)
 	{
 		_pthread_mutex_lock(&shared_data->m_is_anyone_die);
@@ -50,7 +50,7 @@ int	is_anyone_die(t_philosophy *philo, int identity)
 		_pthread_mutex_unlock(&shared_data->m_print[identity]);
 		return (true);
 	}
-	_pthread_mutex_unlock(&shared_data->m_last_eat_time);
+	_pthread_mutex_unlock(&shared_data->m_last_eat_time[identity]);
 	return (false);
 }
 
@@ -68,46 +68,40 @@ bool	is_philo_dead(t_philosophy *philo)
 	return (false);
 }
 
-bool	is_all_finished_dining(t_philosophy *philosophy)
+bool	is_all_finished_dining(t_philosophy *philo)
 {
-	const int	n = philosophy->philo_character->number_of_philosophers;
+	const int	n = philo->philo_character->number_of_philosophers;
+	int			identity;
 	int			i;
 
 	i = -1;
 	while (++i < n)
 	{
-		_pthread_mutex_lock(&(philosophy[i].shared_data->m_is_all_eat));
-		if (philosophy[i].shared_data->is_all_eat == false)
+		identity = philo[i].identity;
+		_pthread_mutex_lock(&(philo[i].shared_data->m_is_all_eat[identity]));
+		if (philo[i].shared_data->is_all_eat == false)
 		{
-			_pthread_mutex_unlock(&(philosophy[i].shared_data->m_is_all_eat));
+			_pthread_mutex_unlock(&(philo[i].shared_data->m_is_all_eat[identity]));
 			return (false);
 		}
-		_pthread_mutex_unlock(&(philosophy[i].shared_data->m_is_all_eat));
+		_pthread_mutex_unlock(&(philo[i].shared_data->m_is_all_eat[identity]));
 	}
 	return (true);
 }
 
-int	monitor_philosophers(t_philosophy *philosophy)
+int	monitor_philosophers(t_philosophy *philo)
 {
-	const int		n = philosophy->philo_character->number_of_philosophers;
+	const int		n = philo->philo_character->number_of_philosophers;
 	int				i;
 	t_shared_data	*cur_shared_data;
 
 	while (1)
 	{
-		if (is_philo_dead(philosophy))
+		if (is_philo_dead(philo))
 		{
-			i = -1;
-			while (++i < n)
-			{
-				cur_shared_data = philosophy[i].shared_data;
-				_pthread_mutex_lock(&cur_shared_data->m_is_anyone_die);
-				philosophy[i].shared_data->is_anyone_die = true;
-				_pthread_mutex_unlock(&cur_shared_data->m_is_anyone_die);
-			}
 			return (0);
 		}
-		if (is_all_finished_dining(philosophy))
+		if (is_all_finished_dining(philo))
 			return (0);
 	}
 }

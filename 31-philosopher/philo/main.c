@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/19 11:53:13 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/19 16:50:54 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,26 +41,26 @@ int	routine(t_philosophy *philosophy, int identity, int eat_count, int numbers)
 	return (0);
 }
 
-void	*dining_philosopher(void *philo)
+void	*dining_philosopher(void *philosophy)
 {
-	t_philosophy	*philosophy;
+	t_philosophy	*philo;
 	int				identity;
 	int				eat_count;
 	int				numbers;
 	int				sleep_time;
 
-	philosophy = (t_philosophy *)philo;
-	identity = philosophy->identity;
-	eat_count = philosophy->philo_character->must_eat;
-	sleep_time = philosophy->philo_character->time_to_eat;
-	numbers = philosophy->philo_character->number_of_philosophers;
+	philo = (t_philosophy *)philo;
+	identity = philo->identity;
+	eat_count = philo->philo_character->must_eat;
+	sleep_time = philo->philo_character->time_to_eat;
+	numbers = philo->philo_character->number_of_philosophers;
 	if (identity % 2 == 0)
 		msleep(sleep_time / 100);
-	if (routine(philosophy, identity, eat_count, numbers) == 1)
+	if (routine(philo, identity, eat_count, numbers) == 1)
 		return (NULL);
-	_pthread_mutex_lock(&philosophy->shared_data->m_is_all_eat);
-	philosophy->shared_data->is_all_eat = true;
-	_pthread_mutex_unlock(&philosophy->shared_data->m_is_all_eat);
+	_pthread_mutex_lock(&philo->shared_data->m_is_all_eat[identity]);
+	philo->shared_data->is_all_eat[identity] = true;
+	_pthread_mutex_unlock(&philo->shared_data->m_is_all_eat[identity]);
 	return (NULL);
 }
 
