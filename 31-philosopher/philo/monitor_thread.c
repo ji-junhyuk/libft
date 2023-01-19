@@ -6,11 +6,26 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:33:21 by junji             #+#    #+#             */
-/*   Updated: 2023/01/18 16:54:41 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/19 11:31:12 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+bool	is_anyone_die_true(t_shared_data *shared_data)
+{
+	if (_pthread_mutex_lock(&shared_data->m_is_anyone_die) == 1)
+		return (-1);
+	if (shared_data->is_anyone_die == true)
+	{
+		if (_pthread_mutex_unlock(&shared_data->m_is_anyone_die) == 1)
+			return (-1);
+		return (1);
+	}
+	if (_pthread_mutex_unlock(&shared_data->m_is_anyone_die) == 1)
+		return (-1);
+	return (0);
+}
 
 int	is_anyone_die(t_philosophy *philo, int identity)
 {

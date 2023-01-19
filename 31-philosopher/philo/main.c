@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/19 11:04:33 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/19 11:20:02 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ int	routine(t_philosophy *philosophy, int identity, int eat_count, int numbers)
 		}
 		if (putdown_fork(philosophy))
 		{
-			_pthread_mutex_unlock(&philosophy->shared_data->m_fork[right_fork]); _pthread_mutex_unlock(&philosophy->shared_data->m_fork[left_fork]);
+			_pthread_mutex_unlock(&philosophy->shared_data->m_fork[right_fork]);
+			_pthread_mutex_unlock(&philosophy->shared_data->m_fork[left_fork]);
 			return (1);
 		}
 		if (is_sleeping(philosophy))

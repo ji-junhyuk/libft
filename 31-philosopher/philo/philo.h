@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:16:13 by junji             #+#    #+#             */
-/*   Updated: 2023/01/19 11:05:19 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/19 11:31:37 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ bool	is_valid_input(const int argc, const char *argv[],
 int		create_philosophers(t_philosophy **philosophy,
 			t_philo_character *philo_character);
 
+bool	is_anyone_die_true(t_shared_data *shared_data);
 int		monitor_philosophers(t_philosophy *philosophy);
 
 int		return_resource(t_philosophy *philosophy);
