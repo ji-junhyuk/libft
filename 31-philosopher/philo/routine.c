@@ -16,11 +16,11 @@ int	is_thinking(t_philosophy *philosophy)
 {
 	t_shared_data	*cur_shared_data;
 
-	usleep(100);
 	cur_shared_data = philosophy->shared_data;
 	if (is_anyone_die_true(cur_shared_data))
 		return (1);
 	print_elapse_time(philosophy, "is thinking", false);
+	usleep(100);
 	return (0);
 }
 
