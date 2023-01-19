@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:16:13 by junji             #+#    #+#             */
-/*   Updated: 2023/01/18 15:25:25 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/19 11:05:19 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	*_malloc(size_t size);
 
 int		is_thinking(t_philosophy *philosophy);
 int		get_fork(t_philosophy *philosophy);
-int		eat_spaghetti(t_philosophy *philosophy);
+int		eat_spaghetti(t_philosophy *philosophy, int eat_count);
 int		putdown_fork(t_philosophy *philosophy);
 int		is_sleeping(t_philosophy *philosophy);
 
