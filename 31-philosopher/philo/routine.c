@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:36:09 by junji             #+#    #+#             */
-/*   Updated: 2023/01/20 13:57:53 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 16:07:47 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,18 +88,18 @@ int	putdown_fork(t_philosophy *philo, bool sys_failed)
 		return (1);
 	if (identity % 2 == 0)
 	{
+		shared_data->fork_state[identity] = false;
 		sys_failed |= _pthread_mutex_unlock(&shared_data->m_fork[identity]);
 		usleep(100);
-		sys_failed |= _pthread_mutex_unlock(&shared_data->m_fork[right_fork]);
-		shared_data->fork_state[identity] = false;
 		shared_data->fork_state[right_fork] = false;
+		sys_failed |= _pthread_mutex_unlock(&shared_data->m_fork[right_fork]);
 		return (0);
 	}
+	shared_data->fork_state[identity] = false;
 	sys_failed |= _pthread_mutex_unlock(&shared_data->m_fork[identity]);
 	usleep(100);
-	sys_failed |= pthread_mutex_unlock(&shared_data->m_fork[right_fork]);
 	shared_data->fork_state[right_fork] = false;
-	shared_data->fork_state[identity] = false;
+	sys_failed |= pthread_mutex_unlock(&shared_data->m_fork[right_fork]);
 	if (sys_failed)
 		return (-1);
 	return (0);
