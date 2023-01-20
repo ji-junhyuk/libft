@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:20:23 by junji             #+#    #+#             */
-/*   Updated: 2023/01/19 16:57:14 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 10:49:28 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,19 @@ long	get_elapsed_milesecond(t_philosophy *philo, bool is_eat_status)
 	long			elapsed_time;
 	long			sec;
 	int				usec;
-	t_shared_data	*shared_data;
+	t_shared_data	*s;
 
 	gettimeofday(&cur_time, NULL);
-	shared_data = philo->shared_data;
+	s = philo->shared_data;
 	sec = (cur_time.tv_sec - philo->start_time.tv_sec) * 1000;
 	usec = (cur_time.tv_usec - philo->start_time.tv_usec) / 1000;
 	elapsed_time = sec + usec;
 	if (is_eat_status)
 	{
-		if (_pthread_mutex_lock(&shared_data->m_last_eat_time[philo->identity]) == 1)
+		if (_pthread_mutex_lock(&s->m_last_eat_time[philo->identity]) == 1)
 			return (-1);
-		shared_data->last_eat_time[philo->identity] = elapsed_time;
-		if (_pthread_mutex_unlock(&shared_data->m_last_eat_time[philo->identity]) == 1)
+		s->last_eat_time[philo->identity] = elapsed_time;
+		if (_pthread_mutex_unlock(&s->m_last_eat_time[philo->identity]) == 1)
 			return (-1);
 	}
 	return (elapsed_time);

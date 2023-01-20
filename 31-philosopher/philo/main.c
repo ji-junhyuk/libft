@@ -6,36 +6,36 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/19 16:50:54 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 13:57:57 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	routine(t_philosophy *philosophy, int identity, int eat_count, int numbers)
+int	routine(t_philosophy *philo, int identity, int eat_count, int n)
 {
 	const int	left_fork = identity;
-	const int	right_fork = (identity + numbers - 1) % numbers;
+	const int	right_fork = (identity + n - 1) % n;
 
 	while (--eat_count >= 0)
 	{
-		if (is_thinking(philosophy))
+		if (is_thinking(philo, n))
 			return (1);
-		if (get_fork(philosophy))
+		if (get_fork(philo, identity, n, false))
 			return (1);
-		if (eat_spaghetti(philosophy, eat_count))
+		if (eat_spaghetti(philo, eat_count, false))
 		{
-			_pthread_mutex_unlock(&philosophy->shared_data->m_fork[right_fork]);
-			_pthread_mutex_unlock(&philosophy->shared_data->m_fork[left_fork]);
+			_pthread_mutex_unlock(&philo->shared_data->m_fork[right_fork]);
+			_pthread_mutex_unlock(&philo->shared_data->m_fork[left_fork]);
 			return (1);
 		}
-		if (putdown_fork(philosophy))
+		if (putdown_fork(philo, false))
 		{
-			_pthread_mutex_unlock(&philosophy->shared_data->m_fork[right_fork]);
-			_pthread_mutex_unlock(&philosophy->shared_data->m_fork[left_fork]);
+			_pthread_mutex_unlock(&philo->shared_data->m_fork[right_fork]);
+			_pthread_mutex_unlock(&philo->shared_data->m_fork[left_fork]);
 			return (1);
 		}
-		if (is_sleeping(philosophy))
+		if (is_sleeping(philo, false))
 			return (1);
 	}
 	return (0);
@@ -49,7 +49,7 @@ void	*dining_philosopher(void *philosophy)
 	int				numbers;
 	int				sleep_time;
 
-	philo = (t_philosophy *)philo;
+	philo = (t_philosophy *)philosophy;
 	identity = philo->identity;
 	eat_count = philo->philo_character->must_eat;
 	sleep_time = philo->philo_character->time_to_eat;
@@ -58,9 +58,6 @@ void	*dining_philosopher(void *philosophy)
 		msleep(sleep_time / 100);
 	if (routine(philo, identity, eat_count, numbers) == 1)
 		return (NULL);
-	_pthread_mutex_lock(&philo->shared_data->m_is_all_eat[identity]);
-	philo->shared_data->is_all_eat[identity] = true;
-	_pthread_mutex_unlock(&philo->shared_data->m_is_all_eat[identity]);
 	return (NULL);
 }
 

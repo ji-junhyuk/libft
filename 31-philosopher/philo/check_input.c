@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:23:38 by junji             #+#    #+#             */
-/*   Updated: 2023/01/17 14:25:06 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 11:03:02 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ bool	is_valid_input(const int argc, const char *argv[],
 3. time_to_eat(in milliseconds\n\
 4. time_to_sleep(in milliseconds\n\
 5. number_of_times_each_philosopher_must_eat(optional argument\n\
-*input number follow atoi rule";
+*input number follow atoi rule\n";
 	const char	*input_number_error_msg = "usage: \n\
 1. philosopher more than 0\n\
 2. negative argument is not allowed\n\
-*input number follow atoi rule";
+*input number follow atoi rule\n";
 
 	memset(philo_char, 0, sizeof(*philo_char));
 	if (!(argc == 5 || argc == 6))

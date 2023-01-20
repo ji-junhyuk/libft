@@ -28,11 +28,11 @@ philosophy :
 	@touch $@
 	@make philosophy
 
-debugs	:
-	make DEBUG=2
-
 debug	:
 	make DEBUG=1
+
+debugs	:
+	make DEBUG=2
 
 ifeq ($(DEBUG), 1)
     CFLAGS	+=	-g3 -fsanitize=thread

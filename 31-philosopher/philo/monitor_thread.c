@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:33:21 by junji             #+#    #+#             */
-/*   Updated: 2023/01/19 17:09:59 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 11:40:37 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,36 +71,28 @@ bool	is_philo_dead(t_philosophy *philo)
 bool	is_all_finished_dining(t_philosophy *philo)
 {
 	const int	n = philo->philo_character->number_of_philosophers;
-	int			identity;
 	int			i;
 
 	i = -1;
 	while (++i < n)
 	{
-		identity = philo[i].identity;
-		_pthread_mutex_lock(&(philo[i].shared_data->m_is_all_eat[identity]));
-		if (philo[i].shared_data->is_all_eat == false)
+		_pthread_mutex_lock(&(philo[i].shared_data->m_is_all_eat[i]));
+		if (philo[i].shared_data->is_all_eat[i] == false)
 		{
-			_pthread_mutex_unlock(&(philo[i].shared_data->m_is_all_eat[identity]));
+			_pthread_mutex_unlock(&(philo[i].shared_data->m_is_all_eat[i]));
 			return (false);
 		}
-		_pthread_mutex_unlock(&(philo[i].shared_data->m_is_all_eat[identity]));
+		_pthread_mutex_unlock(&(philo[i].shared_data->m_is_all_eat[i]));
 	}
 	return (true);
 }
 
 int	monitor_philosophers(t_philosophy *philo)
 {
-	const int		n = philo->philo_character->number_of_philosophers;
-	int				i;
-	t_shared_data	*cur_shared_data;
-
 	while (1)
 	{
 		if (is_philo_dead(philo))
-		{
 			return (0);
-		}
 		if (is_all_finished_dining(philo))
 			return (0);
 	}

@@ -6,53 +6,63 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:26:14 by junji             #+#    #+#             */
-/*   Updated: 2023/01/19 16:47:54 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 11:13:11 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	init_shared_data(t_shared_data *shared_data, int n)
+int	init_shared_data(t_shared_data *shared, int n)
 {
 	int		i;
-	bool	syscall_failed;
+	bool	sys_failed;
 
-	syscall_failed = false;
-	shared_data->is_anyone_die = false;
-	syscall_failed |= _pthread_mutex_init(&shared_data->m_is_anyone_die, NULL);
+	sys_failed = false;
+	shared->is_anyone_die = false;
+	sys_failed |= _pthread_mutex_init(&shared->m_is_anyone_die, NULL);
 	i = -1;
 	while (++i < n)
 	{
-		shared_data->fork_state[i] = false;
-		shared_data->is_print_possible[i] = true;
-		shared_data->is_all_eat[i] = false;
-		shared_data[i].last_eat_time = 0;
-		syscall_failed |= _pthread_mutex_init(&shared_data->m_fork[i], NULL);
-		syscall_failed |= _pthread_mutex_init(&shared_data->m_print[i], NULL);
-		syscall_failed |= _pthread_mutex_init(&shared_data->m_is_all_eat[i], NULL);
-		syscall_failed |= _pthread_mutex_init(&shared_data->m_last_eat_time[i], NULL);
+		shared->fork_state[i] = false;
+		shared->is_print_possible[i] = true;
+		shared->is_all_eat[i] = false;
+		shared->last_eat_time[i] = 0;
+		sys_failed |= _pthread_mutex_init(&shared->m_fork[i], NULL);
+		sys_failed |= _pthread_mutex_init(&shared->m_print[i], NULL);
+		sys_failed |= _pthread_mutex_init(&shared->m_is_all_eat[i], NULL);
+		sys_failed |= _pthread_mutex_init(&shared->m_last_eat_time[i], NULL);
 	}
-	if (syscall_failed)
+	if (sys_failed)
 		return (1);
 	return (0);
 }
 
-int	malloc_shared_data(t_shared_data **shared_data_addr, int n)
+int	malloc_shared_data(t_shared_data **shared_data, int n)
 {
-	t_shared_data		*shared_data;
-
-	shared_data = _malloc(sizeof(t_shared_data) * n);
-	shared_data->m_fork = _malloc(sizeof(pthread_mutex_t) * n);
-	shared_data->fork_state = _malloc(sizeof(bool) * n);
-	shared_data->m_print = _malloc(sizeof(pthread_mutex_t) * n);
-	shared_data->is_print_possible = _malloc(sizeof(bool) * n);
-	shared_data->m_is_all_eat = _malloc(sizeof(pthread_mutex_t) * n);
-	shared_data->is_all_eat = _malloc(sizeof(bool) * n);
-	shared_data->m_last_eat_time = _malloc(sizeof(pthread_mutex_t) * n);
-	shared_data->last_eat_time = _malloc(sizeof(long) * n);
-	if (init_shared_data(shared_data, n) == 1)
+	(*shared_data)->m_fork = _malloc(sizeof(pthread_mutex_t) * n);
+	if (!(*shared_data)->m_fork)
 		return (1);
-	*shared_data_addr = shared_data;
+	(*shared_data)->fork_state = _malloc(sizeof(bool) * n);
+	if (!(*shared_data)->fork_state)
+		return (1);
+	(*shared_data)->m_print = _malloc(sizeof(pthread_mutex_t) * n);
+	if (!(*shared_data)->m_print)
+		return (1);
+	(*shared_data)->is_print_possible = _malloc(sizeof(bool) * n);
+	if (!(*shared_data)->is_print_possible)
+		return (1);
+	(*shared_data)->m_is_all_eat = _malloc(sizeof(pthread_mutex_t) * n);
+	if (!(*shared_data)->m_is_all_eat)
+		return (1);
+	(*shared_data)->is_all_eat = _malloc(sizeof(bool) * n);
+	if (!(*shared_data)->is_all_eat)
+		return (1);
+	(*shared_data)->m_last_eat_time = _malloc(sizeof(pthread_mutex_t) * n);
+	if (!(*shared_data)->m_last_eat_time)
+		return (1);
+	(*shared_data)->last_eat_time = _malloc(sizeof(long) * n);
+	if (!(*shared_data)->last_eat_time)
+		return (1);
 	return (0);
 }
 
@@ -63,11 +73,15 @@ int	init_struct(t_philosophy **philosophy,
 	struct timeval	start_time;
 	t_shared_data	*shared_data;
 
-	shared_data = NULL;
 	*philosophy = _malloc(sizeof(t_philosophy) * n);
 	if (!*philosophy)
 		return (1);
+	shared_data = _malloc(sizeof(t_shared_data));
+	if (!shared_data)
+		return (1);
 	if (malloc_shared_data(&shared_data, n) == 1)
+		return (1);
+	if (init_shared_data(shared_data, n) == 1)
 		return (1);
 	i = -1;
 	gettimeofday(&start_time, NULL);

@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:16:13 by junji             #+#    #+#             */
-/*   Updated: 2023/01/19 16:48:22 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 13:58:11 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,16 @@ typedef struct s_shared_data
 {
 	pthread_mutex_t		*m_fork;
 	bool				*fork_state;
+
 	pthread_mutex_t		*m_print;
 	bool				*is_print_possible;
+
 	pthread_mutex_t		*m_is_all_eat;
 	bool				*is_all_eat;
+
 	pthread_mutex_t		*m_last_eat_time;
 	long				*last_eat_time;
+
 	pthread_mutex_t		m_is_anyone_die;
 	bool				is_anyone_die;
 }	t_shared_data;
@@ -59,7 +63,6 @@ long	get_elapsed_milesecond(t_philosophy *philosophy, bool is_eat_status);
 int		print_elapse_time(t_philosophy *philosophy,
 			const char *status, bool is_eat_status);
 int		msleep(long time);
-
 bool	is_valid_input(const int argc, const char *argv[],
 			t_philo_character *philo_char);
 
@@ -83,10 +86,11 @@ int		_pthread_mutex_destroy(pthread_mutex_t *mutex);
 void	*dining_philosopher(void *philo);
 void	*_malloc(size_t size);
 
-int		is_thinking(t_philosophy *philosophy);
-int		get_fork(t_philosophy *philosophy);
-int		eat_spaghetti(t_philosophy *philosophy, int eat_count);
-int		putdown_fork(t_philosophy *philosophy);
-int		is_sleeping(t_philosophy *philosophy);
+int		is_thinking(t_philosophy *philosophy, int n);
+int		get_fork(t_philosophy *philosophy,
+			int identity, int n, bool sys_failed);
+int		eat_spaghetti(t_philosophy *philosophy, int eat_count, bool sys_failed);
+int		putdown_fork(t_philosophy *philosophy, bool sys_failed);
+int		is_sleeping(t_philosophy *philosophy, bool sys_failed);
 
 #endif
