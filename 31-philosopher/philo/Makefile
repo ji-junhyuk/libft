@@ -6,7 +6,7 @@ SRCS = $(addsuffix .c, $(SRC))
 
 OBJS = $(SRCS:.c=.o) 
 
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread -g3
 
 %.o : %.c
 	@printf "\033[Kcompile 🦑 $<🔥\r"

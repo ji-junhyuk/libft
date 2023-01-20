@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:31:43 by junji             #+#    #+#             */
-/*   Updated: 2023/01/20 10:41:06 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 14:40:27 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	free_rest(t_philosophy *philosophy)
 {
-	free(philosophy[0].shared_data->fork_state);
-	free(philosophy[0].shared_data->is_print_possible);
-	free(philosophy[0].shared_data->is_all_eat);
-	free(philosophy[0].shared_data->last_eat_time);
-	free(philosophy[0].shared_data);
+	free(philosophy->shared_data->fork_state);
+	free(philosophy->shared_data->is_print_possible);
+	free(philosophy->shared_data->is_all_eat);
+	free(philosophy->shared_data->last_eat_time);
+	free(philosophy->shared_data);
 	free(philosophy);
 }
 
@@ -60,5 +60,6 @@ int	return_resource(t_philosophy *philosophy)
 			return (1);
 	}
 	free_rest(philosophy);
+	system("leaks philo");
 	return (0);
 }

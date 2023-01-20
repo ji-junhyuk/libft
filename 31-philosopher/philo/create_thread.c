@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:26:14 by junji             #+#    #+#             */
-/*   Updated: 2023/01/20 11:13:11 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 14:38:03 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	init_shared_data(t_shared_data *shared, int n)
 int	malloc_shared_data(t_shared_data **shared_data, int n)
 {
 	(*shared_data)->m_fork = _malloc(sizeof(pthread_mutex_t) * n);
+	printf("*shared_data->m_fork:%p\n", (*shared_data)->m_fork);
 	if (!(*shared_data)->m_fork)
 		return (1);
 	(*shared_data)->fork_state = _malloc(sizeof(bool) * n);
