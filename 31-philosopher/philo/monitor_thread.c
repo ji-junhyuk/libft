@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:33:21 by junji             #+#    #+#             */
-/*   Updated: 2023/01/20 11:40:37 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 17:02:49 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,10 @@ int	is_anyone_die(t_philosophy *philo, int identity)
 		_pthread_mutex_unlock(&shared_data->m_is_anyone_die);
 		print_elapse_time(&philo[identity], "died", false);
 		_pthread_mutex_lock(&shared_data->m_print[identity]);
-		philo[identity].shared_data->is_print_possible = false;
+		shared_data->is_print_possible[identity] = false;
 		_pthread_mutex_unlock(&shared_data->m_print[identity]);
 		return (true);
 	}
-	_pthread_mutex_unlock(&shared_data->m_last_eat_time[identity]);
 	return (false);
 }
 

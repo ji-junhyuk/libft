@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:31:43 by junji             #+#    #+#             */
-/*   Updated: 2023/01/20 14:40:27 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 16:56:22 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,15 @@
 
 void	free_rest(t_philosophy *philosophy)
 {
-	free(philosophy->shared_data->fork_state);
-	free(philosophy->shared_data->is_print_possible);
-	free(philosophy->shared_data->is_all_eat);
-	free(philosophy->shared_data->last_eat_time);
-	free(philosophy->shared_data);
+	free(philosophy[0].shared_data->m_fork);
+	free(philosophy[0].shared_data->m_print);
+	free(philosophy[0].shared_data->m_is_all_eat);
+	free(philosophy[0].shared_data->m_last_eat_time);
+	free(philosophy[0].shared_data->is_print_possible);
+	free(philosophy[0].shared_data->fork_state);
+	free(philosophy[0].shared_data->is_all_eat);
+	free(philosophy[0].shared_data->last_eat_time);
+	free(philosophy[0].shared_data);
 	free(philosophy);
 }
 
@@ -47,9 +51,9 @@ int	return_resource(t_philosophy *philosophy)
 	if (_pthread_mutex_destroy(&shared_data->m_is_anyone_die) == 1)
 		return (1);
 	i = -1;
+	shared_data = philosophy[0].shared_data;
 	while (++i < n)
 	{
-		shared_data = philosophy[i].shared_data;
 		if (_pthread_mutex_destroy(&shared_data->m_fork[i]) == 1)
 			return (1);
 		if (_pthread_mutex_destroy(&shared_data->m_print[i]) == 1)
@@ -60,6 +64,5 @@ int	return_resource(t_philosophy *philosophy)
 			return (1);
 	}
 	free_rest(philosophy);
-	system("leaks philo");
 	return (0);
 }

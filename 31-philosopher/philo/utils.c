@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:20:23 by junji             #+#    #+#             */
-/*   Updated: 2023/01/20 10:49:28 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/20 17:07:24 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ int	print_elapse_time(t_philosophy *philo,
 	shared_data = philo->shared_data;
 	if (_pthread_mutex_lock(&shared_data->m_print[identity]) == 1)
 		return (-1);
-	if (shared_data->is_print_possible)
-		printf("%ld %d %s\n", elapsed, identity + 1, status);
+	if (shared_data->is_print_possible[identity])
+		printf("\033[0;32m%06ld \033[0;37m%03d %s\n", elapsed, identity + 1, status);
 	if (_pthread_mutex_unlock(&shared_data->m_print[identity]) == 1)
 		return (-1);
 	return (0);
