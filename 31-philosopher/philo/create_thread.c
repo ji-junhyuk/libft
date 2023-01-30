@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:26:14 by junji             #+#    #+#             */
-/*   Updated: 2023/01/20 16:36:31 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/30 08:59:31 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,25 @@ int	init_shared_data(t_shared_data *shared, int n)
 
 int	malloc_shared_data(t_shared_data **shared_data, int n)
 {
-	(*shared_data)->m_fork = _malloc(sizeof(pthread_mutex_t) * n); // 
+	(*shared_data)->m_fork = _malloc(sizeof(pthread_mutex_t) * n);
 	if (!(*shared_data)->m_fork)
 		return (1);
 	(*shared_data)->fork_state = _malloc(sizeof(bool) * n);
 	if (!(*shared_data)->fork_state)
 		return (1);
-	(*shared_data)->m_print = _malloc(sizeof(pthread_mutex_t) * n); // 
+	(*shared_data)->m_print = _malloc(sizeof(pthread_mutex_t) * n);
 	if (!(*shared_data)->m_print)
 		return (1);
-	(*shared_data)->is_print_possible = _malloc(sizeof(bool) * n); //
+	(*shared_data)->is_print_possible = _malloc(sizeof(bool) * n);
 	if (!(*shared_data)->is_print_possible)
 		return (1);
-	(*shared_data)->m_is_all_eat = _malloc(sizeof(pthread_mutex_t) * n); // 
+	(*shared_data)->m_is_all_eat = _malloc(sizeof(pthread_mutex_t) * n);
 	if (!(*shared_data)->m_is_all_eat)
 		return (1);
 	(*shared_data)->is_all_eat = _malloc(sizeof(bool) * n);
 	if (!(*shared_data)->is_all_eat)
 		return (1);
-	(*shared_data)->m_last_eat_time = _malloc(sizeof(pthread_mutex_t) * n); //
+	(*shared_data)->m_last_eat_time = _malloc(sizeof(pthread_mutex_t) * n);
 	if (!(*shared_data)->m_last_eat_time)
 		return (1);
 	(*shared_data)->last_eat_time = _malloc(sizeof(long) * n);
