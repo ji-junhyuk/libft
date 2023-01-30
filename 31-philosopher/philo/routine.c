@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 14:36:09 by junji             #+#    #+#             */
-/*   Updated: 2023/01/30 09:48:43 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/30 14:50:02 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	putdown_fork(t_philosophy *philo, bool sys_failed)
 	sys_failed |= _pthread_mutex_unlock(&shared_data->m_fork[identity]);
 	usleep(100);
 	shared_data->fork_state[right_fork] = false;
-	sys_failed |= pthread_mutex_unlock(&shared_data->m_fork[right_fork]);
+	sys_failed |= _pthread_mutex_unlock(&shared_data->m_fork[right_fork]);
 	if (sys_failed)
 		return (-1);
 	return (0);
@@ -117,7 +117,7 @@ int	is_sleeping(t_philosophy *philo, bool sys_failed)
 		sys_failed |= _pthread_mutex_unlock(&shared_data->m_is_anyone_die);
 		return (1);
 	}
-	sys_failed |= pthread_mutex_unlock(&shared_data->m_is_anyone_die);
+	sys_failed |= _pthread_mutex_unlock(&shared_data->m_is_anyone_die);
 	if (sys_failed)
 		return (-1);
 	print_elapse_time(philo, "is sleeping", false);
