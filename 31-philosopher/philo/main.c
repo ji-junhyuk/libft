@@ -6,7 +6,7 @@
 /*   By: junji <junji@42seoul.student.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:43:32 by junji             #+#    #+#             */
-/*   Updated: 2023/01/20 16:36:38 by junji            ###   ########.fr       */
+/*   Updated: 2023/01/30 09:41:16 by junji            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,27 @@ int	routine(t_philosophy *philo, int identity, int eat_count, int n)
 void	*dining_philosopher(void *philosophy)
 {
 	t_philosophy	*philo;
-	int				identity;
-	int				eat_count;
 	int				numbers;
 	int				sleep_time;
+	bool			sys_failed;
+	t_shared_data	*shared_data;
 
 	philo = (t_philosophy *)philosophy;
-	identity = philo->identity;
-	eat_count = philo->philo_character->must_eat;
+	shared_data = philo->shared_data;
 	sleep_time = philo->philo_character->time_to_eat;
 	numbers = philo->philo_character->number_of_philosophers;
-	if (identity % 2 == 0)
+	sys_failed = false;
+	if (philo->philo_character->must_eat == 0)
+	{
+		_pthread_mutex_lock(&shared_data->m_is_all_eat[philo->identity]);
+		shared_data->is_all_eat[philo->identity] = true;
+		_pthread_mutex_unlock(&shared_data->m_is_all_eat[philo->identity]);
+		return (NULL);
+	}
+	if (philo->identity % 2 == 0)
 		msleep(sleep_time / 100);
-	if (routine(philo, identity, eat_count, numbers) == 1)
+	if (routine(philo, philo->identity,
+			philo->philo_character->must_eat, numbers) == 1)
 		return (NULL);
 	return (NULL);
 }
