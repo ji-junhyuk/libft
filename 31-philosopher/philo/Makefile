@@ -24,7 +24,7 @@ philosophy :
 	@echo '🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥'
 
 .all_check : $(OBJS)
-	@$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 	@touch $@
 	@make philosophy
 
