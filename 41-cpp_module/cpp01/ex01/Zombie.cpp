@@ -20,13 +20,17 @@ Zombie *Zombie::newZombie(std::string name) {
 
 void Zombie::randomChump(std::string name) {
     Zombie zombie(name);
-    zombie.announce();
+    zombie.Announce();
 }
 
-void Zombie::announce(void) {
+void Zombie::Announce(void) {
     std::cout << this->mName << ": BraiiiiiiinnnzzzZ..." << '\n';
 }
 
 Zombie::~Zombie() {
     std::cout << "~Zombie(): " << this->mName << '\n';
+}
+
+void Zombie::SetName(const std::string &name) {
+    Zombie::mName = name;
 }

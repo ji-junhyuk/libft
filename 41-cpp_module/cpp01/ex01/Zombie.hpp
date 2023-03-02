@@ -15,9 +15,11 @@ public:
     Zombie();
     Zombie(std::string name);
     Zombie* newZombie(std::string name);
+    Zombie* zombieHorde(int N, std::string name);
     ~Zombie();
     void randomChump(std::string name);
-    void announce(void);
+    void Announce(void);
+    void SetName(const std::string &mName);
 };
 
 #endif //CPP01_ZOMBIE_HPP
