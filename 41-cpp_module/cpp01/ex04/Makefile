@@ -1,4 +1,4 @@
-SRCS = main.cpp
+SRCS = main.cpp CreateReplacedFile.cpp
 
 NAME = SED
 
