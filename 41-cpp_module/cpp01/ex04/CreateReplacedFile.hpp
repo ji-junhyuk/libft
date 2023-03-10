@@ -19,7 +19,6 @@ private:
 
 public:
     CreateReplacedFile(const char *file_name);
-
     void ReadBuffer(const char *file_name);
     void ReplaceContent(const char *before, const char *after);
 };
