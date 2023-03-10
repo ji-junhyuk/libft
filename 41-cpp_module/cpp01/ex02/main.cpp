@@ -7,8 +7,6 @@
 
 int main(void) {
     std::string str1 = "HI THIS IS BRAIN";
-    int a = 10;
-    int &num = a;
     std::string *stringPTR = &str1;
     std::string &stringREF = str1;
 

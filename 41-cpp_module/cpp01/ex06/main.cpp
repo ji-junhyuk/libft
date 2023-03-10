@@ -4,18 +4,17 @@
 
 #include "Harl.hpp"
 
-int main(void)
+void    put_error(const char *str)
 {
-    Harl harl;
+    std::cout << str << '\n';
+    exit(1);
+}
 
-   harl.Complain("DEBUG");
-   std::cout << "======\n";
-    harl.Complain("INFO");
-    std::cout << "======\n";
-    harl.Complain("WARNING");
-    std::cout << "======\n";
-    harl.Complain("ERROR");
-    std::cout << "======\n";
-    harl.Complain("dkfjaskdjf");
-    std::cout << "======\n";
+int main(int argc, char *argv[])
+{
+    if (argc != 2)
+        put_error("Not valid arguments.\n");
+    Harl harl;
+    std::string key(argv[1]);
+   harl.Complain(key);
 }
