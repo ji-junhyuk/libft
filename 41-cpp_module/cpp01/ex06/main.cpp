@@ -13,7 +13,7 @@ void    put_error(const char *str)
 int main(int argc, char *argv[])
 {
     if (argc != 2)
-        put_error("Not valid arguments.\n");
+        put_error("Not valid arguments.");
     Harl harl;
     std::string key(argv[1]);
    harl.Complain(key);
