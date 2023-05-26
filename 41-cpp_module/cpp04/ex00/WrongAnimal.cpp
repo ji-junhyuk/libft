@@ -14,7 +14,7 @@ WrongAnimal::WrongAnimal(std::string type) : mType(type) {
 
 WrongAnimal::WrongAnimal(const WrongAnimal &other) {
     std::cout << "[WrongAnimal] Copy constructor is called" << std::endl;
-    *this = other;
+    mType = other.mType;
 }
 
 WrongAnimal &WrongAnimal::operator=(const WrongAnimal &other) {

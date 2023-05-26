@@ -27,7 +27,7 @@
 					[
 						0
 					],
-					"name" : "cpp04",
+					"name" : "CPP02",
 					"targetIndexes" : 
 					[
 						0
@@ -38,9 +38,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "cpp04::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-cpp04-Debug-5dc31158f579e5e1f525.json",
-					"name" : "cpp04",
+					"id" : "CPP02::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CPP02-Debug-162c0e7b791edcdaa099.json",
+					"name" : "CPP02",
 					"projectIndex" : 0
 				}
 			]
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04/cmake-build-debug",
-		"source" : "/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04"
+		"build" : "/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp02/cmake-build-debug",
+		"source" : "/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp02"
 	},
 	"version" : 
 	{

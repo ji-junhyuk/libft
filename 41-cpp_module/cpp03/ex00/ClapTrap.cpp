@@ -13,9 +13,8 @@ ClapTrap::ClapTrap(std::string& name) : mHitPoints(10), mEnergyPoints(10), mAtta
     mName = name;
 }
 
-ClapTrap::ClapTrap(const ClapTrap &other) {
+ClapTrap::ClapTrap(const ClapTrap &other) : mName(other.mName), mHitPoints(other.mHitPoints), mAttackDamage(other.mAttackDamage), mEnergyPoints(other.mEnergyPoints) {
     std::cout << "Copy constructor called" << '\n' << std::endl;
-    *this = other;
 }
 
 ClapTrap &ClapTrap::operator=(const ClapTrap &other) {

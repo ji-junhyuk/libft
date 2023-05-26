@@ -17,7 +17,7 @@ Fixed::Fixed(const float value) {
 }
 
 Fixed::Fixed(const Fixed &other) {
-    *this = other;
+    mFixedPointValue = other.mFixedPointValue;
 }
 
 Fixed &Fixed::operator=(const Fixed &other) {

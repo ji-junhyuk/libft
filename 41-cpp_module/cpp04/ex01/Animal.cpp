@@ -14,7 +14,7 @@ Animal::Animal(std::string type) : mType(type) {
 
 Animal::Animal(const Animal &other) {
     std::cout << "[Animal] Copy constructor is called" << std::endl;
-    *this = other;
+    mType = other.mType;
 }
 
 Animal &Animal::operator=(const Animal &other) {
