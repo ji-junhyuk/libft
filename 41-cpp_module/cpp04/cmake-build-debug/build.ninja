@@ -88,6 +88,41 @@ build CMakeFiles/cpp04.dir/ex00/WrongCat.cpp.o: CXX_COMPILER__cpp04_Debug /Users
   OBJECT_DIR = CMakeFiles/cpp04.dir
   OBJECT_FILE_DIR = CMakeFiles/cpp04.dir/ex00
 
+build CMakeFiles/cpp04.dir/ex01/Animal.cpp.o: CXX_COMPILER__cpp04_Debug /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04/ex01/Animal.cpp || cmake_object_order_depends_target_cpp04
+  DEP_FILE = CMakeFiles/cpp04.dir/ex01/Animal.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fcolor-diagnostics -std=gnu++14
+  INCLUDES = -I/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04/ex00
+  OBJECT_DIR = CMakeFiles/cpp04.dir
+  OBJECT_FILE_DIR = CMakeFiles/cpp04.dir/ex01
+
+build CMakeFiles/cpp04.dir/ex01/Brain.cpp.o: CXX_COMPILER__cpp04_Debug /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04/ex01/Brain.cpp || cmake_object_order_depends_target_cpp04
+  DEP_FILE = CMakeFiles/cpp04.dir/ex01/Brain.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fcolor-diagnostics -std=gnu++14
+  INCLUDES = -I/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04/ex00
+  OBJECT_DIR = CMakeFiles/cpp04.dir
+  OBJECT_FILE_DIR = CMakeFiles/cpp04.dir/ex01
+
+build CMakeFiles/cpp04.dir/ex01/Dog.cpp.o: CXX_COMPILER__cpp04_Debug /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04/ex01/Dog.cpp || cmake_object_order_depends_target_cpp04
+  DEP_FILE = CMakeFiles/cpp04.dir/ex01/Dog.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fcolor-diagnostics -std=gnu++14
+  INCLUDES = -I/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04/ex00
+  OBJECT_DIR = CMakeFiles/cpp04.dir
+  OBJECT_FILE_DIR = CMakeFiles/cpp04.dir/ex01
+
+build CMakeFiles/cpp04.dir/ex01/Cat.cpp.o: CXX_COMPILER__cpp04_Debug /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04/ex01/Cat.cpp || cmake_object_order_depends_target_cpp04
+  DEP_FILE = CMakeFiles/cpp04.dir/ex01/Cat.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fcolor-diagnostics -std=gnu++14
+  INCLUDES = -I/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04/ex00
+  OBJECT_DIR = CMakeFiles/cpp04.dir
+  OBJECT_FILE_DIR = CMakeFiles/cpp04.dir/ex01
+
+build CMakeFiles/cpp04.dir/ex01/main.cpp.o: CXX_COMPILER__cpp04_Debug /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04/ex01/main.cpp || cmake_object_order_depends_target_cpp04
+  DEP_FILE = CMakeFiles/cpp04.dir/ex01/main.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fcolor-diagnostics -std=gnu++14
+  INCLUDES = -I/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp04/ex00
+  OBJECT_DIR = CMakeFiles/cpp04.dir
+  OBJECT_FILE_DIR = CMakeFiles/cpp04.dir/ex01
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target cpp04
@@ -96,7 +131,7 @@ build CMakeFiles/cpp04.dir/ex00/WrongCat.cpp.o: CXX_COMPILER__cpp04_Debug /Users
 #############################################
 # Link the executable cpp04
 
-build cpp04: CXX_EXECUTABLE_LINKER__cpp04_Debug CMakeFiles/cpp04.dir/ex00/Animal.cpp.o CMakeFiles/cpp04.dir/ex00/Cat.cpp.o CMakeFiles/cpp04.dir/ex00/Dog.cpp.o CMakeFiles/cpp04.dir/ex00/main.cpp.o CMakeFiles/cpp04.dir/ex00/WrongAnimal.cpp.o CMakeFiles/cpp04.dir/ex00/WrongCat.cpp.o
+build cpp04: CXX_EXECUTABLE_LINKER__cpp04_Debug CMakeFiles/cpp04.dir/ex00/Animal.cpp.o CMakeFiles/cpp04.dir/ex00/Cat.cpp.o CMakeFiles/cpp04.dir/ex00/Dog.cpp.o CMakeFiles/cpp04.dir/ex00/main.cpp.o CMakeFiles/cpp04.dir/ex00/WrongAnimal.cpp.o CMakeFiles/cpp04.dir/ex00/WrongCat.cpp.o CMakeFiles/cpp04.dir/ex01/Animal.cpp.o CMakeFiles/cpp04.dir/ex01/Brain.cpp.o CMakeFiles/cpp04.dir/ex01/Dog.cpp.o CMakeFiles/cpp04.dir/ex01/Cat.cpp.o CMakeFiles/cpp04.dir/ex01/main.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
   OBJECT_DIR = CMakeFiles/cpp04.dir
   POST_BUILD = :
