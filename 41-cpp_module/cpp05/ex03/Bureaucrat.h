@@ -2,11 +2,12 @@
 // Created by ji junhyuk on 2023/05/26.
 //
 
-#ifndef CPP05_BUREAUCRAT_H
-#define CPP05_BUREAUCRAT_H
+#ifndef CPP05_BUREAUCRAT2_H
+#define CPP05_BUREAUCRAT2_H
 
 #include <string>
 #include <iostream>
+#include "AForm.h"
 
 class Bureaucrat {
 
@@ -26,6 +27,9 @@ public:
 
     void increaseGrade();
     void decreaseGrade();
+
+    void signForm(AForm& form);
+    void executeForm(const AForm &form) const;
 
 public:
     class GradeTooHighException : public std::exception {

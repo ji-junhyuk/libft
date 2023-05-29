@@ -3,7 +3,6 @@
 //
 
 #include "Bureaucrat.h"
-#include "../ex01/Bureaucrat.h"
 
 
 Bureaucrat::Bureaucrat() : mName("default"), mGrade(150) {
@@ -58,6 +57,20 @@ void Bureaucrat::decreaseGrade() {
         throw GradeTooLowException();
     }
     ++mGrade;
+}
+
+void Bureaucrat::signForm(Form& form) {
+    try {
+        if (form.isSigned()) {
+            std::cout << mName << " couldn't sign " << form.getName() << " because already signed" << std::endl;
+        }
+        else {
+            form.beSigned(*this);
+            std::cout << mName << " signed " << form.getName() << std::endl;
+        }
+    } catch (const std::exception &e) {
+        std::cout << mName << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+    }
 }
 
 const char *Bureaucrat::GradeTooHighException::what() const throw() {
