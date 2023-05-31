@@ -46,17 +46,23 @@ cmake_ninja_workdir = /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp0
 
 build cmake_object_order_depends_target_cpp06: phony || CMakeFiles/cpp06.dir
 
-build CMakeFiles/cpp06.dir/ex00/main.cpp.o: CXX_COMPILER__cpp06_Debug /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp06/ex00/main.cpp || cmake_object_order_depends_target_cpp06
-  DEP_FILE = CMakeFiles/cpp06.dir/ex00/main.cpp.o.d
+build CMakeFiles/cpp06.dir/ex02/Base.cpp.o: CXX_COMPILER__cpp06_Debug /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp06/ex02/Base.cpp || cmake_object_order_depends_target_cpp06
+  DEP_FILE = CMakeFiles/cpp06.dir/ex02/Base.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fcolor-diagnostics -std=gnu++14
   OBJECT_DIR = CMakeFiles/cpp06.dir
-  OBJECT_FILE_DIR = CMakeFiles/cpp06.dir/ex00
+  OBJECT_FILE_DIR = CMakeFiles/cpp06.dir/ex02
 
-build CMakeFiles/cpp06.dir/ex00/Convertor.cpp.o: CXX_COMPILER__cpp06_Debug /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp06/ex00/Convertor.cpp || cmake_object_order_depends_target_cpp06
-  DEP_FILE = CMakeFiles/cpp06.dir/ex00/Convertor.cpp.o.d
+build CMakeFiles/cpp06.dir/ex02/main.cpp.o: CXX_COMPILER__cpp06_Debug /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp06/ex02/main.cpp || cmake_object_order_depends_target_cpp06
+  DEP_FILE = CMakeFiles/cpp06.dir/ex02/main.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fcolor-diagnostics -std=gnu++14
   OBJECT_DIR = CMakeFiles/cpp06.dir
-  OBJECT_FILE_DIR = CMakeFiles/cpp06.dir/ex00
+  OBJECT_FILE_DIR = CMakeFiles/cpp06.dir/ex02
+
+build CMakeFiles/cpp06.dir/ex02/C.cpp.o: CXX_COMPILER__cpp06_Debug /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp06/ex02/C.cpp || cmake_object_order_depends_target_cpp06
+  DEP_FILE = CMakeFiles/cpp06.dir/ex02/C.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fcolor-diagnostics -std=gnu++14
+  OBJECT_DIR = CMakeFiles/cpp06.dir
+  OBJECT_FILE_DIR = CMakeFiles/cpp06.dir/ex02
 
 
 # =============================================================================
@@ -66,7 +72,7 @@ build CMakeFiles/cpp06.dir/ex00/Convertor.cpp.o: CXX_COMPILER__cpp06_Debug /User
 #############################################
 # Link the executable cpp06
 
-build cpp06: CXX_EXECUTABLE_LINKER__cpp06_Debug CMakeFiles/cpp06.dir/ex00/main.cpp.o CMakeFiles/cpp06.dir/ex00/Convertor.cpp.o
+build cpp06: CXX_EXECUTABLE_LINKER__cpp06_Debug CMakeFiles/cpp06.dir/ex02/Base.cpp.o CMakeFiles/cpp06.dir/ex02/main.cpp.o CMakeFiles/cpp06.dir/ex02/C.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
   OBJECT_DIR = CMakeFiles/cpp06.dir
   POST_BUILD = :
