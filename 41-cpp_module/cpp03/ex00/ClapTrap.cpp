@@ -13,7 +13,7 @@ ClapTrap::ClapTrap(std::string& name) : mHitPoints(10), mEnergyPoints(10), mAtta
     mName = name;
 }
 
-ClapTrap::ClapTrap(const ClapTrap &other) : mName(other.mName), mHitPoints(other.mHitPoints), mAttackDamage(other.mAttackDamage), mEnergyPoints(other.mEnergyPoints) {
+ClapTrap::ClapTrap(const ClapTrap& other) : mName(other.mName), mHitPoints(other.mHitPoints), mEnergyPoints(other.mEnergyPoints), mAttackDamage(other.mAttackDamage) {
     std::cout << "Copy constructor called" << '\n' << std::endl;
 }
 

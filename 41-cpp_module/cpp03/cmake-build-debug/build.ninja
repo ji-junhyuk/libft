@@ -116,6 +116,13 @@ build CMakeFiles/cpp03.dir/ex03/main.cpp.o: CXX_COMPILER__cpp03_Debug /Users/jij
   OBJECT_DIR = CMakeFiles/cpp03.dir
   OBJECT_FILE_DIR = CMakeFiles/cpp03.dir/ex03
 
+build CMakeFiles/cpp03.dir/ex00/ClapTrap.cpp.o: CXX_COMPILER__cpp03_Debug /Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp03/ex00/ClapTrap.cpp || cmake_object_order_depends_target_cpp03
+  DEP_FILE = CMakeFiles/cpp03.dir/ex00/ClapTrap.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fcolor-diagnostics -std=gnu++14
+  INCLUDES = -I/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp03/ex00
+  OBJECT_DIR = CMakeFiles/cpp03.dir
+  OBJECT_FILE_DIR = CMakeFiles/cpp03.dir/ex00
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target cpp03
@@ -124,7 +131,7 @@ build CMakeFiles/cpp03.dir/ex03/main.cpp.o: CXX_COMPILER__cpp03_Debug /Users/jij
 #############################################
 # Link the executable cpp03
 
-build cpp03: CXX_EXECUTABLE_LINKER__cpp03_Debug CMakeFiles/cpp03.dir/ex01/ClapTrap.cpp.o CMakeFiles/cpp03.dir/ex01/main.cpp.o CMakeFiles/cpp03.dir/ex01/ScavTrap.cpp.o CMakeFiles/cpp03.dir/ex02/FragTrap.cpp.o CMakeFiles/cpp03.dir/ex02/main.cpp.o CMakeFiles/cpp03.dir/ex03/ClapTrap.cpp.o CMakeFiles/cpp03.dir/ex03/FragTrap.cpp.o CMakeFiles/cpp03.dir/ex03/ScavTrap.cpp.o CMakeFiles/cpp03.dir/ex03/DiamondTrap.cpp.o CMakeFiles/cpp03.dir/ex03/main.cpp.o
+build cpp03: CXX_EXECUTABLE_LINKER__cpp03_Debug CMakeFiles/cpp03.dir/ex01/ClapTrap.cpp.o CMakeFiles/cpp03.dir/ex01/main.cpp.o CMakeFiles/cpp03.dir/ex01/ScavTrap.cpp.o CMakeFiles/cpp03.dir/ex02/FragTrap.cpp.o CMakeFiles/cpp03.dir/ex02/main.cpp.o CMakeFiles/cpp03.dir/ex03/ClapTrap.cpp.o CMakeFiles/cpp03.dir/ex03/FragTrap.cpp.o CMakeFiles/cpp03.dir/ex03/ScavTrap.cpp.o CMakeFiles/cpp03.dir/ex03/DiamondTrap.cpp.o CMakeFiles/cpp03.dir/ex03/main.cpp.o CMakeFiles/cpp03.dir/ex00/ClapTrap.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
   OBJECT_DIR = CMakeFiles/cpp03.dir
   POST_BUILD = :

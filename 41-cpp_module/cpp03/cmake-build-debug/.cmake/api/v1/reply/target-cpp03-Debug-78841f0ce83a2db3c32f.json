@@ -75,7 +75,8 @@
 				11,
 				12,
 				14,
-				15
+				15,
+				16
 			]
 		}
 	],
@@ -117,7 +118,8 @@
 				11,
 				12,
 				14,
-				15
+				15,
+				16
 			]
 		},
 		{
@@ -223,6 +225,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "ex03/main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "ex00/ClapTrap.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],
