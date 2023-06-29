@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/25.
-//
-
 #include "WrongCat.h"
 
 WrongCat::WrongCat() : WrongAnimal("WrongCat") {
@@ -15,8 +11,7 @@ WrongCat::WrongCat(const WrongCat &other) {
 
 WrongCat &WrongCat::operator=(const WrongCat &other) {
     std::cout << "[WrongCat] Copy assignment constructor is called" << std::endl;
-    if (this != &other)
-    {
+    if (this != &other) {
         mType = other.mType;
     }
     return (*this);

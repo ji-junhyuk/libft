@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/26.
-//
-
 #include "Brain.h"
 
 Brain::Brain() : mIdeas() {

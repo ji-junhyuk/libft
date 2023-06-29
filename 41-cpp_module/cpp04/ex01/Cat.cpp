@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/25.
-//
-
 #include "Cat.h"
 
 Cat::Cat() : Animal("Cat"), mBrain(new Brain) {
@@ -14,8 +10,7 @@ Cat::Cat(const Cat &other) : Animal("Cat"), mBrain(new Brain(*other.mBrain)) {
 
 Cat &Cat::operator=(const Cat &other) {
     std::cout << "[Cat] Copy assignment constructor called" << std::endl;
-    if (this != &other)
-    {
+    if (this != &other) {
         mType = other.mType;
         delete mBrain;
         mBrain = new Brain(*other.mBrain);

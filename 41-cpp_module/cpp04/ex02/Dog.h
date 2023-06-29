@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/25.
-//
-
 #ifndef CPP04_DOG_H
 #define CPP04_DOG_H
 

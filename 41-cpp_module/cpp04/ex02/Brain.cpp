@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/26.
-//
-
 #include "Brain.h"
 
 Brain::Brain() : mIdeas() {
@@ -18,8 +14,7 @@ Brain::Brain(const Brain &other) {
 
 Brain &Brain::operator=(const Brain &other) {
     std::cout << "[Brain] Copy constructor called" << std::endl;
-    if (this != &other)
-    {
+    if (this != &other) {
         for (int i = 0; i < 100; ++i) {
             mIdeas[i] = other.mIdeas[i];
         }

@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/26.
-//
-
 #ifndef CPP04_BRAIN_H
 #define CPP04_BRAIN_H
 

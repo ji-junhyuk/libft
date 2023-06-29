@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/25.
-//
-
 #ifndef CPP04_CAT_H
 #define CPP04_CAT_H
 

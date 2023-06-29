@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/25.
-//
-
 #include "WrongCat.h"
 
 WrongCat::WrongCat() : WrongAnimal("WrongCat") {

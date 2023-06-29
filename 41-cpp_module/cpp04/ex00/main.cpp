@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/25.
-//
-
 #include "Animal.h"
 #include "Cat.h"
 #include "Dog.h"
@@ -11,13 +7,14 @@
 void run_main()
 {
     const Animal* meta = new Animal();
-    const Animal* j = new Dog();
     const Animal* i = new Cat();
-    std::cout << j->getType() << " " << std::endl;
+    const Animal* j = new Dog();
+    std::cout << meta->getType() << " " << std::endl;
     std::cout << i->getType() << " " << std::endl;
-    i->makeSound(); //will output the cat sound!
-    j->makeSound();
+    std::cout << j->getType() << " " << std::endl;
     meta->makeSound();
+    i->makeSound();
+    j->makeSound();
 
     std::cout << std::endl;
     delete meta;
@@ -26,13 +23,15 @@ void run_main()
 
     std::cout << std::endl;
     const WrongAnimal* meta2 = new WrongAnimal();
-    const WrongAnimal* k = new WrongCat();
-    std::cout << k->getType() << " " << std::endl;
+    const WrongAnimal* n = new WrongCat();
+    std::cout << meta2->getType() << " " << std::endl;
+    std::cout << n->getType() << " " << std::endl;
     meta2->makeSound();
+    n->makeSound();
 
     std::cout << std::endl;
     delete meta2;
-    delete k;
+    delete n;
     std::cout << std::endl;
 }
 

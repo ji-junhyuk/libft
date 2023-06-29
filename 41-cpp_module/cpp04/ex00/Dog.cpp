@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/25.
-//
-
 #include "Dog.h"
 
 Dog::Dog() : Animal("Dog") {
@@ -15,8 +11,7 @@ Dog::Dog(const Dog &other) {
 
 Dog &Dog::operator=(const Dog &other) {
     std::cout << "[Dog] Copy assignment constructor called" << std::endl;
-    if (this != &other)
-    {
+    if (this != &other) {
         mType = other.mType;
     }
     return *this;

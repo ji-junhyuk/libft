@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/25.
-//
-
 #include "Dog.h"
 
 Dog::Dog() : Animal("Dog"), mBrain(new Brain()) {

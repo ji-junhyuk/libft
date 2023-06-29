@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/25.
-//
-
 #include "Animal.h"
 
 Animal::Animal() : mType("default") {
@@ -19,8 +15,7 @@ Animal::Animal(const Animal &other) {
 
 Animal &Animal::operator=(const Animal &other) {
     std::cout << "[Animal] Copy constructor is called" << std::endl;
-    if (this != &other)
-    {
+    if (this != &other) {
         mType = other.mType;
     }
     return *this;

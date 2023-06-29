@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/25.
-//
-
 #include "Animal.h"
 #include "Cat.h"
 #include "Dog.h"
@@ -12,12 +8,10 @@ void run_main()
 {
     const Animal* animal[4];
     for (int i = 0; i < 4; ++i) {
-        if (i % 2)
-        {
+        if (i % 2) {
             animal[i] = new Dog();
         }
-        else
-        {
+        else {
            animal[i] = new Cat();
         }
     }
