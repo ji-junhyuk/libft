@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/28.
-//
-
 #ifndef CPP05_FORM_H
 #define CPP05_FORM_H
 
@@ -35,15 +31,15 @@ public:
 
 public:
     class GradeTooHighException : public std::exception {
+    public:
         virtual const char *what() const throw();
     };
     class GradeTooLowException : public std::exception {
+    public:
         virtual const char *what() const throw();
     };
 };
 
 std::ostream &operator<<(std::ostream &os, const Form &form);
-
-
 
 #endif //CPP05_FORM_H

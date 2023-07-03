@@ -38,6 +38,9 @@ public:
     class GradeTooLowException : public std::exception {
         virtual const char *what() const throw();
     };
+    class IsNotSignedException : public std::exception {
+        virtual const char *what() const throw();
+    };
 };
 
 std::ostream &operator<<(std::ostream &os, const Bureaucrat &bureaucrat);

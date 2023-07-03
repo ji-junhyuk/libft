@@ -58,20 +58,17 @@ int Intern::generateHash(const char *key) {
         hash = (((hash << 5) + hash) + *key) % TABLE_SIZE;
         key++;
     }
-//    std::cout << hash % TABLE_SIZE << '\n';
     return hash % TABLE_SIZE;
 }
 
 const char *Intern::InvalidFunctionNameException::what(void) const throw() {
-    return "creating form is failed.";
+    return "Invalid function name.";
 }
 
 AForm* Intern::makeForm(const std::string formName, const std::string target) {
     setHashTable();
     if (std::find(mFunctionTables, mFunctionTables + FUNC_SIZE, formName) == mFunctionTables + FUNC_SIZE)
-    {
         throw InvalidFunctionNameException();
-    }
     const char *key = formName.c_str();
     return (this->*mFp[generateHash(key)])(target);
 }

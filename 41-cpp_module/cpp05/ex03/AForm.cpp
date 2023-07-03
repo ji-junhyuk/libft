@@ -48,9 +48,7 @@ AForm::~AForm() {
 
 void AForm::beSigned(Bureaucrat& bure) {
     if (bure.getGrade() > mRequiredSign)
-    {
         throw AForm::GradeTooLowException();
-    }
     mbSigned = true;
 }
 

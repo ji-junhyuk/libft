@@ -77,9 +77,10 @@ void Bureaucrat::executeForm(const AForm &form) const {
     try {
         if (form.isSigned()) {
             form.execute(*this);
+            std::cout << mName << " executed " << form.getName() << std::endl;
         }
         else {
-            std::cout << mName << " couldn't execute " << form.getName() << " because is not signed" << std::endl;
+            throw IsNotSignedException();
         }
     } catch (const std::exception &e) {
         std::cout << mName << " couldn't execute " << form.getName() << " because " << e.what() << std::endl;
@@ -92,6 +93,10 @@ const char *Bureaucrat::GradeTooHighException::what() const throw() {
 
 const char *Bureaucrat::GradeTooLowException::what() const throw() {
     return "Grade is too low.";
+}
+
+const char *Bureaucrat::IsNotSignedException::what() const throw() {
+    return "Form is not signed.";
 }
 
 std::ostream &operator<<(std::ostream &os, const Bureaucrat &bureaucrat) {

@@ -48,18 +48,20 @@ AForm::~AForm() {
 
 void AForm::beSigned(Bureaucrat& bure) {
     if (bure.getGrade() > mRequiredSign)
-    {
         throw AForm::GradeTooLowException();
-    }
     mbSigned = true;
 }
 
 const char *AForm::GradeTooHighException::what() const throw() {
-    return "Grade is too high.";
+    return "Form Grade is too high.";
 }
 
 const char *AForm::GradeTooLowException::what() const throw() {
-    return "Grade is too low.";
+    return "Form Grade is too low.";
+}
+
+const char *AForm::AlreadySignedException::what() const throw() {
+    return "Form is Already Signed.";
 }
 
 std::ostream& operator<<(std::ostream& os, const AForm& form) {

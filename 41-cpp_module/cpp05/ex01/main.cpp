@@ -10,9 +10,15 @@ int main(void)
     Bureaucrat A;
 
     Bureaucrat B("B", 80);
+
     Form form1;
     Form form2("Form2", false, 85, 85);
-    Form form3("Form3", false, 55, 55);
+    Form form3("Form3", false, 50, 55);
+    try {
+        Form form4("Form4", false, -2, 0);
+    } catch (const Form::GradeTooHighException& e) {
+        std::cout << e.what() << std::endl;
+    }
 
     A.signForm(form1);
     B.signForm(form1);

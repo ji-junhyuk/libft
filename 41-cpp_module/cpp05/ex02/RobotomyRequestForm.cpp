@@ -32,20 +32,13 @@ RobotomyRequestForm::~RobotomyRequestForm() {
 
 void RobotomyRequestForm::execute(const Bureaucrat &executor) const {
     if (!this->isSigned())
-    {
-        std::cerr << "It can be executed only after it is signed." << std::endl;
-        return ;
-    }
+        throw Bureaucrat::IsNotSignedException();
     if (this->getRequiredExec() < executor.getGrade())
-        throw AForm::GradeTooLowException();
+        throw Bureaucrat::GradeTooLowException();
+    (void)executor;
     srand(time(NULL));
     if (rand() % 2 == 0)
-    {
         std::cout << mTarget << " has been robotomized." << std::endl;
-    }
     else
-    {
         std::cout << mTarget << " robotomy failed." << std::endl;
-    }
-
 }

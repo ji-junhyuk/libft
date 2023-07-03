@@ -26,6 +26,10 @@ Form::Form() : mName("default"), mbSigned(false), mRequiredSign(150), mRequiredE
 }
 
 Form::Form(const std::string name, bool isSigned, const int gradeSign, const int gradeExec) : mName(name), mbSigned(isSigned), mRequiredSign(gradeSign), mRequiredExec(gradeExec) {
+    if (gradeSign < 1 || gradeExec < 1)
+        throw GradeTooHighException();
+    if (gradeSign > 150 || gradeExec > 150)
+        throw GradeTooLowException();
     std::cout << "[Form] Four argument constructor called" << std::endl;
 }
 
@@ -35,8 +39,7 @@ Form::Form(const Form &other) : mName(other.mName), mbSigned(other.mbSigned), mR
 
 Form &Form::operator=(const Form &other) {
     std::cout << "[Form] Copy assignment constructor called" << std::endl;
-    if (this != &other)
-    {
+    if (this != &other) {
         mbSigned = other.mbSigned;
     }
     return *this;
@@ -47,8 +50,7 @@ Form::~Form() {
 }
 
 void Form::beSigned(Bureaucrat &bure) {
-    if (bure.getGrade() > mRequiredSign)
-    {
+    if (bure.getGrade() > mRequiredSign) {
         throw Form::GradeTooLowException();
     }
     mbSigned = true;

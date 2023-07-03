@@ -36,12 +36,9 @@ void ShrubberyCreationForm::execute(const Bureaucrat &executor) const {
     std::ofstream file;
 
     if (!this->isSigned())
-    {
-        std::cerr << "It can be executed only after it is signed." << std::endl;
-        return ;
-    }
+        throw Bureaucrat::IsNotSignedException();
     if (this->getRequiredExec() < executor.getGrade())
-        throw AForm::GradeTooLowException();
+        throw Bureaucrat::GradeTooLowException();
     filename = mTarget;
     filename.append("_shrubbery");
     file.open(filename.c_str());

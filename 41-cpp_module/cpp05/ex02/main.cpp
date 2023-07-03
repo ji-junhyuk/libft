@@ -11,23 +11,25 @@ int main()
 {
     ShrubberyCreationForm form1; // 145, 137
 
-    Bureaucrat A("A", 145);
-    Bureaucrat B("B", 130);
+    Bureaucrat A("A", 146);
+    Bureaucrat B("B", 145);
+    Bureaucrat C("C", 130);
     A.executeForm(form1);
     A.signForm(form1);
-    A.executeForm(form1);
-    B.executeForm(form1);
+    B.signForm(form1);
+    C.signForm(form1);
+    C.executeForm(form1);
 
     RobotomyRequestForm form2; // 72 45
-    Bureaucrat C("C", 72);
-    Bureaucrat D("C", 40);
-    C.executeForm(form2);
-    C.signForm(form2);
-    C.executeForm(form2);
+    Bureaucrat D("D", 72);
+    Bureaucrat E("E", 40);
     D.executeForm(form2);
+    D.signForm(form2);
+    D.executeForm(form2);
+    E.executeForm(form2);
 
     PresidentialPardonForm form3; // 72 45
-    Bureaucrat E("E", 1);
-    E.signForm(form3);
-    E.executeForm(form3);
+    Bureaucrat F("F", 1);
+    F.signForm(form3);
+    F.executeForm(form3);
 }

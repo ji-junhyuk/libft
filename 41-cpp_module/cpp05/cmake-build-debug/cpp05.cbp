@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="cpp05"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cpp05">
+				<Option output="/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/cpp05" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/junji/42course/41-cpp_module/cpp05/cpp05"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 cpp05"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cpp05/fast">
+				<Option output="/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/cpp05" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/junji/42course/41-cpp_module/cpp05/cpp05"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 cpp05/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp05/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex00/Bureaucrat.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex00/Bureaucrat.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex00/main.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex01/Bureaucrat.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex01/Bureaucrat.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex01/Form.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex01/Form.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex01/main.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex02/AForm.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex02/AForm.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex02/Bureaucrat.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex02/Bureaucrat.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex02/PresidentialPardonForm.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex02/PresidentialPardonForm.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex02/RobotomyRequestForm.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex02/RobotomyRequestForm.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex02/ShrubberyCreationForm.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex02/ShrubberyCreationForm.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex02/main.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/AForm.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/AForm.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/Bureaucrat.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/Bureaucrat.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/Intern.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/Intern.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/PresidentialPardonForm.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/PresidentialPardonForm.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/RobotomyRequestForm.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/RobotomyRequestForm.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/ShrubberyCreationForm.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/ShrubberyCreationForm.h">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/ex03/main.cpp">
+			<Option target="cpp05"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp05/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

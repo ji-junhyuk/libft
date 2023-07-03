@@ -14,7 +14,7 @@ Bureaucrat::Bureaucrat(const std::string name, int grade) : mName(name), mGrade(
         throw GradeTooHighException();
     if (mGrade > 150)
         throw GradeTooLowException();
-    std::cout << "[Bureaucrat] Single argument Constructor called" << std::endl;
+    std::cout << "[Bureaucrat] Two argument Constructor called" << std::endl;
 }
 
 Bureaucrat::Bureaucrat(const Bureaucrat &other) : mName(other.mName), mGrade(other.mGrade) {
