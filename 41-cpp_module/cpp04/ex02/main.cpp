@@ -25,6 +25,6 @@ void run_main()
 
 int main(void) {
     run_main();
-    system("leaks Brain");
+//    system("leaks Brain");
     return 0;
 }

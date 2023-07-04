@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="cpp04"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cpp04">
+				<Option output="/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/cpp04" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/junji/42course/41-cpp_module/cpp04/ex00"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 cpp04"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cpp04/fast">
+				<Option output="/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/cpp04" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/junji/42course/41-cpp_module/cpp04/ex00"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 cpp04/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/junji/42course/41-cpp_module/cpp04/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Animal.cpp">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Animal.h">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Cat.cpp">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Cat.h">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Dog.cpp">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Dog.h">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/WrongAnimal.cpp">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/WrongAnimal.h">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/WrongCat.cpp">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/WrongCat.h">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/main.cpp">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Animal.cpp">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Animal.h">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Brain.cpp">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Brain.h">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Cat.cpp">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Cat.h">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Dog.cpp">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Dog.h">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/main.cpp">
+			<Option target="cpp04"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
