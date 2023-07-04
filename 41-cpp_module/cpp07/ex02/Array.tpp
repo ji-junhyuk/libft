@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/06/01.
-//
-
 #ifndef CPP07_ARRAY_TPP
 #define CPP07_ARRAY_TPP
 
@@ -42,7 +38,7 @@ Array<T>::~Array() {
 
 template <typename T>
 T& Array<T>::operator[](unsigned int i) const {
-    if (mSize <= i)
+    if (i >= mSize || i < 0)
         throw OutOfBoundException();
     return mArray[i];
 }

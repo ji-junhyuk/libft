@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/06/01.
-//
-
 #ifndef CPP07_ARRAY_H
 #define CPP07_ARRAY_H
 

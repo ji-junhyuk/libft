@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/06/01.
-//
-
 #ifndef CPP07_WHATEVER_H
 #define CPP07_WHATEVER_H
 
@@ -28,4 +24,3 @@ T max(T& a, T& b) {
 }
 
 #endif //CPP07_WHATEVER_H
-

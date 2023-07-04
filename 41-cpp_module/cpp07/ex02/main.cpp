@@ -6,13 +6,7 @@
 #include <string>
 #include "Array.h"
 
-int main(void)
-{
-    int *p = new int[5];
-
-    for (int i = 0; i < 5; ++i) {
-        p[i] = 100 + i;
-    }
+void run_main() {
     //operator()
     Array<int> arr(10);
     for (unsigned int i = 0; i < 10; ++i) {
@@ -36,10 +30,10 @@ int main(void)
     // string
     Array<std::string> A(10);
     for (int i = 0; i < 10; ++i) {
-        A[i] = static_cast<char>(i + 65);
+        A[i] = (i + 65);
     }
     for (int i = 0; i < 10; ++i) {
-       std::cout << A[i] << ' ';
+        std::cout << A[i] << ' ';
     }
     std::cout << '\n';
 
@@ -49,6 +43,15 @@ int main(void)
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
     }
+    try {
+        std::cout << arr[10];
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+    }
+}
 
-
+int main(void)
+{
+    run_main();
+//    system("leaks Array");
 }

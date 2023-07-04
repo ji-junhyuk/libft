@@ -1,35 +1,24 @@
-//
-// Created by ji junhyuk on 2023/06/01.
-//
-
 #include "iter.h"
+#include <vector>
 #include <iostream>
 
 template <typename T>
-
-void mult(T& a) {
-    a *= 2;
+void print(T& a) {
+    std::cout << a << ' ';
 }
-
-struct makeDouble {
-    template <typename T>
-    void operator()(T& value) {
-        value *= 2;
-    }
-};
-
 
 int main(void) {
     int arr[] = {1, 2, 3, 4, 5};
-    iter(arr, 5, mult<int>);
+    iter(arr, 5, print<int>);
+    std::cout << std::endl;
+
+    std::string arr2[] = {"1a", "2b", "3c", "4d", "5e"};
+    iter(arr2, 5, print<std::string>);
+    std::cout << std::endl;
+
+    std::vector<int>V(5);
     for (int i = 0; i < 5; ++i) {
-        std::cout << arr[i] << ' ';
+        V[i] = i + 1;
     }
-    std::cout << '\n';
-    makeDouble dou;
-    iter(arr, 5, dou);
-    for (int i = 0; i < 5; ++i) {
-        std::cout << arr[i] << ' ';
-    }
-    std::cout << '\n';
+    iter(V.data(), V.size(), print<int>);
 }

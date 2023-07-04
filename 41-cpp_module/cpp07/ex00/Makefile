@@ -1,4 +1,4 @@
-SRCS = main.cpp Convertor.cpp
+SRCS = main.cpp
 
 NAME = utils
 
