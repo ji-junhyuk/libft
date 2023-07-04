@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/06/01.
-//
-
 #include "MutantStack.h"
 #include <iostream>
 
@@ -18,12 +14,9 @@ int main(void) {
     mstack.push(737);
     MutantStack<int>::iterator it = mstack.begin();
     MutantStack<int>::iterator ite = mstack.end();
-    ++it;
-    --it;
     while (it != ite) {
-        std::cout << *it << std::endl;
+        std::cout << *it << ' ';
         ++it;
     }
-    std::stack<int> s(mstack);
-
+    std::cout << std::endl;
 }

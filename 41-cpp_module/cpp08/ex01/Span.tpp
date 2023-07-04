@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/06/01.
-//
-
 #include "Span.h"
 
 template <typename T>

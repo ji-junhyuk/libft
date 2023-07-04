@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/06/01.
-//
-
 #ifndef CPP08_MUTANTSTACK_H
 #define CPP08_MUTANTSTACK_H
 

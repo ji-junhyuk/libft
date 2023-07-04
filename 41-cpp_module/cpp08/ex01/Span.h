@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/06/01.
-//
-
 #ifndef CPP08_SPAN_H
 #define CPP08_SPAN_H
 
@@ -14,7 +10,6 @@ private:
     unsigned int mCapacity;
     unsigned int mSize;
     std::vector<T> mNumbers;
-
 
 public:
     Span();
@@ -29,7 +24,6 @@ public:
     T shortestSpan() const;
     T longestSpan() const;
     unsigned int size() const;
-
 
 public:
     class SpanIsFulled : public std::exception {

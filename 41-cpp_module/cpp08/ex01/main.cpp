@@ -14,15 +14,6 @@ int main() {
     int longest = span.longestSpan();
     std::cout << "longest: " << longest << std::endl;
 
-    try {
-        Span<int> span2(2);
-        span2.addNumber(1);
-        span2.addNumber(2);
-        span2.addNumber(3);
-    }
-    catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-    }
 
     Span<double> span3(5);
 
@@ -33,7 +24,26 @@ int main() {
     span3.addNumber(7.5);
 
     double shortest2 = span3.shortestSpan();
-    double longest2 = span3.longestSpan();
-    std::cout << "longest: " << longest2 << std::endl;
-    std::cout << "shortest: " << shortest2 << std::endl;
+    double longest2 = span3.longestSpan(); std::cout << "longest: " << longest2 << std::endl; std::cout << "shortest: " << shortest2 << std::endl;
+
+    Span<int> span4(1);
+    try {
+        span4.addNumber(numbers, numbers + sizeof(numbers) / sizeof(int));
+    }
+    catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+    }
+    try {
+        int shortest4 = span4.shortestSpan();
+        std::cout << shortest4 << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+    }
+    try {
+        int longest4 = span4.longestSpan();
+        std::cout << longest4 << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+    }
+
 }
