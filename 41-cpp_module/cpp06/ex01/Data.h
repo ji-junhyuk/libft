@@ -1,15 +1,9 @@
-//
-// Created by ji junhyuk on 2023/05/31.
-//
-
 #ifndef CPP06_DATA_H
 #define CPP06_DATA_H
 
 #include <iostream>
 
 class Data {
-
-private:
 
 private:
     unsigned int mInt;

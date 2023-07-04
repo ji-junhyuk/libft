@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/30.
-//
-
 #include "Convertor.h"
 
 int main(int argc, char *argv[]) {

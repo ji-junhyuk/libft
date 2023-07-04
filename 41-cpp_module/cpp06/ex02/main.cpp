@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/31.
-//
-
 #include <cstdlib>
 #include <ctime>
 #include <iostream>

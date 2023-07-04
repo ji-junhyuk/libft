@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/31.
-//
-
 #ifndef CPP06_SERIALIZE_H
 #define CPP06_SERIALIZE_H
 

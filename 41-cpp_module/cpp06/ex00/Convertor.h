@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/30.
-//
-
 #ifndef CPP06_CONVERTOR_H
 #define CPP06_CONVERTOR_H
 

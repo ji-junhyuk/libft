@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/30.
-//
-
 #include "Convertor.h"
 
 void Convertor::convert(const char* str) {
@@ -23,18 +19,15 @@ void Convertor::convert(const char* str) {
 }
 
 void Convertor::checkValidArgument(const char *str, const char *base_str) {
-    if (*str)
-    {
-        if (strlen(base_str) == 1 && isprint(*base_str))
-        {
+    if (*str) {
+        if (strlen(base_str) == 1 && isprint(*base_str)) {
             std::cout << "char: " << *str << '\n';
             std::cout << "int: impossible" << '\n';
             std::cout << "float: impossible" << '\n';
             std::cout << "double: impossible" << '\n';
             exit(0);
         }
-        if (!(!strcmp(str, "f") || !strcmp(str, "F")))
-        {
+        if (!(!strcmp(str, "f") || !strcmp(str, "F"))) {
             std::cout << "char: impossible" << '\n';
             std::cout << "int: impossible" << '\n';
             std::cout << "float: impossible" << '\n';
@@ -50,8 +43,7 @@ void Convertor::printChar(const char *str, long &value) {
         std::cout << "char: impossible" << std::endl;
         return ;
     }
-    if (*str && value == 0) // inff 42.03ff
-    {
+    if (*str && value == 0) {
         std::cout << "char: impossible" << std::endl;
         return ;
     }
@@ -67,8 +59,7 @@ void Convertor::printInt(const char *str, long &value) {
         std::cout << "int: impossible" << std::endl;
         return ;
     }
-    if (*str && value == 0) //inf inff 42.03ff
-    {
+    if (*str && value == 0) {
         std::cout << "int: impossible" << std::endl;
         return ;
     }

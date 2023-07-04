@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "cpp06::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-cpp06-Debug-aeddb6bd02bae3b60f7b.json",
+					"jsonFile" : "target-cpp06-Debug-9e9cb46445046bba3c6a.json",
 					"name" : "cpp06",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp06/cmake-build-debug",
-		"source" : "/Users/jijunhyuk/CLionProjects/42course/41-cpp_module/cpp06"
+		"build" : "/Users/junji/42course/41-cpp_module/cpp06/cmake-build-debug",
+		"source" : "/Users/junji/42course/41-cpp_module/cpp06"
 	},
 	"version" : 
 	{

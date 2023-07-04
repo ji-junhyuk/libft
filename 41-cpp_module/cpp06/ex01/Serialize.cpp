@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/05/31.
-//
-
 #include "Serialize.h"
 
 uintptr_t Serialize::serialize(Data *ptr) {
