@@ -2,7 +2,7 @@
 // Created by ji junhyuk on 2023/06/03.
 //
 
-#include "BitcoinExchange.h"
+#include "BitcoinExchange.hpp"
 
 BitcoinExchange::BitcoinExchange() {
 
@@ -32,29 +32,25 @@ void BitcoinExchange::setPriceBitcoin() {
     std::getline(file, line);
     while (std::getline(file, line)) {
         size_t pos = line.find( ',');
-        if (pos == std::string::npos) {
-            //throw InvalidDataFormat();
-            continue ;
-        }
-        else {
-            std::string key = line.substr(0, pos);
-            std::string value = line.substr(pos + 1);
-            std::cout << "key: " << key << std::endl;
-            isValidKey(key);
-            isValidValue(value);
-            std::cout << key << ' ' << value << '\n';
-            mBitCoinPriceCollection[key] = std::strtod(value.c_str(), NULL);
-        }
+        std::string key = line.substr(0, pos);
+        std::string value = line.substr(pos + 1);
+        mBitCoinPriceCollection[key] = std::strtod(value.c_str(), NULL);
+//        if (pos == std::string::npos) {
+//            throw InvalidDataFormat();
+//        }
+//        else {
+//            std::cout << key << ' ' << value << '\n';
+//            checkValidKey(key);
+//            checkValidValue(value);
+//            std::cout << key << ' ' << value << '\n';
+//        }
     }
 }
 
-void BitcoinExchange::isValidKey(const std::string& str) {
-    std::cout << str << '\n';
-    std::ostringstream oss;
-    oss << str;
+void BitcoinExchange::checkValidKey(const std::string& str) {
     std::istringstream iss(str);
     std::string token;
-    int year, month, date, days = 0;
+    int year = 0, month = 0, date = 0, days = 0;
     bool isLeapYear = false;
 
     int i = 0;
@@ -69,10 +65,12 @@ void BitcoinExchange::isValidKey(const std::string& str) {
             throw InvalidDataFormat();
        ++i;
     }
-    if (year < 2009 || year > 2022)
+    if (year < 2009 || year > 2022) {
         throw InvalidDataFormat();
-    if (month < 1 || month > 12)
+    }
+    if (month < 1 || month > 12) {
         throw InvalidDataFormat();
+    }
     static const int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     days = daysInMonth[month - 1];
     if ((year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))) {
@@ -81,29 +79,54 @@ void BitcoinExchange::isValidKey(const std::string& str) {
     if (month == 2 && isLeapYear) {
         days = 29;
     }
-    if (date < 1 || date > days)
+    if (date < 1 || date > days) {
         throw InvalidDataFormat();
+    }
 }
 
-void BitcoinExchange::isValidValue(const std::string &str) {
+void BitcoinExchange::checkValidValue(const std::string &str) {
     std::ostringstream oss;
     char* endPtr;
     double value = strtod(str.c_str(), &endPtr);
     std::cout << "value: " << value << std::endl;
-    if (*endPtr != '\0') {
+    if (*endPtr) {
         std::cout << endPtr << std::endl;
         throw InvalidDataFormat();
     }
     if (value < 0)
         throw NotPositiveNumber();
-    if (value > 1000)
+    else if (value > 1000)
         throw TooLargeNumber();
 }
 
-const char *BitcoinExchange::InvalidDataFormat::what() const throw() {
-    return "Error: bad input => ";
+void BitcoinExchange::calculateBitcoinPrice(const char *fileName) {
+    std::ifstream file(fileName);
+
+    if (!file) {
+        std::cerr << "cannot open file." << std::endl;
+        return ;
+    }
+    std::string line;
+    std::getline(file, line);
+    while (std::getline(file, line)) {
+        size_t pos = line.find('|');
+        try {
+            if (pos == std::string::npos)
+                throw InvalidDataFormat();
+            std::string key = line.substr(0, pos);
+            std::string value = line.substr(pos + 1);
+            checkValidKey(key);
+            checkValidValue(value);
+            mBitCoinPriceCollection[key] = std::strtod(value.c_str(), NULL);
+        } catch (std::exception &e) {
+            std::cout << e.what() << std::endl;
+        }
+    }
 }
 
+const char *BitcoinExchange::InvalidDataFormat::what() const throw() {
+    return key.c_str();//"Error: bad input => ";
+}
 
 const char *BitcoinExchange::TooLargeNumber::what(void) const throw() {
     return "Error: too large a number.";

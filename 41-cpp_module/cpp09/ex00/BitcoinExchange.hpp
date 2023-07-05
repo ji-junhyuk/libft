@@ -2,8 +2,8 @@
 // Created by ji junhyuk on 2023/06/03.
 //
 
-#ifndef CPP09_BITCOINEXCHANGE_H
-#define CPP09_BITCOINEXCHANGE_H
+#ifndef CPP09_BITCOINEXCHANGE_HPP
+#define CPP09_BITCOINEXCHANGE_HPP
 
 #include <string>
 #include <map>
@@ -24,22 +24,25 @@ public:
     ~BitcoinExchange();
 
     void setPriceBitcoin();
-    void isValidKey(const std::string &str);
-    void isValidValue(const std::string &str);
+    void checkValidKey(const std::string &str);
+    void checkValidValue(const std::string &str);
+    void calculateBitcoinPrice(const char *fileName);
 public:
     class InvalidDataFormat : public std::exception {
+    public:
+        std::string key;
+    public:
         virtual const char *what() const throw();
     };
-
     class TooLargeNumber : public std::exception {
+    public:
         virtual const char *what() const throw();
     };
-
     class NotPositiveNumber : public std::exception {
+    public:
         virtual const char *what() const throw();
     };
-
 };
 
 
-#endif //CPP09_BITCOINEXCHANGE_H
+#endif //CPP09_BITCOINEXCHANGE_HPP
