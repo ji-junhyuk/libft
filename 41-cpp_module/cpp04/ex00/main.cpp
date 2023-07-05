@@ -1,8 +1,8 @@
-#include "Animal.h"
-#include "Cat.h"
-#include "Dog.h"
-#include "WrongAnimal.h"
-#include "WrongCat.h"
+#include "Animal.hpp"
+#include "Cat.hpp"
+#include "Dog.hpp"
+#include "WrongAnimal.hpp"
+#include "WrongCat.hpp"
 
 void run_main()
 {

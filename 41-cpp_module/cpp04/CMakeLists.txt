@@ -7,9 +7,9 @@ include_directories(ex00)
 
 add_executable(cpp04
         ex00/Animal.cpp
-        ex00/Animal.h
+        ex00/Animal.hpp
         ex00/Cat.cpp
-        ex00/Cat.h
+        ex00/Cat.hpp
         ex00/Dog.cpp
-        ex00/Dog.h
-        ex00/main.cpp ex00/WrongAnimal.h ex00/WrongAnimal.cpp ex00/WrongCat.h ex00/WrongCat.cpp ex01/Animal.cpp ex01/Brain.h ex01/Dog.h ex01/Brain.cpp ex01/Cat.h ex01/Dog.cpp ex01/Cat.cpp ex01/main.cpp)
+        ex00/Dog.hpp
+        ex00/main.cpp ex00/WrongAnimal.hpp ex00/WrongAnimal.cpp ex00/WrongCat.hpp ex00/WrongCat.cpp ex01/Animal.cpp ex01/Brain.hpp ex01/Dog.hpp ex01/Brain.cpp ex01/Cat.hpp ex01/Dog.cpp ex01/Cat.cpp ex01/main.cpp)

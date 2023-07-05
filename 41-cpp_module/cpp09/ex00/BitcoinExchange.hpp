@@ -27,15 +27,6 @@ public:
     void isValidKey(const std::string &str);
     void isValidValue(const std::string &str);
 public:
-//    class Error : public std::exception {
-//    public:
-//        Error(const std::string& message, const std::string& key);
-//        virtual const char* what() const throw();
-//
-//    private:
-//        std::string errorMessage;
-//        std::string errorKey;
-//    };
     class InvalidDataFormat : public std::exception {
         virtual const char *what() const throw();
     };

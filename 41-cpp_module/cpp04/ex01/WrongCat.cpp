@@ -1,4 +1,4 @@
-#include "WrongCat.h"
+#include "WrongCat.hpp"
 
 WrongCat::WrongCat() : WrongAnimal("WrongCat") {
     std::cout << "[WrongCat] Default constructor is called" << std::endl;

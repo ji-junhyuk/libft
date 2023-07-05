@@ -1,5 +1,5 @@
-#ifndef CPP04_ANIMAL_H
-#define CPP04_ANIMAL_H
+#ifndef CPP04_ANIMAL_HPP
+#define CPP04_ANIMAL_HPP
 
 #include <string>
 #include <iostream>
@@ -22,4 +22,4 @@ public:
 };
 
 
-#endif //CPP04_ANIMAL_H
+#endif //CPP04_ANIMAL_HPP

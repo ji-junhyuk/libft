@@ -1,5 +1,5 @@
-#ifndef CPP04_BRAIN_H
-#define CPP04_BRAIN_H
+#ifndef CPP04_BRAIN_HPP
+#define CPP04_BRAIN_HPP
 
 #include <string>
 #include <iostream>
@@ -17,4 +17,4 @@ public:
 };
 
 
-#endif //CPP04_BRAIN_H
+#endif //CPP04_BRAIN_HPP

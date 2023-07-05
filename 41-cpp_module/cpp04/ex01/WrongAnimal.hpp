@@ -1,5 +1,5 @@
-#ifndef CPP04_WRONGANIMAL_H
-#define CPP04_WRONGANIMAL_H
+#ifndef CPP04_WRONGANIMAL_HPP
+#define CPP04_WRONGANIMAL_HPP
 
 #include <string>
 #include <iostream>
@@ -22,4 +22,4 @@ class WrongAnimal {
 };
 
 
-#endif //CPP04_WRONGANIMAL_H
+#endif //CPP04_WRONGANIMAL_HPP

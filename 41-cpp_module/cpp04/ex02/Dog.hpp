@@ -1,8 +1,8 @@
 #ifndef CPP04_DOG_H
 #define CPP04_DOG_H
 
-#include "Animal.h"
-#include "Brain.h"
+#include "Animal.hpp"
+#include "Brain.hpp"
 
 class Dog : public Animal {
 

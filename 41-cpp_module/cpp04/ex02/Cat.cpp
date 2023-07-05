@@ -1,4 +1,4 @@
-#include "Cat.h"
+#include "Cat.hpp"
 
 Cat::Cat() : Animal("Cat"), mBrain(new Brain) {
     std::cout << "[Cat] Default constructor called" << std::endl;

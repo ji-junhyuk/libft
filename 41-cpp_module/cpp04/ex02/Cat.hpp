@@ -1,8 +1,8 @@
 #ifndef CPP04_CAT_H
 #define CPP04_CAT_H
 
-#include "Animal.h"
-#include "Brain.h"
+#include "Animal.hpp"
+#include "Brain.hpp"
 
 class Cat : public Animal {
 

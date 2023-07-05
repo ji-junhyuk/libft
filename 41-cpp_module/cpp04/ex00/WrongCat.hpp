@@ -1,7 +1,11 @@
-#ifndef CPP04_WRONGCAT_H
-#define CPP04_WRONGCAT_H
+//
+// Created by ji junhyuk on 2023/05/25.
+//
 
-#include "WrongAnimal.h"
+#ifndef CPP04_WRONGCAT_HPP
+#define CPP04_WRONGCAT_HPP
+
+#include "WrongAnimal.hpp"
 
 class WrongCat : public WrongAnimal {
 
@@ -15,4 +19,4 @@ public:
 };
 
 
-#endif //CPP04_WRONGCAT_H
+#endif //CPP04_WRONGCAT_HPP

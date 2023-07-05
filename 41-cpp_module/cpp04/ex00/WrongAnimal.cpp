@@ -1,4 +1,4 @@
-#include "WrongAnimal.h"
+#include "WrongAnimal.hpp"
 
 WrongAnimal::WrongAnimal() : mType("default") {
     std::cout << "[WrongAnimal] Default constructor is called" << std::endl;
