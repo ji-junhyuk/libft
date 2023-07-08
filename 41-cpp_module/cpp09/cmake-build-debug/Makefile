@@ -177,6 +177,30 @@ ex00/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp09.dir/build.make CMakeFiles/cpp09.dir/ex00/main.cpp.s
 .PHONY : ex00/main.cpp.s
 
+ex01/RPN.o: ex01/RPN.cpp.o
+.PHONY : ex01/RPN.o
+
+# target to build an object file
+ex01/RPN.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp09.dir/build.make CMakeFiles/cpp09.dir/ex01/RPN.cpp.o
+.PHONY : ex01/RPN.cpp.o
+
+ex01/RPN.i: ex01/RPN.cpp.i
+.PHONY : ex01/RPN.i
+
+# target to preprocess a source file
+ex01/RPN.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp09.dir/build.make CMakeFiles/cpp09.dir/ex01/RPN.cpp.i
+.PHONY : ex01/RPN.cpp.i
+
+ex01/RPN.s: ex01/RPN.cpp.s
+.PHONY : ex01/RPN.s
+
+# target to generate assembly for a file
+ex01/RPN.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp09.dir/build.make CMakeFiles/cpp09.dir/ex01/RPN.cpp.s
+.PHONY : ex01/RPN.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -192,6 +216,9 @@ help:
 	@echo "... ex00/main.o"
 	@echo "... ex00/main.i"
 	@echo "... ex00/main.s"
+	@echo "... ex01/RPN.o"
+	@echo "... ex01/RPN.i"
+	@echo "... ex01/RPN.s"
 .PHONY : help
 
 
