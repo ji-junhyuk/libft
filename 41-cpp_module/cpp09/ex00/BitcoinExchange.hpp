@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/06/03.
-//
-
 #ifndef CPP09_BITCOINEXCHANGE_HPP
 #define CPP09_BITCOINEXCHANGE_HPP
 
@@ -30,8 +26,6 @@ public:
 public:
     class InvalidDataFormat : public std::exception {
     public:
-        std::string key;
-    public:
         virtual const char *what() const throw();
     };
     class TooLargeNumber : public std::exception {
@@ -39,6 +33,10 @@ public:
         virtual const char *what() const throw();
     };
     class NotPositiveNumber : public std::exception {
+    public:
+        virtual const char *what() const throw();
+    };
+    class TooEarlyDate : public std::exception {
     public:
         virtual const char *what() const throw();
     };

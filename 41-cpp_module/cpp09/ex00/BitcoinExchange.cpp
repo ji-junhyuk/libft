@@ -1,7 +1,3 @@
-//
-// Created by ji junhyuk on 2023/06/03.
-//
-
 #include "BitcoinExchange.hpp"
 
 BitcoinExchange::BitcoinExchange() {
@@ -35,15 +31,6 @@ void BitcoinExchange::setPriceBitcoin() {
         std::string key = line.substr(0, pos);
         std::string value = line.substr(pos + 1);
         mBitCoinPriceCollection[key] = std::strtod(value.c_str(), NULL);
-//        if (pos == std::string::npos) {
-//            throw InvalidDataFormat();
-//        }
-//        else {
-//            std::cout << key << ' ' << value << '\n';
-//            checkValidKey(key);
-//            checkValidValue(value);
-//            std::cout << key << ' ' << value << '\n';
-//        }
     }
 }
 
@@ -56,11 +43,11 @@ void BitcoinExchange::checkValidKey(const std::string& str) {
     int i = 0;
     while (std::getline(iss, token, '-')) {
         if (i == 0)
-            year = std::stoi(token);
+            year = strtol(token.c_str(), NULL, 10);
         else if (i == 1)
-            month = std::stoi(token);
+            month = strtol(token.c_str(), NULL, 10);
         else if (i == 2)
-            date = std::stoi(token);
+            date = strtol(token.c_str(), NULL, 10);
         else
             throw InvalidDataFormat();
        ++i;
@@ -88,11 +75,8 @@ void BitcoinExchange::checkValidValue(const std::string &str) {
     std::ostringstream oss;
     char* endPtr;
     double value = strtod(str.c_str(), &endPtr);
-    std::cout << "value: " << value << std::endl;
-    if (*endPtr) {
-        std::cout << endPtr << std::endl;
+    if (*endPtr)
         throw InvalidDataFormat();
-    }
     if (value < 0)
         throw NotPositiveNumber();
     else if (value > 1000)
@@ -114,18 +98,40 @@ void BitcoinExchange::calculateBitcoinPrice(const char *fileName) {
             if (pos == std::string::npos)
                 throw InvalidDataFormat();
             std::string key = line.substr(0, pos);
+            std::string::size_type spacePos = key.find(' ');
+            while (spacePos != std::string::npos) {
+                key.erase(spacePos, 1);
+                spacePos = key.find(' ');
+            }
             std::string value = line.substr(pos + 1);
+            spacePos = value.find(' ');
+            while (spacePos != std::string::npos) {
+                value.erase(spacePos, 1);
+                spacePos = value.find(' ');
+            }
             checkValidKey(key);
             checkValidValue(value);
-            mBitCoinPriceCollection[key] = std::strtod(value.c_str(), NULL);
-        } catch (std::exception &e) {
+            std::map<std::string, double>::iterator it = mBitCoinPriceCollection.find(key);
+            if (it != mBitCoinPriceCollection.end()) {
+                std::cout << key << " => " << value << " = " << it->second * strtod(value.c_str(), NULL) << std::endl;
+            } else {
+                std::map<std::string, double>::iterator upperBound = mBitCoinPriceCollection.upper_bound(key);
+                    if (upperBound == mBitCoinPriceCollection.begin())
+                       throw TooEarlyDate();
+                    --upperBound;
+                    std::cout << key << " => " << value << " = " << upperBound->second * strtod(value.c_str(), NULL) << std::endl;
+            }
+        } catch (const InvalidDataFormat& e) {
+            std::cout << e.what() << line << std::endl;
+        }
+        catch (std::exception &e) {
             std::cout << e.what() << std::endl;
         }
     }
 }
 
 const char *BitcoinExchange::InvalidDataFormat::what() const throw() {
-    return key.c_str();//"Error: bad input => ";
+    return "Error: bad input => ";
 }
 
 const char *BitcoinExchange::TooLargeNumber::what(void) const throw() {
@@ -134,4 +140,8 @@ const char *BitcoinExchange::TooLargeNumber::what(void) const throw() {
 
 const char *BitcoinExchange::NotPositiveNumber::what(void) const throw() {
     return "Error: not a positive number.";
+}
+
+const char *BitcoinExchange::TooEarlyDate::what(void) const throw() {
+    return "Error: date too early to provide";
 }
