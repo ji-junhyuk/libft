@@ -5,11 +5,12 @@ BitcoinExchange::BitcoinExchange() {
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &other) {
-    (void) other;
+    mBitCoinPriceCollection = other.mBitCoinPriceCollection;
 }
 
 BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &other) {
-    (void) other;
+    if (this != &other)
+        mBitCoinPriceCollection = other.mBitCoinPriceCollection;
     return *this;
 }
 
