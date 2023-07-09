@@ -97,6 +97,15 @@
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp09/ex01/RPN.hpp">
 			<Option target="cpp09"/>
 		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp09/ex02/PmergeMe.cpp">
+			<Option target="cpp09"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp09/ex02/PmergeMe.hpp">
+			<Option target="cpp09"/>
+		</Unit>
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp09/ex02/main.cpp">
+			<Option target="cpp09"/>
+		</Unit>
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp09/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

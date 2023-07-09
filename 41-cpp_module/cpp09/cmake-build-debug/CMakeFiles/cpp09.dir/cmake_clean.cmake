@@ -5,6 +5,10 @@ file(REMOVE_RECURSE
   "CMakeFiles/cpp09.dir/ex00/main.cpp.o.d"
   "CMakeFiles/cpp09.dir/ex01/RPN.cpp.o"
   "CMakeFiles/cpp09.dir/ex01/RPN.cpp.o.d"
+  "CMakeFiles/cpp09.dir/ex02/PmergeMe.cpp.o"
+  "CMakeFiles/cpp09.dir/ex02/PmergeMe.cpp.o.d"
+  "CMakeFiles/cpp09.dir/ex02/main.cpp.o"
+  "CMakeFiles/cpp09.dir/ex02/main.cpp.o.d"
   "cpp09"
   "cpp09.pdb"
 )

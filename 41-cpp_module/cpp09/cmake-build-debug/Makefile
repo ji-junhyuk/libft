@@ -201,6 +201,54 @@ ex01/RPN.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp09.dir/build.make CMakeFiles/cpp09.dir/ex01/RPN.cpp.s
 .PHONY : ex01/RPN.cpp.s
 
+ex02/PmergeMe.o: ex02/PmergeMe.cpp.o
+.PHONY : ex02/PmergeMe.o
+
+# target to build an object file
+ex02/PmergeMe.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp09.dir/build.make CMakeFiles/cpp09.dir/ex02/PmergeMe.cpp.o
+.PHONY : ex02/PmergeMe.cpp.o
+
+ex02/PmergeMe.i: ex02/PmergeMe.cpp.i
+.PHONY : ex02/PmergeMe.i
+
+# target to preprocess a source file
+ex02/PmergeMe.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp09.dir/build.make CMakeFiles/cpp09.dir/ex02/PmergeMe.cpp.i
+.PHONY : ex02/PmergeMe.cpp.i
+
+ex02/PmergeMe.s: ex02/PmergeMe.cpp.s
+.PHONY : ex02/PmergeMe.s
+
+# target to generate assembly for a file
+ex02/PmergeMe.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp09.dir/build.make CMakeFiles/cpp09.dir/ex02/PmergeMe.cpp.s
+.PHONY : ex02/PmergeMe.cpp.s
+
+ex02/main.o: ex02/main.cpp.o
+.PHONY : ex02/main.o
+
+# target to build an object file
+ex02/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp09.dir/build.make CMakeFiles/cpp09.dir/ex02/main.cpp.o
+.PHONY : ex02/main.cpp.o
+
+ex02/main.i: ex02/main.cpp.i
+.PHONY : ex02/main.i
+
+# target to preprocess a source file
+ex02/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp09.dir/build.make CMakeFiles/cpp09.dir/ex02/main.cpp.i
+.PHONY : ex02/main.cpp.i
+
+ex02/main.s: ex02/main.cpp.s
+.PHONY : ex02/main.s
+
+# target to generate assembly for a file
+ex02/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp09.dir/build.make CMakeFiles/cpp09.dir/ex02/main.cpp.s
+.PHONY : ex02/main.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -219,6 +267,12 @@ help:
 	@echo "... ex01/RPN.o"
 	@echo "... ex01/RPN.i"
 	@echo "... ex01/RPN.s"
+	@echo "... ex02/PmergeMe.o"
+	@echo "... ex02/PmergeMe.i"
+	@echo "... ex02/PmergeMe.s"
+	@echo "... ex02/main.o"
+	@echo "... ex02/main.i"
+	@echo "... ex02/main.s"
 .PHONY : help
 
 
