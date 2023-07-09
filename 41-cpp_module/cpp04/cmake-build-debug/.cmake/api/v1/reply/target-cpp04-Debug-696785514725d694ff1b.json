@@ -147,7 +147,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "ex00/Animal.h",
+			"path" : "ex00/Animal.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -158,7 +158,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "ex00/Cat.h",
+			"path" : "ex00/Cat.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -169,7 +169,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "ex00/Dog.h",
+			"path" : "ex00/Dog.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -180,7 +180,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "ex00/WrongAnimal.h",
+			"path" : "ex00/WrongAnimal.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -191,7 +191,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "ex00/WrongCat.h",
+			"path" : "ex00/WrongCat.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -208,12 +208,12 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "ex01/Brain.h",
+			"path" : "ex01/Brain.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 1,
-			"path" : "ex01/Dog.h",
+			"path" : "ex01/Dog.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -224,7 +224,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "ex01/Cat.h",
+			"path" : "ex01/Cat.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{

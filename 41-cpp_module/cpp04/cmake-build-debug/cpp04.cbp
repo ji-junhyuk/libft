@@ -85,31 +85,31 @@
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Animal.cpp">
 			<Option target="cpp04"/>
 		</Unit>
-		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Animal.h">
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Animal.hpp">
 			<Option target="cpp04"/>
 		</Unit>
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Cat.cpp">
 			<Option target="cpp04"/>
 		</Unit>
-		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Cat.h">
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Cat.hpp">
 			<Option target="cpp04"/>
 		</Unit>
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Dog.cpp">
 			<Option target="cpp04"/>
 		</Unit>
-		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Dog.h">
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/Dog.hpp">
 			<Option target="cpp04"/>
 		</Unit>
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/WrongAnimal.cpp">
 			<Option target="cpp04"/>
 		</Unit>
-		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/WrongAnimal.h">
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/WrongAnimal.hpp">
 			<Option target="cpp04"/>
 		</Unit>
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/WrongCat.cpp">
 			<Option target="cpp04"/>
 		</Unit>
-		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/WrongCat.h">
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/WrongCat.hpp">
 			<Option target="cpp04"/>
 		</Unit>
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex00/main.cpp">
@@ -118,25 +118,25 @@
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Animal.cpp">
 			<Option target="cpp04"/>
 		</Unit>
-		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Animal.h">
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Animal.hpp">
 			<Option target="cpp04"/>
 		</Unit>
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Brain.cpp">
 			<Option target="cpp04"/>
 		</Unit>
-		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Brain.h">
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Brain.hpp">
 			<Option target="cpp04"/>
 		</Unit>
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Cat.cpp">
 			<Option target="cpp04"/>
 		</Unit>
-		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Cat.h">
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Cat.hpp">
 			<Option target="cpp04"/>
 		</Unit>
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Dog.cpp">
 			<Option target="cpp04"/>
 		</Unit>
-		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Dog.h">
+		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/Dog.hpp">
 			<Option target="cpp04"/>
 		</Unit>
 		<Unit filename="/Users/junji/42course/41-cpp_module/cpp04/ex01/main.cpp">
