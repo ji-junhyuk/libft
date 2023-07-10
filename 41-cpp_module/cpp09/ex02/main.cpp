@@ -7,7 +7,7 @@
 #include <list>
 
 int main(int argc, const char *argv[]) {
-    if (argc >= 2) {
+    if (argc >= 3) {
         struct timeval startTime;
         struct timeval curTime;
         long elapsed_time = 0;

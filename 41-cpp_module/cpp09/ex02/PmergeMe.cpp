@@ -373,7 +373,6 @@ void PmergeMe::PmergeList::printSequence() {
         std::cout << *it << ' ';
     }
     std::cout << std::endl;
-    std::cout << std::is_sorted(mMainChain.begin(), mMainChain.end()) << '\n';
 }
 
 void PmergeMe::PmergeList::mergeSelectionSort(const char **argv) {
