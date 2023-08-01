@@ -2,7 +2,7 @@
 // Created by ji junhyuk on 2023/05/26.
 //
 
-#include "Bureaucrat.h"
+#include "Bureaucrat.hpp"
 
 
 Bureaucrat::Bureaucrat() : mName("default"), mGrade(150) {
@@ -23,8 +23,7 @@ Bureaucrat::Bureaucrat(const Bureaucrat &other) : mName(other.mName), mGrade(oth
 
 Bureaucrat &Bureaucrat::operator=(const Bureaucrat &other) {
     std::cout << "[Bureaucrat] Copy assignment Constructor called" << std::endl;
-    if (this != &other)
-    {
+    if (this != &other) {
         mGrade = other.mGrade;
     }
     return *this;

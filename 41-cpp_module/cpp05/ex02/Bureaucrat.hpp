@@ -2,12 +2,12 @@
 // Created by ji junhyuk on 2023/05/26.
 //
 
-#ifndef CPP05_BUREAUCRAT2_H
-#define CPP05_BUREAUCRAT2_H
+#ifndef CPP05_BUREAUCRAT_HPP
+#define CPP05_BUREAUCRAT_HPP
 
 #include <string>
 #include <iostream>
-#include "AForm.h"
+#include "AForm.hpp"
 
 class Bureaucrat {
 
@@ -36,6 +36,9 @@ public:
         virtual const char *what() const throw();
     };
     class GradeTooLowException : public std::exception {
+        virtual const char *what() const throw();
+    };
+    class IsNotSignedException : public std::exception {
         virtual const char *what() const throw();
     };
 };

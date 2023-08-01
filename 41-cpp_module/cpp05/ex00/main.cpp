@@ -2,7 +2,7 @@
 // Created by ji junhyuk on 2023/05/26.
 //
 
-#include "Bureaucrat.h"
+#include "Bureaucrat.hpp"
 
 int main(void)
 {
@@ -28,14 +28,14 @@ int main(void)
         Bureaucrat C("C", -2);
         std::cout << C; // 실행 안됨
     } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+        std::cout << "C " << e.what() << std::endl;
     }
     std::cout << "===========================" << '\n' << std::endl;
 
     try {
         Bureaucrat D(Bureaucrat("D", 151));
     } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+        std::cout << "D " << e.what() << std::endl;
     }
     std::cout << "===========================" << '\n' << std::endl;
 

@@ -2,7 +2,7 @@
 // Created by ji junhyuk on 2023/05/29.
 //
 
-#include "ShrubberyCreationForm.h"
+#include "ShrubberyCreationForm.hpp"
 
 ShrubberyCreationForm::ShrubberyCreationForm() : AForm("ShrubberyCreationForm", false, 145, 137), mTarget("default") {
     std::cout << "[Shrubbery] Default constructor called" << std::endl;
@@ -19,8 +19,7 @@ ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other)
 
 ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationForm &other) {
     std::cout << "[Shrubbery] Copy assignment constructor called" << std::endl;
-    if (this != &other)
-    {
+    if (this != &other) {
         AForm::operator=(other);
         mTarget = other.mTarget;
     }
@@ -35,8 +34,7 @@ void ShrubberyCreationForm::execute(const Bureaucrat &executor) const {
     std::string filename;
     std::ofstream file;
 
-    if (!this->isSigned())
-    {
+    if (!this->isSigned()) {
         std::cerr << "It can be executed only after it is signed." << std::endl;
         return ;
     }

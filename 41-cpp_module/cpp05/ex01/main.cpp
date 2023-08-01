@@ -2,8 +2,8 @@
 // Created by ji junhyuk on 2023/05/26.
 //
 
-#include "Bureaucrat.h"
-#include "Form.h"
+#include "Bureaucrat.hpp"
+#include "Form.hpp"
 
 int main(void)
 {
@@ -17,7 +17,7 @@ int main(void)
     try {
         Form form4("Form4", false, -2, 0);
     } catch (const Form::GradeTooHighException& e) {
-        std::cout << e.what() << std::endl;
+        std::cout << "Form4 " <<  e.what() << std::endl;
     }
 
     A.signForm(form1);

@@ -2,12 +2,12 @@
 // Created by ji junhyuk on 2023/05/29.
 //
 
-#ifndef CPP05_PRESIDENTIALPARDONFORM_H
-#define CPP05_PRESIDENTIALPARDONFORM_H
+#ifndef CPP05_PRESIDENTIALPARDONFORM_HPP
+#define CPP05_PRESIDENTIALPARDONFORM_HPP
 
 
-#include "AForm.h"
-#include "Bureaucrat.h"
+#include "AForm.hpp"
+#include "Bureaucrat.hpp"
 
 class PresidentialPardonForm : public AForm {
 
@@ -25,4 +25,4 @@ public:
 };
 
 
-#endif //CPP05_PRESIDENTIALPARDONFORM_H
+#endif //CPP05_PRESIDENTIALPARDONFORM_HPP

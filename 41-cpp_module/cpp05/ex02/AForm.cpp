@@ -2,8 +2,8 @@
 // Created by ji junhyuk on 2023/05/28.
 //
 
-#include "AForm.h"
-#include "Bureaucrat.h"
+#include "AForm.hpp"
+#include "Bureaucrat.hpp"
 
 const std::string &AForm::getName() const {
     return mName;
@@ -35,8 +35,7 @@ AForm::AForm(const AForm& other) : mName(other.mName), mbSigned(other.mbSigned),
 
 AForm &AForm::operator=(const AForm& other) {
     std::cout << "[AForm] Copy assignment constructor called" << std::endl;
-    if (this != &other)
-    {
+    if (this != &other) {
         mbSigned = other.mbSigned;
     }
     return *this;
@@ -58,10 +57,6 @@ const char *AForm::GradeTooHighException::what() const throw() {
 
 const char *AForm::GradeTooLowException::what() const throw() {
     return "Form Grade is too low.";
-}
-
-const char *AForm::AlreadySignedException::what() const throw() {
-    return "Form is Already Signed.";
 }
 
 std::ostream& operator<<(std::ostream& os, const AForm& form) {

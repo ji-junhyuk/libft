@@ -2,9 +2,7 @@
 // Created by ji junhyuk on 2023/05/26.
 //
 
-#include "Bureaucrat.h"
-#include "../ex01/Bureaucrat.h"
-
+#include "Bureaucrat.hpp"
 
 Bureaucrat::Bureaucrat() : mName("default"), mGrade(150) {
     std::cout << "[Bureaucrat] Default Constructor called" << std::endl;

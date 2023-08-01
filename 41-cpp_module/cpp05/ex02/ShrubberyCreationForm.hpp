@@ -2,12 +2,12 @@
 // Created by ji junhyuk on 2023/05/29.
 //
 
-#ifndef CPP05_SHRUBBERYCREATIONFORM_H
-#define CPP05_SHRUBBERYCREATIONFORM_H
+#ifndef CPP05_SHRUBBERYCREATIONFORM_HPP
+#define CPP05_SHRUBBERYCREATIONFORM_HPP
 
 
-#include "Bureaucrat.h"
-#include "AForm.h"
+#include "Bureaucrat.hpp"
+#include "AForm.hpp"
 #include "fstream"
 
 class ShrubberyCreationForm : public AForm {
@@ -26,4 +26,4 @@ public:
 };
 
 
-#endif //CPP05_SHRUBBERYCREATIONFORM_H
+#endif //CPP05_SHRUBBERYCREATIONFORM_HPP

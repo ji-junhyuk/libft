@@ -2,12 +2,12 @@
 // Created by ji junhyuk on 2023/05/29.
 //
 
-#ifndef CPP05_ROBOTOMYREQUESTFORM_H
-#define CPP05_ROBOTOMYREQUESTFORM_H
+#ifndef CPP05_ROBOTOMYREQUESTFORM_HPP2
+#define CPP05_ROBOTOMYREQUESTFORM_HPP2
 
 
-#include "AForm.h"
-#include "Bureaucrat.h"
+#include "AForm.hpp"
+#include "Bureaucrat.hpp"
 
 class RobotomyRequestForm : public AForm {
 
@@ -25,4 +25,4 @@ public:
 };
 
 
-#endif //CPP05_ROBOTOMYREQUESTFORM_H
+#endif //CPP05_ROBOTOMYREQUESTFORM_HPP2

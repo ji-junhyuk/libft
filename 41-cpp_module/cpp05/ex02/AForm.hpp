@@ -2,8 +2,8 @@
 // Created by ji junhyuk on 2023/05/28.
 //
 
-#ifndef CPP05_FORM_H
-#define CPP05_FORM_H
+#ifndef CPP05_FORM_HPP
+#define CPP05_FORM_HPP
 
 
 #include <string>
@@ -41,14 +41,10 @@ public:
     class GradeTooLowException : public std::exception {
         virtual const char *what() const throw();
     };
-    class AlreadySignedException : public std::exception {
-        virtual const char *what() const throw();
-    };
-
 };
 
 std::ostream &operator<<(std::ostream &os, const AForm &form);
 
 
 
-#endif //CPP05_FORM_H
+#endif //CPP05_FORM_HPP

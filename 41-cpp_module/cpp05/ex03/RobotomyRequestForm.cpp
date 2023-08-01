@@ -2,7 +2,7 @@
 // Created by ji junhyuk on 2023/05/29.
 //
 
-#include "RobotomyRequestForm.h"
+#include "RobotomyRequestForm.hpp"
 
 RobotomyRequestForm::RobotomyRequestForm() : AForm("RobotomyRequestForm", false, 72, 45), mTarget("default") {
     std::cout << "[RobotomyRequestForm] Default constructor called" << std::endl;
@@ -18,8 +18,7 @@ RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &other) : AFo
 
 RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &other) {
     std::cout << "[RobotomyRequestForm] Copy assignment constructor called" << std::endl;
-    if (this != &other)
-    {
+    if (this != &other) {
        AForm::operator=(other);
        mTarget = other.mTarget;
     }
@@ -31,20 +30,17 @@ RobotomyRequestForm::~RobotomyRequestForm() {
 }
 
 void RobotomyRequestForm::execute(const Bureaucrat &executor) const {
-    if (!this->isSigned())
-    {
+    if (!this->isSigned()) {
         std::cerr << "It can be executed only after it is signed." << std::endl;
         return ;
     }
     if (this->getRequiredExec() < executor.getGrade())
         throw AForm::GradeTooLowException();
     srand(time(NULL));
-    if (rand() % 2 == 0)
-    {
+    if (rand() % 2 == 0) {
         std::cout << mTarget << " has been robotomized." << std::endl;
     }
-    else
-    {
+    else {
         std::cout << mTarget << " robotomy failed." << std::endl;
     }
 

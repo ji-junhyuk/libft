@@ -2,7 +2,7 @@
 // Created by ji junhyuk on 2023/05/29.
 //
 
-#include "RobotomyRequestForm.h"
+#include "RobotomyRequestForm.hpp"
 
 RobotomyRequestForm::RobotomyRequestForm() : AForm("RobotomyRequestForm", false, 72, 45), mTarget("default") {
     std::cout << "[RobotomyRequestForm] Default constructor called" << std::endl;
@@ -31,11 +31,8 @@ RobotomyRequestForm::~RobotomyRequestForm() {
 }
 
 void RobotomyRequestForm::execute(const Bureaucrat &executor) const {
-    if (!this->isSigned())
-        throw Bureaucrat::IsNotSignedException();
     if (this->getRequiredExec() < executor.getGrade())
         throw Bureaucrat::GradeTooLowException();
-    (void)executor;
     srand(time(NULL));
     if (rand() % 2 == 0)
         std::cout << mTarget << " has been robotomized." << std::endl;

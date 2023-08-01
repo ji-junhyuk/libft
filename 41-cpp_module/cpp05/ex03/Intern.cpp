@@ -2,7 +2,13 @@
 // Created by ji junhyuk on 2023/05/29.
 //
 
-#include "Intern.h"
+#include "Intern.hpp"
+
+Intern::Intern() {
+    mFunctionTables[0] = "ShrubberyCreationForm";
+    mFunctionTables[1] = "RobotomyRequestForm";
+    mFunctionTables[2] = "PresidentialPardonForm";
+}
 
 Intern::Intern(const Intern &other) {
     for (int i = 0; i < FUNC_SIZE; ++i) {

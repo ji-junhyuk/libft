@@ -1,5 +1,5 @@
-#ifndef CPP05_FORM_H
-#define CPP05_FORM_H
+#ifndef CPP05_FORM_HPP
+#define CPP05_FORM_HPP
 
 
 #include <string>
@@ -11,6 +11,8 @@ class Form {
 private:
     const std::string mName;
     bool mbSigned;
+
+private:
     const int mRequiredSign;
     const int mRequiredExec;
 
@@ -42,4 +44,4 @@ public:
 
 std::ostream &operator<<(std::ostream &os, const Form &form);
 
-#endif //CPP05_FORM_H
+#endif //CPP05_FORM_HPP

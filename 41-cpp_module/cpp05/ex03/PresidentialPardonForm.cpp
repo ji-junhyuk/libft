@@ -2,7 +2,7 @@
 // Created by ji junhyuk on 2023/05/29.
 //
 
-#include "PresidentialPardonForm.h"
+#include "PresidentialPardonForm.hpp"
 
 PresidentialPardonForm::PresidentialPardonForm() : AForm("PresidentialPardonForm", false, 25, 5), mTarget("default") {
     std::cout << "[PresidentialPardonForm] Default constructor called" << std::endl;
@@ -30,8 +30,7 @@ PresidentialPardonForm::~PresidentialPardonForm() {
 }
 
 void PresidentialPardonForm::execute(const Bureaucrat &executor) const {
-    if (!this->isSigned())
-    {
+    if (!this->isSigned()) {
         std::cerr << "It can be executed only after it is signed." << std::endl;
         return ;
     }

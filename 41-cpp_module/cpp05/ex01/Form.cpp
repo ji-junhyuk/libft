@@ -2,8 +2,8 @@
 // Created by ji junhyuk on 2023/05/28.
 //
 
-#include "Form.h"
-#include "Bureaucrat.h"
+#include "Form.hpp"
+#include "Bureaucrat.hpp"
 
 const std::string &Form::getName() const {
     return mName;

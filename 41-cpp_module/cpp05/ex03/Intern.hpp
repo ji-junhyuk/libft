@@ -2,14 +2,14 @@
 // Created by ji junhyuk on 2023/05/29.
 //
 
-#ifndef CPP05_INTERN_H
-#define CPP05_INTERN_H
+#ifndef CPP05_INTERN_HPP
+#define CPP05_INTERN_HPP
 
 
-#include "AForm.h"
-#include "ShrubberyCreationForm.h"
-#include "RobotomyRequestForm.h"
-#include "PresidentialPardonForm.h"
+#include "AForm.hpp"
+#include "ShrubberyCreationForm.hpp"
+#include "RobotomyRequestForm.hpp"
+#include "PresidentialPardonForm.hpp"
 
 #define TABLE_SIZE 8
 #define FUNC_SIZE 3
@@ -21,11 +21,7 @@ private:
     AForm* (Intern::*mFp[TABLE_SIZE])(const std::string target) const;
 
 public:
-    Intern() {
-        mFunctionTables[0] = "ShrubberyCreationForm";
-        mFunctionTables[1] = "RobotomyRequestForm";
-        mFunctionTables[2] = "PresidentialPardonForm";
-    };
+    Intern();
     Intern(const Intern& other);
     Intern& operator=(const Intern& other);
     ~Intern();
@@ -44,4 +40,4 @@ public:
 };
 
 
-#endif //CPP05_INTERN_H
+#endif //CPP05_INTERN_HPP
