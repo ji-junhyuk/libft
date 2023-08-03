@@ -1,0 +1,69 @@
+# Written for backward compatibility.
+version: '3.8'
+
+# Services defines computer resources.
+services:
+  # Service identifier mariadb.
+  mariadb:
+    # Build image with Dockerfile.
+    build: ./requirements/mariadb
+    # Always restart the container, no matter what reason it shuts down.
+    restart: always
+    # Specify a container name
+    container_name: inception_mariadb
+    # Set environment variables.
+    env_file:
+      - .env
+    # Use wordpress_network
+    networks:
+      - wordpress_network
+    # Container-independent file system
+    volumes:
+      - mariadb:/var/lib/mysql
+
+  wordpress:
+    build: ./requirements/wordpress
+    restart: always
+    container_name: inception_wordpress
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    networks:
+      - wordpress_network
+    volumes:
+      - wordpress_nginx_shared:/var/www/html
+
+  nginx:
+    build: ./requirements/nginx
+    restart: always
+    container_name: inception_nginx
+    ports:
+      - "443:443"
+    networks:
+      - wordpress_network
+    volumes:
+      - wordpress_nginx_shared:/var/www/
+
+# Allow services to communicate with each other.
+networks:
+  # Bridge, Host, None, Overlay, Macvlan, user-defined network...
+  wordpress_network:
+    # Bridge: Connecting containers running on the same Docker host 
+    driver: bridge
+
+# Services store and share persistent data into volumes.
+volumes:
+  mariadb:
+    driver: local
+    driver_opts:
+      device: /home/junto/data/mariadb
+      type: none
+      o: bind
+  wordpress_nginx_shared:
+    driver: local
+    driver_opts:
+      device: /home/junto/data/wordpress
+      type: none
+      o: bind
+
